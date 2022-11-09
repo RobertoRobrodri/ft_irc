@@ -1,20 +1,23 @@
 # COLORS #
-GREEN = @echo "\033[0;32m"
-BLUE = @echo "\033[0;34m" 
-PURPLE = @echo "\033[0;35m"
-CYAN = @echo "\033[0;36m"
-RESET = "\033[1;0m"
+#
+GREEN 	= @echo "\033[0;32m"
+BLUE 	= @echo "\033[0;34m" 
+PURPLE 	= @echo "\033[0;35m"
+CYAN 	= @echo "\033[0;36m"
+RESET 	= "\033[1;0m"
 
 # VARIABLES #
-NAME = irc
-CC = clang++
-INCLUDE = -std=c++98
-CXXFLAGS = -Wall -Werror -Wextra
+#
+NAME 		= irc
+CC 			= clang++
+INCLUDE 	= -std=c++98
+CXXFLAGS 	= -Wall -Werror -Wextra
 
 # PATHs #
-SRC_PATH    = srcs
-SUBFILE1_PATH    = subfile1
-OBJ_PATH    = objects
+#
+SRC_PATH    	= srcs
+SUBFILE1_PATH   = parser
+OBJ_PATH    	= objects
 
 # SOURCES #
 
