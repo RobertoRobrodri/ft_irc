@@ -8,20 +8,20 @@ RESET 	= "\033[1;0m"
 
 # VARIABLES #
 #
-NAME 		= irc
+NAME 		= ircserv
 CC 			= clang++
 INCLUDE 	= -std=c++98
-CXXFLAGS 	= -Wall -Werror -Wextra
+CXXFLAGS 	= -Wall -Wextra #-Werror
 
 # PATHs #
 #
 SRC_PATH    	= srcs
-SUBFILE1_PATH   = parser
+SUBFILE1_PATH   = server
 OBJ_PATH    	= objects
 
 # SOURCES #
 
-SUBFILE1_SRC = test.cpp
+SUBFILE1_SRC = server.cpp
 
 SRC =  	main.cpp \
 		$(addprefix $(SUBFILE1_PATH)/, $(SUBFILE1_SRC))

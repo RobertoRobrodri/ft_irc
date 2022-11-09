@@ -11,6 +11,9 @@
 /* ************************************************************************** */
 
 #include "server.hpp"
+#include <string>
+#include <vector>
+#include <sstream>
 
 server::server( void ) {
 
@@ -18,8 +21,20 @@ server::server( void ) {
   
 }
 
-server::server( std::string str ) {
+server::server( std::string network , std::string prt , std::string pass )
+{
+    std::stringstream test(network);
+    std::string segment;
+    std::vector <std::string>seglist;
 
+    while (std::getline(test,segment,':'))
+      seglist.push_back(segment);
+
+    this->host          = seglist[0];
+    this->network_port  = seglist[1];
+		this->network_pass  = seglist[2];
+		this->port          = prt;
+		this->password      = pass;
   std::cout << "Parameter constructor called" << std::endl;
   
 }
@@ -36,14 +51,19 @@ server::~server( void ) {
 
 }
 
-server server::&operator=(const server &tmp)
+server & server::operator=(const server &tmp)
 {
   std::cout << "Operator equalizer called" << std::endl;
 }
 
 std::ostream &operator<<(std::ostream& os, const server &tmp)
 {
-	std::cout << "Operator output called" << std::endl;
+	os << std::endl << "Operator output called" << std::endl;
+  os << "host           |     " << tmp.get_host() << std::endl;
+  os << "network pass   |     " << tmp.get_network_pass() << std::endl;
+  os << "network port   |     " << tmp.get_network_port() << std::endl;
+  os << "password       |     " << tmp.get_password() << std::endl;
+  os << "port           |     " << tmp.get_port() << std::endl;
 	return (os);
 }
 
