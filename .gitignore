@@ -1,0 +1,4 @@
+*.o
+objects
+.DS_STORE
+irc
