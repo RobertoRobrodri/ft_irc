@@ -44,6 +44,8 @@ $(OBJ_PATH)/%.o: $(SRC_PATH)/%.cpp | $(OBJ_PATH)
             
 $(NAME): $(OBJS)
 	$(CC) $(CXXFLAGS) $(INCLUDE) $(OBJS) -o $(NAME)
+	clear
+	$(GREEN) Program asembled $(RESET)
 
 ##RULES
 $(MAKE): make
