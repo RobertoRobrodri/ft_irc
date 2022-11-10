@@ -22,7 +22,6 @@ int exit_msg(std::string msg)
 int main(int argc, char **argv)
 {
 	(void)argc;
-	(void)argv;
 	server *serv;
 	if (argc != 4)
 		return (exit_msg("Unexact number of argvs"));

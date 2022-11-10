@@ -9,7 +9,7 @@ RESET 	= "\033[1;0m"
 # VARIABLES #
 #
 NAME 		= ircserv
-CC 			= clang++
+CC 			= c++
 INCLUDE 	= -std=c++98
 CXXFLAGS 	= -Wall -Wextra #-Werror
 

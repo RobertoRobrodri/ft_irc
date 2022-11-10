@@ -15,7 +15,7 @@
 #include <vector>
 #include <sstream>
 
-server::server( void ) : host(""), network_port (""), network_pass(""), port(""), password("")
+server::server( void ) : host(""), network_pass (""), network_port(""), port(""), password("")
 {
   
   std::cout << "Default constructor called" << std::endl;
@@ -33,12 +33,12 @@ server::server( std::string network , std::string prt , std::string pass ) : hos
 
     if (seglist.size() == 3)
     {
-      this->host          = seglist[0];
-      this->network_port  = seglist[1];
-		  this->network_pass  = seglist[2];
+		this->host          = seglist[0];
+		this->network_port  = seglist[1];
+		this->network_pass  = seglist[2];
     }
     this->port          = prt;
-		this->password      = pass;
+	this->password      = pass;
   std::cout << "Parameter constructor called" << std::endl;
   
 }
@@ -58,6 +58,7 @@ server::~server( void ) {
 server & server::operator=(const server &tmp)
 {
   std::cout << "Operator equalizer called" << std::endl;
+  return *this;
 }
 
 std::ostream &operator<<(std::ostream& os, const server &tmp)
@@ -97,4 +98,31 @@ bool	server::check_data_correct(void) const
   if (this->port == "" || !this->is_good_port(this->port))
     return (0);
   return (1);
+}
+
+sock_in	init_socket_struct(std::string port, std::string host)
+{
+	sock_in	addr;
+// Init struct that the socket needs
+
+//  IPV4 addresses
+	addr.sin_family				= AF_INET;
+//  Convert our port to a network address (host to network)
+	addr.sin_port				= htons(atoi(port.c_str()));
+//  Our address as integer
+	addr.sin_addr.s_addr		= inet_addr(host.c_str());
+	return addr;
+}
+
+int		server::connect_to_host(void)
+{
+	sock_in  addr;
+
+	if ((this->host_socket = socket(AF_INET, SOCK_STREAM, 0)) == -1)
+		return 0;
+	addr = init_socket_struct(this->network_port, this->host);
+	if (connect(this->host_socket, (const sock_addr*)&addr, sizeof(addr)) == -1)
+		return 0;
+	std::cout << "Connected!" << std::endl;
+	return 1;
 }
