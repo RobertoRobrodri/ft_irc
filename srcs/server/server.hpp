@@ -16,6 +16,7 @@ class	server {
 
 		server	( void );
 		bool	is_good_port(std::string port) const;
+		bool	is_good_host(std::string host) const;
 	public:
 
 		server	( std::string network , std::string prt , std::string pass );
