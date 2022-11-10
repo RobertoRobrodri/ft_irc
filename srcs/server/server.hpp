@@ -14,11 +14,12 @@ class	server {
 		std::string port;
 		std::string password;
 
+		bool	is_good_port(std::string port) const;
 	public:
 
-		server ( void );
-		server( std::string network , std::string prt , std::string pass );
-		server ( const server & var );
+		server	( void );
+		server	( std::string network , std::string prt , std::string pass );
+		server 	( const server & var );
 		~server ( void );
 		server &operator=(const server &tmp);
 
@@ -30,6 +31,11 @@ class	server {
 		std::string get_network_port(void) const 	{return(this->network_port);};
 		std::string get_port(void) const 			{return(this->port);};
 		std::string get_password(void) const 		{return(this->password);};
+
+		/*###########################################
+		#				FUNCTIONS					#
+		############################################*/
+		bool	check_data_correct(void);
 };
 
 std::ostream &operator<<(std::ostream& os, const server &tmp);
