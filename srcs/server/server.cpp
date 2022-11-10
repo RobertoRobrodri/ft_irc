@@ -15,8 +15,9 @@
 #include <vector>
 #include <sstream>
 
-server::server( void ) {
-
+server::server( void ) : host(""), network_port (""), network_pass(""), port(""), password("")
+{
+  
   std::cout << "Default constructor called" << std::endl;
   
 }
@@ -83,7 +84,7 @@ bool	server::is_good_port(std::string port) const
   return (1);
 }
 
-bool	server::check_data_correct(void)
+bool	server::check_data_correct(void) const
 {
   if (this->host == "")
     return (0);

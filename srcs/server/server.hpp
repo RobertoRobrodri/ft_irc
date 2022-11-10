@@ -14,10 +14,10 @@ class	server {
 		std::string port;
 		std::string password;
 
+		server	( void );
 		bool	is_good_port(std::string port) const;
 	public:
 
-		server	( void );
 		server	( std::string network , std::string prt , std::string pass );
 		server 	( const server & var );
 		~server ( void );
@@ -35,7 +35,7 @@ class	server {
 		/*###########################################
 		#				FUNCTIONS					#
 		############################################*/
-		bool	check_data_correct(void);
+		bool	check_data_correct(void) const;
 };
 
 std::ostream &operator<<(std::ostream& os, const server &tmp);
