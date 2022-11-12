@@ -8,11 +8,12 @@
 #include <sys/socket.h>
 #include <netinet/in.h>
 #include <arpa/inet.h>
+#include <netdb.h>
 
 class	server {
 
 	private:
-		
+
 		int	host_socket;
 		int	client_socket;
 
@@ -45,7 +46,8 @@ class	server {
 		#				FUNCTIONS					#
 		############################################*/
 		bool	check_data_correct(void) const;
-		int		connect_to_host(void);
+		int		connect_to_host(void); // Creo que no necesitamos esta funcion
+		int		server_listening(void);
 };
 
 std::ostream &operator<<(std::ostream& os, const server &tmp);

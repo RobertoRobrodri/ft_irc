@@ -30,5 +30,7 @@ int main(int argc, char **argv)
 		std::cout << "GOOD CHECK "<< std::endl << *serv <<std::endl;
 	else
 		std::cout << "BAD CHECK " << std::endl << *serv <<std::endl;
+	//serv->connect_to_host();
+	serv->server_listening();
 	return (0);
 }
