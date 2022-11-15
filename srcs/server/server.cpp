@@ -72,6 +72,31 @@ std::ostream &operator<<(std::ostream& os, const server &tmp)
 	return (os);
 }
 
+
+=======
+bool	server::is_good_host(std::string host) const
+{
+  std::stringstream test(host);
+    std::string segment;
+    std::vector <int>seglist;
+
+    while (std::getline(test,segment,'.'))
+    {
+      if (segment.c_str() != std::to_string(atoi(segment.c_str())))
+        seglist.push_back(-1);
+      else
+        seglist.push_back(atoi(segment.c_str()));
+    }
+    if (seglist.size() != 4)
+      return (0);
+    for (int i = 0; i < 4; i++)
+      if (seglist[i] < 0 || seglist[i] > 255)
+        return (0);
+    
+    return (1);
+}
+
+
 bool	server::is_good_port(std::string port) const
 {
   int port_i;
@@ -86,7 +111,7 @@ bool	server::is_good_port(std::string port) const
 
 bool	server::check_data_correct(void) const
 {
-  if (this->host == "")
+  if (this->host == "" || !this->is_good_host(this->host))
     return (0);
   if (this->network_pass == "")
     return (0);

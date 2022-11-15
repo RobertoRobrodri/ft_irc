@@ -1,3 +1,6 @@
+Good check
+./ircserv 127.0.1.16:6676:test 7000 9
+
 Documents to take a look
 
 https://www.rfc-editor.org/rfc/rfc2812  - Client Protocol
@@ -11,3 +14,8 @@ https://www.w3.org/Addressing/draft-mirashi-url-irc-01.txt#:~:text=IRC%20servers
 https://www.gta.ufrj.br/ensino/eel878/sockets/sockaddr_inman.html
 https://pubs.opengroup.org/onlinepubs/009695399/functions/inet_addr.html
 https://www.gnu.org/software/libc/manual/html_node/Socket_002dLevel-Options.html#Socket_002dLevel-Options
+=======
+https://modern.ircdocs.horse/ - Resume
+IRSSI - cliente por terminal
+NETCAT - nc localhost <port>
+

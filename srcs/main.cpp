@@ -6,11 +6,12 @@
 /*   By: mortiz-d <mortiz-d@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/09 12:00:57 by mortiz-d          #+#    #+#             */
-/*   Updated: 2022/11/10 13:07:05 by mortiz-d         ###   ########.fr       */
+/*   Updated: 2022/11/10 15:34:14 by mortiz-d         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <iostream>
+#include <sys/socket.h>
 #include "server/server.hpp"
 
 int exit_msg(std::string msg)
@@ -21,6 +22,7 @@ int exit_msg(std::string msg)
 
 int main(int argc, char **argv)
 {
+	// int sock;
 	(void)argc;
 	server *serv;
 	if (argc != 4)
@@ -29,8 +31,13 @@ int main(int argc, char **argv)
 	if (serv->check_data_correct())
 		std::cout << "GOOD CHECK "<< std::endl << *serv <<std::endl;
 	else
+
 		std::cout << "BAD CHECK " << std::endl << *serv <<std::endl;
 	//serv->connect_to_host();
 	serv->server_listening();
+=======
+		return (exit_msg("Bad Check"));
+	// sock = socket( 0,SOCK_STREAM,PF_INET6);
+
 	return (0);
 }
