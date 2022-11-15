@@ -9,7 +9,7 @@ RESET 	= "\033[1;0m"
 # VARIABLES #
 #
 NAME 		= ircserv
-CC 			= clang++
+CC 			= c++
 INCLUDE 	= -std=c++98
 CXXFLAGS 	= -Wall -Wextra #-Werror
 
@@ -18,6 +18,7 @@ CXXFLAGS 	= -Wall -Wextra #-Werror
 SRC_PATH    	= srcs
 SUBFILE1_PATH   = server
 OBJ_PATH    	= objects
+TEST_PATH		= test
 
 # SOURCES #
 
@@ -63,5 +64,16 @@ fclean: clean
 	rm -rf $(OBJ_PATH)
 
 re: fclean all
+
+test:
+	mkdir -p $(TEST_PATH)
+	cp -Rs	$(PWD)/$(SRC_PATH)/$(SUBFILE1_PATH) $(PWD)/$(TEST_PATH)/
+	@echo "int main(int argc, char **argv)" >> $(PWD)/$(TEST_PATH)/$(SUBFILE1_PATH)/main.cpp
+	@echo "{" >> $(PWD)/$(TEST_PATH)/$(SUBFILE1_PATH)/main.cpp
+	@echo "return (0);" >> $(PWD)/$(TEST_PATH)/$(SUBFILE1_PATH)/main.cpp
+	@echo "}" >> $(PWD)/$(TEST_PATH)/$(SUBFILE1_PATH)/main.cpp
+
+tclean:
+	rm -rf $(TEST_PATH)
 
 PHONY.: all clean fclean re

@@ -24,7 +24,6 @@ int main(int argc, char **argv)
 {
 	// int sock;
 	(void)argc;
-	(void)argv;
 	server *serv;
 	if (argc != 4)
 		return (exit_msg("Unexact number of argvs"));
@@ -32,7 +31,13 @@ int main(int argc, char **argv)
 	if (serv->check_data_correct())
 		std::cout << "GOOD CHECK "<< std::endl << *serv <<std::endl;
 	else
+
+		std::cout << "BAD CHECK " << std::endl << *serv <<std::endl;
+	//serv->connect_to_host();
+	serv->server_listening();
+=======
 		return (exit_msg("Bad Check"));
 	// sock = socket( 0,SOCK_STREAM,PF_INET6);
+
 	return (0);
 }
