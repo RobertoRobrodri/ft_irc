@@ -67,7 +67,7 @@ re: fclean all
 
 test:
 	@echo "##################################################################################"
-	@echo "#                         Generating test folder									#"
+	@echo "#                         Generating test folder                                 #"
 	@echo "##################################################################################"
 	@mkdir -p $(TEST_PATH)
 	@for FILE in $(SRC_PATH)/$(SUBFILE1_PATH)/* ; do Ln -sf $(PWD)/$(SRC_PATH)/$(SUBFILE1_PATH)/* $(PWD)/$(TEST_PATH)/$(basename($$FILE)) ; done;
@@ -92,7 +92,7 @@ test:
 ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠉⠻⢿⣿⣿⣿⣿⣿⣿⠿⠋⠉⠛⠋⠉⠉⠁⠀⠀⠀⠀\n\
 ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠈⠉⠉⠉⠁\n"
 	@echo "##################################################################################"
-	@echo "#               Test ready pls edit main.cpp with you own test					#"
+	@echo "#               Test ready pls edit main.cpp with you own test                   #"
 	@echo "##################################################################################"
 
 tclean:
