@@ -13,9 +13,7 @@
 class	server {
 
 	private:
-
-		int	host_socket;
-		int	client_socket;
+		int	listenin_socket;
 
 		std::string host;
 		std::string network_pass;
@@ -25,9 +23,6 @@ class	server {
 
 		server	( void );
 		bool	is_good_port(std::string port) const;
-
-
-=======
 		bool	is_good_host(std::string host) const;
 
 	public:
@@ -50,7 +45,7 @@ class	server {
 		#				FUNCTIONS					#
 		############################################*/
 		bool	check_data_correct(void) const;
-		int		connect_to_host(void); // Creo que no necesitamos esta funcion
+//		int		connect_to_host(void); // Creo que no necesitamos esta funcion
 		int		server_listening(void);
 };
 
