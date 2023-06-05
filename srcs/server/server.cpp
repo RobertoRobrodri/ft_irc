@@ -203,6 +203,7 @@ int	server::fd_ready( void )
 			this->receive_communication(i);
 			return 0;
 		}
+		sleep(1000);
 	}
 	return 1;
 }
@@ -235,7 +236,7 @@ bool	server::receive_communication(int i)
 	char *buffer[MSG_SIZE];
 	int len;
 
-	std::cout << "Message receive" << std::endl;
+	std::cout << "Message received" << std::endl;
 	len = recv(this->poll_fds[i].fd, buffer, sizeof(buffer), 0);
 	if (len < 0)
     {
@@ -246,6 +247,9 @@ bool	server::receive_communication(int i)
     if (len == 0)
     {
 		std::cout << "  Connection closed" << std::endl;
+		close(this->poll_fds[i].fd);
+		this->poll_fds[i].fd = -1;
+		this->active_fds--;
 		return 1;
     }
 	len = send(this->poll_fds[i].fd, buffer, len, 0);

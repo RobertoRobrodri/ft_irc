@@ -15,13 +15,14 @@
 #include <netdb.h>
 #include <poll.h>
 
+#include <unistd.h>
+
 class	server {
 
 	private:
 		int 				active_fds;
 
 		int					server_socket;
-		int 				client_socket[MAX_CLIENTS];
 		poll_fd				poll_fds[MAX_CLIENTS];
 
 		std::string 		host;
