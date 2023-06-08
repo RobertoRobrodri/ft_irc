@@ -15,8 +15,8 @@ int main(int argc, char **argv)
 	try {
 		if (serv->check_data_correct() == 0)
 			throw std::runtime_error("Data incorrect");
-		if (!serv->server_listening())
-			throw std::runtime_error("Server not listening");
+		// if (!serv->server_listening())
+		// 	throw std::runtime_error("Server not listening");
 		if (serv->wait_for_connection())
 			throw std::runtime_error("Conection failed");
 	}

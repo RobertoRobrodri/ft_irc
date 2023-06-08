@@ -14,15 +14,16 @@
 #include <arpa/inet.h>
 #include <netdb.h>
 #include <poll.h>
-
 #include <unistd.h>
+#include "../autosocket/autosocket.hpp"
 
+class	autosocket;
 class	server {
 
 	private:
 		int 				active_fds;
 
-		int					server_socket;
+		autosocket			*server_socket;
 		poll_fd				poll_fds[MAX_CLIENTS];
 
 		std::string 		host;

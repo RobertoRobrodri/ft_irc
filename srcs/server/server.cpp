@@ -27,6 +27,7 @@ server::server( std::string network , std::string prt , std::string pass ) : act
 		this->network_port  = seglist[1];
 		this->network_pass  = seglist[2];
 	}
+	this->server_socket = new autosocket(this->port, this->host);
 	std::cout << "Parameter constructor called" << std::endl;
 
 }
@@ -113,56 +114,12 @@ bool	server::check_data_correct(void) const
 	return (1);
 }
 
-sock_in	init_socket_struct(std::string port, std::string host)
-{
-	sock_in	addr;
-// Init struct that the socket needs
-
-//  IPV4 addresses
-	addr.sin_family				= AF_INET;
-//  Convert our port to a network address (host to network)
-	addr.sin_port				= htons(atoi(port.c_str()));
-//  Our address as integer
-	addr.sin_addr.s_addr		= inet_addr(host.c_str());
-	return addr;
-}
-
-bool	server::server_listening(void)
-{
-	sock_in	addr;
-	int		opt = 1;
-
-	if ((this->server_socket = socket(AF_INET, SOCK_STREAM, 0)) == -1)
-		return 0;
-	std::cout << "Init socket" << std::endl;
-	// No sé que opciones tendremos que habilitar pero vamos a tener que usarlo
-	if (setsockopt(this->server_socket, SOL_SOCKET, SO_REUSEADDR, &opt, sizeof(opt)) == -1)
-	{
-		perror("Bad socket ");
-		return 0;
-	}
-	addr = init_socket_struct(this->network_port, this->host);
-	// Asigna un nombre al socket; Asigna la info de address al socket
-	if (bind(this->server_socket, (const sock_addr*)&addr, sizeof(addr)) == -1)
-	{
-		perror("Error binding ");
-		return 0;
-	}
-	// Tenemos que definir un max_size para la cola
-	if (listen(this->server_socket, MAX_CLIENTS) == -1)
-	{
-		perror("Can't hear you");
-		return 0;
-	}
-	return 1;
-}
-
 bool	server::wait_for_connection(void)
 {
 	int ret;
 	// Init pollfd struct
 	memset(this->poll_fds, 0, sizeof(this->poll_fds));
-	this->poll_fds[0].fd 	   = this->server_socket;
+	this->poll_fds[0].fd 	   = this->server_socket->fd;
 	this->poll_fds[0].events   = POLLIN;
 
 	while (true)
@@ -187,13 +144,11 @@ bool	server::wait_for_connection(void)
 
 int	server::fd_ready( void )
 {
-	int 	current_size = this->active_fds;
-
-	for (int i = 0; i < current_size; i++)
+	for (int i = 0; i < this->active_fds; i++)
 	{
 		if (this->poll_fds[i].revents == 0)
 			continue;
-		if (this->poll_fds[i].fd == this->server_socket)
+		if (this->poll_fds[i].fd == this->server_socket->fd)
 		{
 			this->accept_communication();
 			return 0;
@@ -203,7 +158,6 @@ int	server::fd_ready( void )
 			this->receive_communication(i);
 			return 0;
 		}
-		sleep(1000);
 	}
 	return 1;
 }
@@ -212,7 +166,7 @@ bool	server::accept_communication(void)
 {
 	int 	new_socket = 0;
 
-	new_socket = accept(this->server_socket, NULL, NULL);
+	new_socket = accept(this->server_socket->fd, NULL, NULL);
 	if (new_socket < 0)
     {
         if (errno != EWOULDBLOCK)
