@@ -12,13 +12,13 @@ server::server( void )
 
 }
 
-server::server( std::string network , std::string prt , std::string pass ) : _active_fds(1), _host(""), _network_pass (""), _network_port(""), _port(prt), _pass(pass){
+server::server( std::string network , std::string port , std::string pass ) : _active_fds(1), data {"", "", "", port, pass} {
 	
 	std::vector <std::string>seglist = ft_split(network, ':');
-	this->_host 		= seglist[0];
-	this->_network_port = seglist[1];
-	this->_network_pass = seglist[2];
-	this->server_socket = new autosocket(this->_port, this->_host);
+	this->data.host 		= seglist[0];
+	this->data.network_port = seglist[1];
+	this->data.network_pass = seglist[2];
+	this->server_socket = new autosocket(this->data.port, this->data.host);
 	std::cout << "Parameter constructor called" << std::endl;
 
 }
@@ -117,7 +117,6 @@ bool	server::accept_communication(void)
 		std::cout << "Ok Schizo " << std::endl;
     	return 1;
     }
-	// TODO Gestionar fds cerrados -  sockets muertos
 	std::cout << "Listening socket is readable fr fr no cap" << std::endl;
 	this->poll_fds[this->_active_fds].fd = new_socket;
 	this->poll_fds[this->_active_fds].events = POLLIN;
