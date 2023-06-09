@@ -12,12 +12,14 @@ server::server( void )
 
 }
 
-server::server( std::string network , std::string port , std::string pass ) : _active_fds(1), data {"", "", "", port, pass} {
+server::server( std::string network , std::string port , std::string pass ) : _active_fds(1) {
 	
 	std::vector <std::string>seglist = ft_split(network, ':');
 	this->data.host 		= seglist[0];
 	this->data.network_port = seglist[1];
 	this->data.network_pass = seglist[2];
+	this->data.port 		= port;
+	this->data.pass 		= pass;
 	this->server_socket = new autosocket(this->data.port, this->data.host);
 	std::cout << "Parameter constructor called" << std::endl;
 
@@ -67,7 +69,7 @@ bool	server::wait_for_connection(void)
 
 	while (true)
 	{
-		std::cout << "Dead server 💀💀💀💀 fr fr no cap" << std::endl;
+		std::cout << "IRC 💀💀💀💀 IRC" << std::endl;
 		std::cout << this->poll_fds[0].fd << " " << this->_active_fds << std::endl;
 		ret = poll(this->poll_fds, this->_active_fds, TIMEOUT);
 		if (ret < 0) {

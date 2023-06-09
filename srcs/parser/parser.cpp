@@ -8,10 +8,7 @@ std::vector<std::string> ft_split(std::string str, char separator)
 	std::vector <std::string>seglist;
 
 	while (std::getline(test, segment, separator))
-	{
-		std::cout << "Segment: " << segment << std::endl;
 		seglist.push_back(segment);
-	}
 	return seglist;
 }
 
@@ -51,7 +48,9 @@ bool	is_good_port(std::string port)
 
 bool	check_data_correct(char **argv)
 {
+	// TODO optimizar esta mierda
 	std::vector <std::string>seglist = ft_split(argv[1], ':');
+	std::string arg_2(argv[2]), arg_3(argv[3]);
 
 	if (seglist.size() != 3)
 		return 0;
@@ -61,9 +60,9 @@ bool	check_data_correct(char **argv)
 		return (0);
 	if (seglist[2].empty())
 		return (0);
-	if (argv[2] == "" ||  !is_good_port(argv[2]))
+	if (arg_2.empty() ||  !is_good_port(arg_2))
 		return (0);
-	if (argv[3] == "")
+	if (arg_3.empty())
 		return (0);
 	return (1);
 }
