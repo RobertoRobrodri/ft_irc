@@ -72,6 +72,7 @@ bool	autosocket::server_listening(void)
 
 	if ((this->fd = socket(AF_INET, SOCK_STREAM, 0)) == -1)
 		return 0;
+	fcntl(this->fd, F_SETFL, O_NONBLOCK);
 	std::cout << "Init socket" << std::endl;
 	// No sé que opciones tendremos que habilitar pero vamos a tener que usarlo
 	if (setsockopt(this->fd, SOL_SOCKET, SO_REUSEADDR, &opt, sizeof(opt)) == -1)

@@ -126,12 +126,12 @@ bool	server::accept_communication(void)
 	std::cout << "New socket: " << new_socket << std::endl;
 	std::cout << "Active clients: "<< this->_active_fds << std::endl;
 	
-	return 1;
+	return 0;
 }
 
 bool	server::receive_communication(int i)
 {
-	char *buffer[MSG_SIZE];
+	char buffer[MSG_SIZE];
 	int len;
 
 	std::cout << "Message received" << std::endl;
@@ -140,7 +140,7 @@ bool	server::receive_communication(int i)
     {
 		if (errno != EWOULDBLOCK)
 			perror("  recv() failed");
-        return 1;
+        exit(1);
     }
     if (len == 0)
     {
@@ -148,9 +148,17 @@ bool	server::receive_communication(int i)
 		close(this->poll_fds[i].fd);
 		this->poll_fds[i].fd = -1;
 		this->_active_fds--;
-		return 1;
+		return 0;
     }
-	len = send(this->poll_fds[i].fd, buffer, len, 0);
+	// parse_message
+	// Testing communication server to client
+	this->send_message(buffer, this->poll_fds[i].fd, len);
+	return 0;
+}
+
+bool	server::send_message(char *msg, int fd, int len)
+{
+	len = send(fd, msg, len, 0);
 	if (len < 0)
     {
 		perror("  send() failed");

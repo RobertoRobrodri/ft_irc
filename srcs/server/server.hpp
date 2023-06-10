@@ -15,10 +15,14 @@
 #include <netdb.h>
 #include <poll.h>
 #include <unistd.h>
+#include <fcntl.h>
+#include <list>
 #include "../autosocket/autosocket.hpp"
 #include "../parser/parser.hpp"
+#include "../user/user.hpp"
 
 class	autosocket;
+class 	user;
 
 typedef struct t_Data_Server {             //Struct para almacenar los datos del servidor
 	std::string host;
@@ -35,12 +39,14 @@ class	server {
 		autosocket			*server_socket;
 		poll_fd				poll_fds[MAX_CLIENTS];
 		data_server			data;
+		std::list<user> 	list_of_users;
 
 		server	( void );
 
 		int		fd_ready(void);
 		bool	accept_communication(void);
 		bool	receive_communication(int i);
+		bool	send_message(char *msg, int fd, int len);
 	public:
 
 		server				( std::string network , std::string port , std::string pass );
@@ -60,10 +66,10 @@ class	server {
 		/*###########################################
 		#				FUNCTIONS					#
 		############################################*/
-		bool	server_listening(void);
 		bool	wait_for_connection(void);
 };
 
 std::ostream &operator<<(std::ostream& os, const server &tmp);
 
 #endif
+
