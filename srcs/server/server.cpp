@@ -71,6 +71,8 @@ bool	server::wait_for_connection(void)
 	{
 		std::cout << "IRC 💀💀💀💀 IRC" << std::endl;
 		ret = poll(this->poll_fds, this->_active_fds, TIMEOUT);
+		// for (int i = 0; i < this->_active_fds; i++)
+		// 	std::cout << this->poll_fds[i].fd << std::endl;
 		if (ret < 0) {
 			perror("Poll error");
 			return 1;
@@ -124,10 +126,10 @@ bool	server::accept_communication(void)
 	this->_active_fds++;
 	user 	new_user;
 	this->list_of_users.insert(std::pair<int, user>(fd, new_user));
-	std::cout << "New socket: " << fd << std::endl;
-	std::cout << "Active clients: " << this->_active_fds << std::endl;
-	std::cout << "New user: " << std::endl;
-	std::cout << this->list_of_users[fd] << std::endl;
+	// std::cout << "New socket: " << fd << std::endl;
+	// std::cout << "Active clients: " << this->_active_fds << std::endl;
+	// std::cout << "New user: " << std::endl;
+	// std::cout << this->list_of_users[fd] << std::endl;
 	
 	return 0;
 }
@@ -173,8 +175,12 @@ void	server::delete_user(int i)
 	std::cout << "Deleted user: " << std::endl;
 	close(this->poll_fds[i].fd);
 	this->list_of_users.erase(this->poll_fds[i].fd);
-	this->poll_fds[i].fd = -1;
+	for (int count = i; count <= this->_active_fds - 1; count++)
+		this->poll_fds[count] = this->poll_fds[count + 1];
+	this->poll_fds[this->_active_fds - 1].fd = 0;
+	this->poll_fds[this->_active_fds - 1].events = 0;
 	this->_active_fds--;
+	//this->poll_fds[i].fd = -1;
 }
 // void	server::parse_message(int i, std::string msg)
 // {

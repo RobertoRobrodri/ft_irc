@@ -11,7 +11,7 @@ RESET 	= "\033[1;0m"
 NAME 		= ircserv
 CC 			= c++
 INCLUDE 	= -std=c++98
-CXXFLAGS 	= -Wall -Wextra #-Werror
+CXXFLAGS 	= -Wall -Wextra -g #-Werror
 
 # PATHs #
 #
