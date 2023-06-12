@@ -19,3 +19,17 @@ https://modern.ircdocs.horse/ - Resume
 IRSSI - cliente por terminal
 NETCAT - nc localhost <port>
 
+=======
+TAREAS
+[ ] Test unitarios (Zome)
+[ ] Encontrar cliente de referencia y probarlo (Rbrdr)
+[ ] Comandos NICK y USER
+[ ] Testear que los comandos no se bloquean
+[ ] Añadir comandos para crear y unirse a un canal
+[ ] Comandos incorrectos
+[ ] Kill cliente
+[ ] Kill conexión
+[ ] Todos los comandos de operación de canales
+[ ] Probar conexión irc
+[ ] Mensajes privados y avisos
+[ ] Privilegios de usuario
