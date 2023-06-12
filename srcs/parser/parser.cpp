@@ -1,6 +1,5 @@
 #include "../parser/parser.hpp"
 
-// HACER TEMPLATE PARA ACEPTAR DEVOLVER CUALQUIER TIPO DE VECTOR
 std::vector<std::string> ft_split(std::string str, char separator)
 {
 	std::stringstream 	test(str);
@@ -8,7 +7,12 @@ std::vector<std::string> ft_split(std::string str, char separator)
 	std::vector <std::string>seglist;
 
 	while (std::getline(test, segment, separator))
+	{
+		size_t last_char = segment.find_last_of('\r');
+		if (last_char != std::string::npos)
+			segment.erase(last_char);
 		seglist.push_back(segment);
+	}
 	return seglist;
 }
 

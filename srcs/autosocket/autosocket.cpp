@@ -2,12 +2,12 @@
 
 autosocket::autosocket( void ) {
 
-  std::cout << "Default constructor called" << std::endl;
+  std::cout << "Autosocket Default constructor called" << std::endl;
   return ;
 }
 
 autosocket::autosocket( std::string port, std::string host ) {
-  std::cout << "Parameter constructor called" << std::endl;
+  std::cout << "Autosocket Parameter constructor called" << std::endl;
   this->init_socket_struct(port, host);
   try {
     if (this->server_listening() == 0)
@@ -22,7 +22,7 @@ autosocket::autosocket( std::string port, std::string host ) {
 
 autosocket::autosocket( const autosocket & var ) {
   
-  std::cout << "Copy constructor called" << std::endl;
+  std::cout << "Autosocket Copy constructor called" << std::endl;
   *this = var;
   return ;
   
@@ -30,7 +30,7 @@ autosocket::autosocket( const autosocket & var ) {
 
 autosocket::~autosocket( void ) {
   
-  std::cout << "Destructor called" << std::endl;
+  std::cout << "Autosocket Destructor called" << std::endl;
   delete this;
   return ;
 
@@ -40,7 +40,7 @@ autosocket::~autosocket( void ) {
 autosocket & autosocket::operator=(const autosocket &tmp) {
 
   (void) tmp;
-  std::cout << "Operator equalizer called" << std::endl;
+  std::cout << "Autosocket Operator equalizer called" << std::endl;
   return (*this);
   
 }
@@ -48,7 +48,7 @@ autosocket & autosocket::operator=(const autosocket &tmp) {
 std::ostream &operator<<(std::ostream& os, const autosocket &tmp) {
 
   (void) tmp;
-	os << std::endl << "Operator output called" << std::endl;
+	os << std::endl << "Autosocket Operator output called" << std::endl;
 	return (os);
   
 }
@@ -72,6 +72,7 @@ bool	autosocket::server_listening(void)
 
 	if ((this->fd = socket(AF_INET, SOCK_STREAM, 0)) == -1)
 		return 0;
+	fcntl(this->fd, F_SETFL, O_NONBLOCK);
 	std::cout << "Init socket" << std::endl;
 	// No sé que opciones tendremos que habilitar pero vamos a tener que usarlo
 	if (setsockopt(this->fd, SOL_SOCKET, SO_REUSEADDR, &opt, sizeof(opt)) == -1)
