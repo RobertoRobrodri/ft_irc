@@ -8,12 +8,13 @@
 server::server( void )
 {
 
-	std::cout << "Default constructor called" << std::endl;
+	std::cout << "Server Default constructor called" << std::endl;
 
 }
 
 server::server( std::string network , std::string port , std::string pass ) : _active_fds(1) {
 	
+	std::cout << "Server Parameter constructor called" << std::endl;
 	std::vector <std::string>seglist = ft_split(network, ':');
 	this->data.host 		= seglist[0];
 	this->data.network_port = seglist[1];
@@ -21,20 +22,19 @@ server::server( std::string network , std::string port , std::string pass ) : _a
 	this->data.port 		= port;
 	this->data.pass 		= pass;
 	this->server_socket = new autosocket(this->data.port, this->data.host);
-	std::cout << "Parameter constructor called" << std::endl;
 
 }
 
 server::server( const server & var ) {
 	(void)var;
-	std::cout << "Copy constructor called" << std::endl;
+	std::cout << "Server Copy constructor called" << std::endl;
 
 }
 
 // DESTRUCTOR
 server::~server( void ) {
 
-	std::cout << "Destructor constructor called" << std::endl;
+	std::cout << "Server Destructor constructor called" << std::endl;
 	delete this;
 
 }
@@ -43,7 +43,7 @@ server::~server( void ) {
 server & server::operator=(const server &tmp)
 {
 	(void)tmp;
-	std::cout << "Operator equalizer called" << std::endl;
+	std::cout << "Server Operator equalizer called" << std::endl;
 	return *this;
 }
 
@@ -70,7 +70,6 @@ bool	server::wait_for_connection(void)
 	while (true)
 	{
 		std::cout << "IRC 💀💀💀💀 IRC" << std::endl;
-		std::cout << this->poll_fds[0].fd << " " << this->_active_fds << std::endl;
 		ret = poll(this->poll_fds, this->_active_fds, TIMEOUT);
 		if (ret < 0) {
 			perror("Poll error");
@@ -109,10 +108,10 @@ int	server::fd_ready( void )
 
 bool	server::accept_communication(void)
 {
-	int 	new_socket = 0;
+	int 	fd = 0;
 
-	new_socket = accept(this->server_socket->fd, NULL, NULL);
-	if (new_socket < 0)
+	fd = accept(this->server_socket->fd, NULL, NULL);
+	if (fd < 0)
     {
         if (errno != EWOULDBLOCK)
           perror("  accept() failed");
@@ -120,11 +119,15 @@ bool	server::accept_communication(void)
     	return 1;
     }
 	std::cout << "Listening socket is readable fr fr no cap" << std::endl;
-	this->poll_fds[this->_active_fds].fd = new_socket;
+	this->poll_fds[this->_active_fds].fd = fd;
 	this->poll_fds[this->_active_fds].events = POLLIN;
 	this->_active_fds++;
-	std::cout << "New socket: " << new_socket << std::endl;
-	std::cout << "Active clients: "<< this->_active_fds << std::endl;
+	user 	new_user;
+	this->list_of_users.insert(std::pair<int, user>(fd, new_user));
+	std::cout << "New socket: " << fd << std::endl;
+	std::cout << "Active clients: " << this->_active_fds << std::endl;
+	std::cout << "New user: " << std::endl;
+	std::cout << this->list_of_users[fd] << std::endl;
 	
 	return 0;
 }
@@ -145,14 +148,12 @@ bool	server::receive_communication(int i)
     if (len == 0)
     {
 		std::cout << "  Connection closed" << std::endl;
-		close(this->poll_fds[i].fd);
-		this->poll_fds[i].fd = -1;
-		this->_active_fds--;
+		// Close fd >> Delete fd from poll >> Delete user from list_of_users
+		this->delete_user(i);
 		return 0;
     }
-	// parse_message
-	// Testing communication server to client
-	this->send_message(buffer, this->poll_fds[i].fd, len);
+//	this->parse_message(i, buffer);
+	//this->send_message(buffer, this->poll_fds[i].fd, len);
 	return 0;
 }
 
@@ -166,3 +167,20 @@ bool	server::send_message(char *msg, int fd, int len)
     }
 	return 0;
 }
+
+void	server::delete_user(int i)
+{
+	std::cout << "Deleted user: " << std::endl;
+	close(this->poll_fds[i].fd);
+	this->list_of_users.erase(this->poll_fds[i].fd);
+	this->poll_fds[i].fd = -1;
+	this->_active_fds--;
+}
+// void	server::parse_message(int i, std::string msg)
+// {
+// 	int j = 0;
+// 	//TODO Hacerlo bien voy a asumir que los comandos están bien y extraer el que corresponde
+// 	std::vector<std::string> seglist = ft_split(msg, ' ');
+// 	this->cmd(seglist[0]);
+// 	this->cmd->execute(i, this->list_of_users[i], seglist[1]);
+// }

@@ -3,20 +3,20 @@
 // INFERFACE
 command::command( void ) {
 
-  std::cout << "Default constructor called" << std::endl;
+  std::cout << "Command Default constructor called" << std::endl;
   return ;
 }
 
 command::command( std::string cmd ) : _cmd(cmd) {
 
-  std::cout << "Parameter constructor called" << std::endl;
+  std::cout << "Command Parameter constructor called" << std::endl;
   return ;
   
 }
 
 command::~command( void ) {
   
-  std::cout << "Destructor called" << std::endl;
+  std::cout << "Command Destructor called" << std::endl;
   return ;
 
 }

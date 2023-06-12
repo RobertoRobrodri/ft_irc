@@ -16,13 +16,16 @@
 #include <poll.h>
 #include <unistd.h>
 #include <fcntl.h>
-#include <list>
+#include <map>
 #include "../autosocket/autosocket.hpp"
 #include "../parser/parser.hpp"
 #include "../user/user.hpp"
+#include "../command/command.hpp"
 
 class	autosocket;
 class 	user;
+class	command;
+class 	context;
 
 typedef struct t_Data_Server {             //Struct para almacenar los datos del servidor
 	std::string host;
@@ -35,11 +38,12 @@ typedef struct t_Data_Server {             //Struct para almacenar los datos del
 class	server {
 
 	private:
-		int 				_active_fds;
-		autosocket			*server_socket;
-		poll_fd				poll_fds[MAX_CLIENTS];
-		data_server			data;
-		std::list<user> 	list_of_users;
+		int 					_active_fds;
+		autosocket				*server_socket;
+		poll_fd					poll_fds[MAX_CLIENTS];
+		data_server				data;
+		std::map<int, user> 	list_of_users;
+//		context 			*cmd;
 
 		server	( void );
 
@@ -47,6 +51,8 @@ class	server {
 		bool	accept_communication(void);
 		bool	receive_communication(int i);
 		bool	send_message(char *msg, int fd, int len);
+		void	delete_user(int i);
+//		void	parse_message(int i, std::string msg);
 	public:
 
 		server				( std::string network , std::string port , std::string pass );
