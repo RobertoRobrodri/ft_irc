@@ -1,12 +1,12 @@
 #include "user.hpp"
 
-user::user( void ) : _username(""), _nick(""), _pass("") {
+user::user( void ) : _fd(0), _username(""), _nick(""), _pass("") {
 
   std::cout << "User Default constructor called" << std::endl;
   return ;
 }
 
-user::user( std::string user, std::string nick, std::string pass ) : _username(user), _nick(nick), _pass(pass) {
+user::user( int fd ) : _fd(fd) {
 
   std::cout << "User Parameter constructor called" << std::endl;
   return ;

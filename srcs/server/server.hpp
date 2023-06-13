@@ -5,7 +5,7 @@
 #define	poll_fd		struct pollfd
 #define	MAX_CLIENTS	5
 #define	TIMEOUT		-1
-#define MSG_SIZE	80
+#define MSG_SIZE	512
 #include <string>
 #include <iostream>
 #include <cstring>
@@ -24,8 +24,9 @@
 
 class	autosocket;
 class 	user;
-class	command;
 class 	context;
+typedef void (*command_function)(int i, user &usr, std::string name);
+typedef std::map<std::string, command_function> cmd_map;
 
 typedef struct t_Data_Server {             //Struct para almacenar los datos del servidor
 	std::string host;
@@ -43,8 +44,7 @@ class	server {
 		poll_fd					poll_fds[MAX_CLIENTS];
 		data_server				data;
 		std::map<int, user> 	list_of_users;
-//		context 			*cmd;
-
+		cmd_map 				list_of_cmds;
 		server	( void );
 
 		int		fd_ready(void);
@@ -52,7 +52,7 @@ class	server {
 		bool	receive_communication(int i);
 		bool	send_message(char *msg, int fd, int len);
 		void	delete_user(int i);
-//		void	parse_message(int i, std::string msg);
+		void	parse_message(int i, std::string msg);
 	public:
 
 		server				( std::string network , std::string port , std::string pass );

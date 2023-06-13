@@ -21,8 +21,10 @@ server::server( std::string network , std::string port , std::string pass ) : _a
 	this->data.network_pass = seglist[2];
 	this->data.port 		= port;
 	this->data.pass 		= pass;
+	// TODO hacer funcion para rellenar la list_of_cmds
+	this->list_of_cmds.insert(std::pair<std::string, command_function>("NICK", &cmd::nick));
+	this->list_of_cmds.insert(std::pair<std::string, command_function>("USER", &cmd::username));
 	this->server_socket = new autosocket(this->data.port, this->data.host);
-
 }
 
 server::server( const server & var ) {
@@ -124,7 +126,7 @@ bool	server::accept_communication(void)
 	this->poll_fds[this->_active_fds].fd = fd;
 	this->poll_fds[this->_active_fds].events = POLLIN;
 	this->_active_fds++;
-	user 	new_user;
+	user 	new_user(fd);
 	this->list_of_users.insert(std::pair<int, user>(fd, new_user));
 	// std::cout << "New socket: " << fd << std::endl;
 	// std::cout << "Active clients: " << this->_active_fds << std::endl;
@@ -140,6 +142,7 @@ bool	server::receive_communication(int i)
 	int len;
 
 	std::cout << "Message received" << std::endl;
+	memset(buffer, 0, MSG_SIZE); //Iniciar buffer con ceros porque mete mierda
 	len = recv(this->poll_fds[i].fd, buffer, sizeof(buffer), 0);
 	if (len < 0)
     {
@@ -154,8 +157,8 @@ bool	server::receive_communication(int i)
 		this->delete_user(i);
 		return 0;
     }
-//	this->parse_message(i, buffer);
-	//this->send_message(buffer, this->poll_fds[i].fd, len);
+	buffer[len-1] = 0; //El intro lo ponemos a cero
+	this->parse_message(i, buffer);
 	return 0;
 }
 
@@ -182,11 +185,14 @@ void	server::delete_user(int i)
 	this->_active_fds--;
 	//this->poll_fds[i].fd = -1;
 }
-// void	server::parse_message(int i, std::string msg)
-// {
-// 	int j = 0;
-// 	//TODO Hacerlo bien voy a asumir que los comandos están bien y extraer el que corresponde
-// 	std::vector<std::string> seglist = ft_split(msg, ' ');
-// 	this->cmd(seglist[0]);
-// 	this->cmd->execute(i, this->list_of_users[i], seglist[1]);
-// }
+
+void	server::parse_message(int i, std::string msg)
+{
+	cmd_map::iterator it;
+	//TODO Hacerlo bien voy a asumir que los comandos están bien y extraer el que corresponde
+	std::vector<std::string> seglist = ft_split(msg, ' ');
+	std::cout << seglist[0] << " " << seglist[1] << std::endl;
+	it = this->list_of_cmds.find(seglist[0]);
+	if (it != this->list_of_cmds.end())
+		it->second(i, this->list_of_users.find(i)->second, seglist[1]);
+}
