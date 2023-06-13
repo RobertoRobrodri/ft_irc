@@ -24,6 +24,7 @@ server::server( std::string network , std::string port , std::string pass ) : _a
 	// TODO hacer funcion para rellenar la list_of_cmds
 	this->list_of_cmds.insert(std::pair<std::string, command_function>("NICK", &cmd::nick));
 	this->list_of_cmds.insert(std::pair<std::string, command_function>("USER", &cmd::username));
+	this->list_of_cmds.insert(std::pair<std::string, command_function>("QUIT", &cmd::quit));
 	this->server_socket = new autosocket(this->data.port, this->data.host);
 }
 
@@ -158,6 +159,7 @@ bool	server::receive_communication(int i)
 		return 0;
     }
 	buffer[len-1] = 0; //El intro lo ponemos a cero
+	std::cout << this->list_of_users[i] << std::endl;
 	this->parse_message(i, buffer);
 	return 0;
 }
@@ -194,5 +196,5 @@ void	server::parse_message(int i, std::string msg)
 	std::cout << seglist[0] << " " << seglist[1] << std::endl;
 	it = this->list_of_cmds.find(seglist[0]);
 	if (it != this->list_of_cmds.end())
-		it->second(i, this->list_of_users.find(i)->second, seglist[1]);
+		it->second(*this, this->list_of_users.find(i)->second, seglist[1]);
 }

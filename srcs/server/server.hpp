@@ -25,7 +25,8 @@
 class	autosocket;
 class 	user;
 class 	context;
-typedef void (*command_function)(int i, user &usr, std::string name);
+class   server;
+typedef void (*command_function)(server &svr, user &usr, std::string name);
 typedef std::map<std::string, command_function> cmd_map;
 
 typedef struct t_Data_Server {             //Struct para almacenar los datos del servidor
@@ -50,8 +51,6 @@ class	server {
 		int		fd_ready(void);
 		bool	accept_communication(void);
 		bool	receive_communication(int i);
-		bool	send_message(char *msg, int fd, int len);
-		void	delete_user(int i);
 		void	parse_message(int i, std::string msg);
 	public:
 
@@ -73,6 +72,8 @@ class	server {
 		#				FUNCTIONS					#
 		############################################*/
 		bool	wait_for_connection(void);
+		void	delete_user(int i);
+		bool	send_message(char *msg, int fd, int len);
 };
 
 std::ostream &operator<<(std::ostream& os, const server &tmp);
