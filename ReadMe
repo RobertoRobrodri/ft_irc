@@ -19,11 +19,18 @@ https://www.gnu.org/software/libc/manual/html_node/Socket_002dLevel-Options.html
 https://modern.ircdocs.horse/ - Resume
 IRSSI - cliente por terminal
 NETCAT - nc localhost <port>
-
+=======
+Cliente de referencia: IRSSI
+  INSTALL:
+  - MACOS = brew install irssi
+  - Página oficial = https://irssi.org/download/
+  - /connect localhost
+  - En cuanto se conecta, el cliente envia tres comandos: CAP LS (ignorar), USER y NICK
+  https://ircv3.net/specs/extensions/capability-negotiation.html#connection-registration
 =======
 TAREAS
 [ ] Test unitarios (Zome)
-[ ] Encontrar cliente de referencia y probarlo (Rbrdr)
+[✅] Encontrar cliente de referencia y probarlo (Rbrdr)
 [ ] Comandos NICK y USER
 [ ] Testear que los comandos no se bloquean
 [ ] Añadir comandos para crear y unirse a un canal
