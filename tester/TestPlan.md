@@ -1,3 +1,13 @@
+# Compilation
+[ ] Compile source files and generate program with c++98 flag
+[ ] No relink
+[ ] Rules $(NAME), all, clean, fclean and re in Makefile
+
+# Restrictions
+[ ] No external libraries
+[ ] C libraries and functions only used when needed
+[ ] No forks
+
 # Clients
 
 ## Client Location
