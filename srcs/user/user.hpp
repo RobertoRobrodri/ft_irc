@@ -8,6 +8,7 @@ class	user {
 
 	private:
 
+		int 			_fd;
 		std::string 	_username;
 		std::string 	_nick;
 		std::string 	_pass;
@@ -15,7 +16,7 @@ class	user {
 	public:
 
 		user 			( void );
-		user 			( std::string user, std::string nick, std::string pass );
+		user 			( int fd );
 		user 			( const user & var );
 		~user			( void );
 		user &operator=	(const user &tmp);
