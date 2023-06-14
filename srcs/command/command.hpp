@@ -6,10 +6,12 @@
 #include "../user/user.hpp"
 
 class user;
+class server;
 namespace cmd
 {
-	void nick(int fd, user &usr, std::string name);
-	void username(int fd, user &usr, std::string name);
+	void nick(server &svr, int fd, std::string name);
+	void username(server &svr, int fd, std::string name);
+	void quit(server &svr, int fd, std::string name);
 }
 
 #endif

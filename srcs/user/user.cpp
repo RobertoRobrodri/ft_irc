@@ -32,6 +32,9 @@ user & user::operator=(const user &tmp) {
   this->set_username(tmp.get_username());
   this->set_nick(tmp.get_nick());
   this->set_pass(tmp.get_pass());
+  this->set_fd(tmp.get_fd());
+  std::cout << "THIS USER: " << std::endl  << *this << std::endl;
+  std::cout << "TMP USER: " << std::endl << tmp << std::endl;
   return (*this);
   
 }
@@ -41,5 +44,6 @@ std::ostream &operator<<(std::ostream& os, const user &tmp) {
   os << "Username       |     " << tmp.get_username() << std::endl;
 	os << "Nickname       |     " << tmp.get_nick() << std::endl;
 	os << "Password       |     " << tmp.get_pass() << std::endl;
+  os << "FD             |     " << tmp.get_fd() << std::endl;
 	return (os);
 }

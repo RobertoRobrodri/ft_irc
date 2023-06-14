@@ -24,6 +24,7 @@ server::server( std::string network , std::string port , std::string pass ) : _a
 	// TODO hacer funcion para rellenar la list_of_cmds
 	this->list_of_cmds.insert(std::pair<std::string, command_function>("NICK", &cmd::nick));
 	this->list_of_cmds.insert(std::pair<std::string, command_function>("USER", &cmd::username));
+	this->list_of_cmds.insert(std::pair<std::string, command_function>("QUIT", &cmd::quit));
 	this->server_socket = new autosocket(this->data.port, this->data.host);
 }
 
@@ -73,8 +74,6 @@ bool	server::wait_for_connection(void)
 	{
 		std::cout << "IRC 💀💀💀💀 IRC" << std::endl;
 		ret = poll(this->poll_fds, this->_active_fds, TIMEOUT);
-		// for (int i = 0; i < this->_active_fds; i++)
-		// 	std::cout << this->poll_fds[i].fd << std::endl;
 		if (ret < 0) {
 			perror("Poll error");
 			return 1;
@@ -136,14 +135,14 @@ bool	server::accept_communication(void)
 	return 0;
 }
 
-bool	server::receive_communication(int i)
+bool	server::receive_communication(int poll_fd_pos)
 {
 	char buffer[MSG_SIZE];
 	int len;
 
 	std::cout << "Message received" << std::endl;
 	memset(buffer, 0, MSG_SIZE); //Iniciar buffer con ceros porque mete mierda
-	len = recv(this->poll_fds[i].fd, buffer, sizeof(buffer), 0);
+	len = recv(this->poll_fds[poll_fd_pos].fd, buffer, sizeof(buffer), 0);
 	if (len < 0)
     {
 		if (errno != EWOULDBLOCK)
@@ -154,11 +153,11 @@ bool	server::receive_communication(int i)
     {
 		std::cout << "  Connection closed" << std::endl;
 		// Close fd >> Delete fd from poll >> Delete user from list_of_users
-		this->delete_user(i);
+		this->delete_user(poll_fd_pos);
 		return 0;
     }
 	buffer[len-1] = 0; //El intro lo ponemos a cero
-	this->parse_message(i, buffer);
+	this->parse_message(this->poll_fds[poll_fd_pos].fd, buffer);
 	return 0;
 }
 
@@ -173,26 +172,28 @@ bool	server::send_message(char *msg, int fd, int len)
 	return 0;
 }
 
-void	server::delete_user(int i)
+void	server::delete_user(int poll_fd_pos)
 {
 	std::cout << "Deleted user: " << std::endl;
-	close(this->poll_fds[i].fd);
-	this->list_of_users.erase(this->poll_fds[i].fd);
-	for (int count = i; count <= this->_active_fds - 1; count++)
+	close(this->poll_fds[poll_fd_pos].fd);
+	this->list_of_users.erase(this->poll_fds[poll_fd_pos].fd);
+	for (int count = poll_fd_pos; count <= this->_active_fds - 1; count++)
 		this->poll_fds[count] = this->poll_fds[count + 1];
 	this->poll_fds[this->_active_fds - 1].fd = 0;
 	this->poll_fds[this->_active_fds - 1].events = 0;
 	this->_active_fds--;
-	//this->poll_fds[i].fd = -1;
+	//this->poll_fds[poll_fd_pos].fd = -1;
 }
 
-void	server::parse_message(int i, std::string msg)
+void	server::parse_message(int fd, std::string msg)
 {
 	cmd_map::iterator it;
 	//TODO Hacerlo bien voy a asumir que los comandos están bien y extraer el que corresponde
 	std::vector<std::string> seglist = ft_split(msg, ' ');
-	std::cout << seglist[0] << " " << seglist[1] << std::endl;
 	it = this->list_of_cmds.find(seglist[0]);
 	if (it != this->list_of_cmds.end())
-		it->second(i, this->list_of_users.find(i)->second, seglist[1]);
+		it->second(*this, fd, seglist[1]);
+}
+user& server::get_user(int i) {
+	return(this->list_of_users.find(i)->second);
 }
