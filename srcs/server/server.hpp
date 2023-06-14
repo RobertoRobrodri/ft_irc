@@ -76,6 +76,7 @@ class	server {
 		bool	wait_for_connection(void);
 		void	delete_user(int i);
 		bool	send_message(char *msg, int fd, int len);
+		bool	compare_nicknames(std::string nick) const;
 };
 
 std::ostream &operator<<(std::ostream& os, const server &tmp);

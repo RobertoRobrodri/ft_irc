@@ -197,6 +197,18 @@ void	server::parse_message(int poll_fd_pos, std::string msg)
 		it->second(*this, poll_fd_pos, seglist[1]);
 }
 
+bool	server::compare_nicknames(std::string nick) const
+{
+	std::map<int, user>::const_iterator it;
+
+	for (it = this->list_of_users.begin(); it != this->list_of_users.end(); it++)
+	{
+		if (it->second.get_nick().compare(nick) == 0)
+			return 0;
+	}
+	return 1;
+}
+
 user& server::get_user(int i) {
 	return(this->list_of_users.find(i)->second);
 }
