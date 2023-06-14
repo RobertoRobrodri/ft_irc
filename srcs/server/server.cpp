@@ -157,7 +157,7 @@ bool	server::receive_communication(int poll_fd_pos)
 		return 0;
     }
 	buffer[len-1] = 0; //El intro lo ponemos a cero
-	this->parse_message(this->poll_fds[poll_fd_pos].fd, buffer);
+	this->parse_message(poll_fd_pos, buffer);
 	return 0;
 }
 
@@ -182,18 +182,25 @@ void	server::delete_user(int poll_fd_pos)
 	this->poll_fds[this->_active_fds - 1].fd = 0;
 	this->poll_fds[this->_active_fds - 1].events = 0;
 	this->_active_fds--;
+	for (int i = 0; i < this->_active_fds; i++)
+		std::cout << this->poll_fds[i].fd << std::endl;
 	//this->poll_fds[poll_fd_pos].fd = -1;
 }
 
-void	server::parse_message(int fd, std::string msg)
+void	server::parse_message(int poll_fd_pos, std::string msg)
 {
 	cmd_map::iterator it;
 	//TODO Hacerlo bien voy a asumir que los comandos están bien y extraer el que corresponde
 	std::vector<std::string> seglist = ft_split(msg, ' ');
 	it = this->list_of_cmds.find(seglist[0]);
 	if (it != this->list_of_cmds.end())
-		it->second(*this, fd, seglist[1]);
+		it->second(*this, poll_fd_pos, seglist[1]);
 }
+
 user& server::get_user(int i) {
 	return(this->list_of_users.find(i)->second);
+}
+
+pollfd&	server::get_pollfd(int i) {
+	return (this->poll_fds[i]);
 }
