@@ -74,8 +74,6 @@ bool	server::wait_for_connection(void)
 	{
 		std::cout << "IRC 💀💀💀💀 IRC" << std::endl;
 		ret = poll(this->poll_fds, this->_active_fds, TIMEOUT);
-		// for (int i = 0; i < this->_active_fds; i++)
-		// 	std::cout << this->poll_fds[i].fd << std::endl;
 		if (ret < 0) {
 			perror("Poll error");
 			return 1;
@@ -159,7 +157,6 @@ bool	server::receive_communication(int i)
 		return 0;
     }
 	buffer[len-1] = 0; //El intro lo ponemos a cero
-	std::cout << this->list_of_users[i] << std::endl;
 	this->parse_message(i, buffer);
 	return 0;
 }
@@ -193,8 +190,9 @@ void	server::parse_message(int i, std::string msg)
 	cmd_map::iterator it;
 	//TODO Hacerlo bien voy a asumir que los comandos están bien y extraer el que corresponde
 	std::vector<std::string> seglist = ft_split(msg, ' ');
-	std::cout << seglist[0] << " " << seglist[1] << std::endl;
+	std::cout << seglist[0] << " " << seglist[1] << " "<< i << std::endl;
 	it = this->list_of_cmds.find(seglist[0]);
+	std::cout << this->list_of_users.find(i)->second << std::endl;
 	if (it != this->list_of_cmds.end())
-		it->second(*this, this->list_of_users.find(i)->second, seglist[1]);
+		it->second(*this, this->list_of_users.find(this->poll_fds[i].fd)->second, seglist[1]);
 }

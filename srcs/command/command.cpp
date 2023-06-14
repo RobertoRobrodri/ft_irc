@@ -5,7 +5,7 @@
 void cmd::nick(server &svr, user &usr, std::string name) {
   usr.set_nick(name);
   std::cout << usr << std::endl;
-}  
+}
 
 void  cmd::username(server &svr, user &usr, std::string name) {
   usr.set_username(name);
