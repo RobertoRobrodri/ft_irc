@@ -9,9 +9,9 @@ class user;
 class server;
 namespace cmd
 {
-	void nick(server &svr, user &usr, std::string name);
-	void username(server &svr, user &usr, std::string name);
-	void quit(server &svr, user &usr, std::string name);
+	void nick(server &svr, int fd, std::string name);
+	void username(server &svr, int fd, std::string name);
+	void quit(server &svr, int fd, std::string name);
 }
 
 #endif
