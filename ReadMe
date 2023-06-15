@@ -10,6 +10,7 @@ https://www.rfc-editor.org/rfc/rfc2811  - Channels
 
 https://en.wikipedia.org/wiki/Internet_Relay_Chat - General Info
 https://www.w3.org/Addressing/draft-mirashi-url-irc-01.txt#:~:text=IRC%20servers%20often%20use%20the,for%20clients%20to%20connect%20to.  - Port Range - Security Measures
+https://www.geekshed.net/tag/limits/ - IRC LIMITS
 
 # Socket stuff
 https://www.gta.ufrj.br/ensino/eel878/sockets/sockaddr_inman.html
