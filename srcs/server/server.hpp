@@ -6,6 +6,7 @@
 #define	MAX_CLIENTS	5
 #define	TIMEOUT		-1
 #define MSG_SIZE	512
+#define TOKEN		"TE_DESCONECTO_PUTO"
 #include <string>
 #include <iostream>
 #include <cstring>
@@ -52,6 +53,7 @@ class	server {
 		bool	accept_communication(void);
 		bool	receive_communication(int i);
 		void	parse_message(int poll_fd_pos, std::string msg);
+		void	init_list_of_cmds(void);
 	public:
 
 		server				( std::string network , std::string port , std::string pass );
@@ -77,7 +79,7 @@ class	server {
 		bool	wait_for_connection(void);
 		void	delete_user(int i);
 		bool	send_message(char *msg, int fd, int len);
-		bool	compare_nicknames(std::string nick) const;
+		user	*get_user_from_nick(std::string nick);
 };
 
 std::ostream &operator<<(std::ostream& os, const server &tmp);

@@ -24,10 +24,11 @@ class	user {
 		/*###########################################
 		#				GETTERS						#
 		############################################*/
-		std::string get_username(void) const 		{return(this->_username);};
-		std::string get_nick(void) const 			{return(this->_nick);};
-		std::string get_pass(void) const 			{return(this->_pass);};
+		std::string get_username(void) const	{return(this->_username);};
+		std::string get_nick(void) const 		{return(this->_nick);};
+		std::string get_pass(void) const 		{return(this->_pass);};
 		int 		get_fd(void) const 			{return(this->_fd);};
+		
 		/*###########################################
 		#				SETTERS						#
 		############################################*/
