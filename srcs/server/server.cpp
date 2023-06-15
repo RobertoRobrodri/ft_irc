@@ -27,6 +27,7 @@ server::server( std::string network , std::string port , std::string pass ) : _a
 	this->list_of_cmds.insert(std::pair<std::string, command_function>("PING", &cmd::pingpong));
 	this->list_of_cmds.insert(std::pair<std::string, command_function>("PONG", &cmd::pingpong));
 	this->list_of_cmds.insert(std::pair<std::string, command_function>("QUIT", &cmd::quit));
+	this->list_of_cmds.insert(std::pair<std::string, command_function>("PRIVMSG", &cmd::privmsg));
 	this->server_socket = new autosocket(this->data.port, this->data.host);
 }
 
@@ -191,10 +192,16 @@ void	server::parse_message(int poll_fd_pos, std::string msg)
 {
 	cmd_map::iterator it;
 	//TODO Hacerlo bien voy a asumir que los comandos están bien y extraer el que corresponde
-	std::vector<std::string> seglist = ft_split(msg, ' ');
-	it = this->list_of_cmds.find(seglist[0]);
-	if (it != this->list_of_cmds.end())
-		it->second(*this, poll_fd_pos, seglist[1]);
+	// std::vector<std::string> seglist = ft_split(msg, ' ');
+	// it = this->list_of_cmds.find(seglist[0]);
+	// 	if (it != this->list_of_cmds.end())
+	// 		it->second(*this, poll_fd_pos, seglist[1]);
+	int ind = msg.find(" ");
+	std::string cmd = msg.substr(0, ind);
+	msg = msg.substr(ind + 1);
+	it = this->list_of_cmds.find(cmd);
+		if (it != this->list_of_cmds.end())
+			it->second(*this, poll_fd_pos, msg);
 }
 
 bool	server::compare_nicknames(std::string nick) const

@@ -37,3 +37,20 @@ void  cmd::quit(server &svr, int poll_fd_pos, std::string name) {
   svr.send_message(const_cast<char *>(name.c_str()), usr.get_fd(), name.length());
   svr.delete_user(poll_fd_pos);
 }
+
+void  cmd::privmsg(server &svr, int poll_fd_pos, std::string name) {
+  std::vector<std::string> seglist = ft_split(name, ' ');
+  poll_fd pollfd = svr.get_pollfd(poll_fd_pos);
+  user &usr = svr.get_user(pollfd.fd);
+  std::map<int, user> lst = svr.get_list_of_users();
+  std::cout << "ENTRÉ" << std::endl;
+  
+  for (std::map<int, user>::iterator it = lst.begin(); it != lst.end(); it++)
+	{
+		if (it->second.get_nick().compare(seglist[0]) == 0)
+    {
+      svr.send_message(const_cast<char *>(seglist[1].c_str()), it->second.get_fd(), seglist[1].length());
+      svr.send_message(const_cast<char *>("\n"), it->second.get_fd(), 1);
+    }
+  }
+}

@@ -69,6 +69,7 @@ class	server {
 		std::string get_password(void) const 		{return(this->data.pass);};
 		user& 	get_user(int i);
 		pollfd&	get_pollfd(int i);
+		std::map<int, user> get_list_of_users(void) const {return(this->list_of_users);};
 
 		/*###########################################
 		#				FUNCTIONS					#

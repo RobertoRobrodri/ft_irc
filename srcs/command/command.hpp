@@ -13,6 +13,8 @@ namespace cmd
 	void username(server &svr, int poll_fd_pos, std::string name);
 	void pingpong(server &svr, int poll_fd_pos, std::string name);
 	void quit(server &svr, int poll_fd_pos, std::string name);
+
+	void privmsg(server &svr, int poll_fd_pos, std::string name);
 }
 
 #endif
