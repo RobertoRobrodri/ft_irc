@@ -24,7 +24,10 @@ server::server( std::string network , std::string port , std::string pass ) : _a
 	// TODO hacer funcion para rellenar la list_of_cmds
 	this->list_of_cmds.insert(std::pair<std::string, command_function>("NICK", &cmd::nick));
 	this->list_of_cmds.insert(std::pair<std::string, command_function>("USER", &cmd::username));
+	this->list_of_cmds.insert(std::pair<std::string, command_function>("PING", &cmd::pingpong));
+	this->list_of_cmds.insert(std::pair<std::string, command_function>("PONG", &cmd::pingpong));
 	this->list_of_cmds.insert(std::pair<std::string, command_function>("QUIT", &cmd::quit));
+	this->list_of_cmds.insert(std::pair<std::string, command_function>("PRIVMSG", &cmd::privmsg));
 	this->server_socket = new autosocket(this->data.port, this->data.host);
 }
 
@@ -73,16 +76,13 @@ bool	server::wait_for_connection(void)
 	while (true)
 	{
 		std::cout << "IRC 💀💀💀💀 IRC" << std::endl;
-		ret = poll(this->poll_fds, this->_active_fds, TIMEOUT);
+		ret = poll(this->poll_fds, this->_active_fds, TIMEOUT); //TODO cambiar timeout + check ping clients
 		if (ret < 0) {
 			perror("Poll error");
 			return 1;
 		}
-		// En principio no hay tiemout TIMEOUT = -1
-		// if (ret == 0) {
-		// 	perror("Timeout");
-		// 	return 1;
-		// }
+		if (ret == 0)
+			continue;
 		if (this->fd_ready() == 1)
 			return 1;
 	}
@@ -157,7 +157,8 @@ bool	server::receive_communication(int poll_fd_pos)
 		return 0;
     }
 	buffer[len-1] = 0; //El intro lo ponemos a cero
-	this->parse_message(poll_fd_pos, buffer);
+	if (buffer[0] != 0)
+		this->parse_message(poll_fd_pos, buffer);
 	return 0;
 }
 
@@ -191,10 +192,16 @@ void	server::parse_message(int poll_fd_pos, std::string msg)
 {
 	cmd_map::iterator it;
 	//TODO Hacerlo bien voy a asumir que los comandos están bien y extraer el que corresponde
-	std::vector<std::string> seglist = ft_split(msg, ' ');
-	it = this->list_of_cmds.find(seglist[0]);
-	if (it != this->list_of_cmds.end())
-		it->second(*this, poll_fd_pos, seglist[1]);
+	// std::vector<std::string> seglist = ft_split(msg, ' ');
+	// it = this->list_of_cmds.find(seglist[0]);
+	// 	if (it != this->list_of_cmds.end())
+	// 		it->second(*this, poll_fd_pos, seglist[1]);
+	int ind = msg.find(" ");
+	std::string cmd = msg.substr(0, ind);
+	msg = msg.substr(ind + 1);
+	it = this->list_of_cmds.find(cmd);
+		if (it != this->list_of_cmds.end())
+			it->second(*this, poll_fd_pos, msg);
 }
 
 bool	server::compare_nicknames(std::string nick) const
