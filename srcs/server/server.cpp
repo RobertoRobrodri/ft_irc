@@ -21,13 +21,7 @@ server::server( std::string network , std::string port , std::string pass ) : _a
 	this->data.network_pass = seglist[2];
 	this->data.port 		= port;
 	this->data.pass 		= pass;
-	// TODO hacer funcion para rellenar la list_of_cmds
-	this->list_of_cmds.insert(std::pair<std::string, command_function>("NICK", &cmd::nick));
-	this->list_of_cmds.insert(std::pair<std::string, command_function>("USER", &cmd::username));
-	this->list_of_cmds.insert(std::pair<std::string, command_function>("PING", &cmd::pingpong));
-	this->list_of_cmds.insert(std::pair<std::string, command_function>("PONG", &cmd::pingpong));
-	this->list_of_cmds.insert(std::pair<std::string, command_function>("QUIT", &cmd::quit));
-	this->list_of_cmds.insert(std::pair<std::string, command_function>("PRIVMSG", &cmd::privmsg));
+	this->init_list_of_cmds();
 	this->server_socket = new autosocket(this->data.port, this->data.host);
 }
 
@@ -75,7 +69,6 @@ bool	server::wait_for_connection(void)
 
 	while (true)
 	{
-		std::cout << "IRC 💀💀💀💀 IRC" << std::endl;
 		ret = poll(this->poll_fds, this->_active_fds, TIMEOUT); //TODO cambiar timeout + check ping clients
 		if (ret < 0) {
 			perror("Poll error");
@@ -85,8 +78,18 @@ bool	server::wait_for_connection(void)
 			continue;
 		if (this->fd_ready() == 1)
 			return 1;
+		// ping  users and disconnect inactive
 	}
 	return 0;
+}
+
+void	server::init_list_of_cmds(void)
+{
+	this->list_of_cmds.insert(std::pair<std::string, command_function>("NICK", &cmd::nick));
+	this->list_of_cmds.insert(std::pair<std::string, command_function>("USER", &cmd::username));
+	this->list_of_cmds.insert(std::pair<std::string, command_function>("PONG", &cmd::pong));
+	this->list_of_cmds.insert(std::pair<std::string, command_function>("QUIT", &cmd::quit));
+	this->list_of_cmds.insert(std::pair<std::string, command_function>("PRIVMSG", &cmd::privmsg));
 }
 
 int	server::fd_ready( void )
@@ -204,16 +207,16 @@ void	server::parse_message(int poll_fd_pos, std::string msg)
 			it->second(*this, poll_fd_pos, msg);
 }
 
-bool	server::compare_nicknames(std::string nick) const
+user *server::get_user_from_nick(std::string nick)
 {
-	std::map<int, user>::const_iterator it;
+	std::map<int, user>::iterator it;
 
 	for (it = this->list_of_users.begin(); it != this->list_of_users.end(); it++)
 	{
 		if (it->second.get_nick().compare(nick) == 0)
-			return 0;
+			return &(it->second);
 	}
-	return 1;
+	return NULL;
 }
 
 user& server::get_user(int i) {
