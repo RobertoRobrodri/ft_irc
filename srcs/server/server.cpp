@@ -214,6 +214,8 @@ void	server::create_channel(user &usr, std::string name)
 
 	cnn.add_member(usr);
 	this->list_of_channels.insert(std::pair<std::string, channel>(name, cnn));
+	std::cout << name << " channel created!" << std::endl;
+	std::cout << cnn << std::endl;
 }
 
 // Maybe make a template????
