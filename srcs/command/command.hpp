@@ -14,6 +14,7 @@ namespace cmd
 	void pong(server &svr, int poll_fd_pos, std::string str);
 	void quit(server &svr, int poll_fd_pos, std::string str);
 	void privmsg(server &svr, int poll_fd_pos, std::string str);
+	void join(server &svr, int poll_fd_pos, std::string str);
 }
 
 #endif

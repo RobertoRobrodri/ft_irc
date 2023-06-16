@@ -54,3 +54,18 @@ void  cmd::privmsg(server &svr, int poll_fd_pos, std::string str) {
     svr.send_message(const_cast<char *>("\n"), receiver->get_fd(), 1);
   }
 }
+
+void  cmd::join(server &svr, int poll_fd_pos, std::string str) {
+  // Si no existe canal:
+  // SVR->crear_canal()
+  // else
+  // SVR->add_user_to_channel()
+  std::vector<std::string> seglist = ft_split(str, ' ');
+  poll_fd pollfd = svr.get_pollfd(poll_fd_pos);
+  user &usr = svr.get_user(pollfd.fd);
+  channel *cnn = svr.get_channel_from_name(seglist[0]);
+  if (cnn)
+    cnn->add_member(usr);
+  else
+    svr.create_channel(usr, seglist[0]);
+}

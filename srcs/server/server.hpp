@@ -22,11 +22,14 @@
 #include "../parser/parser.hpp"
 #include "../user/user.hpp"
 #include "../command/command.hpp"
+#include "../channel/channel.hpp"
 
 class	autosocket;
 class 	user;
 class 	context;
 class   server;
+class	channel;
+
 typedef void (*command_function)(server &svr, int poll_fd_pos, std::string name);
 typedef std::map<std::string, command_function> cmd_map;
 
@@ -41,14 +44,15 @@ typedef struct t_Data_Server {             //Struct para almacenar los datos del
 class	server {
 
 	private:
-		int 					_active_fds;
-		autosocket				*server_socket;
-		poll_fd					poll_fds[MAX_CLIENTS];
-		data_server				data;
-		cmd_map 				list_of_cmds;
-		std::map<int, user> 	list_of_users;
-		server	( void );
+		int 							_active_fds;
+		autosocket						*server_socket;
+		poll_fd							poll_fds[MAX_CLIENTS];
+		data_server						data;
+		cmd_map 						list_of_cmds;
+		std::map<int, user> 			list_of_users;
+		std::map<std::string, channel> 	list_of_channels;
 
+		server	( void );
 		int		fd_ready(void);
 		bool	accept_communication(void);
 		bool	receive_communication(int i);
@@ -72,6 +76,7 @@ class	server {
 		user& 	get_user(int i);
 		pollfd&	get_pollfd(int i);
 		std::map<int, user> get_list_of_users(void) const {return(this->list_of_users);};
+		std::map<std::string, channel> get_list_of_channels(void) const {return(this->list_of_channels);};
 
 		/*###########################################
 		#				FUNCTIONS					#
@@ -80,6 +85,8 @@ class	server {
 		void	delete_user(int i);
 		bool	send_message(char *msg, int fd, int len);
 		user	*get_user_from_nick(std::string nick);
+		channel *get_channel_from_name(std::string name);
+		void	create_channel(user &usr, std::string name);
 };
 
 std::ostream &operator<<(std::ostream& os, const server &tmp);
