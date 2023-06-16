@@ -44,10 +44,10 @@ std::ostream &operator<<(std::ostream& os, const channel &tmp) {
 	for (it = lst.begin(); it != lst.end(); it++)
     	os << it->second.get_nick() << std::endl;
 	return (os);
-  
 }
 
 void	channel::add_member(user &usr)
 {
 	this->list_of_members.insert(std::pair<int, user>(usr.get_fd(), usr));
+  std::cout << *this << std::endl;
 }

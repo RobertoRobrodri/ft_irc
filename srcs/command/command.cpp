@@ -18,6 +18,8 @@ void cmd::nick(server &svr, int poll_fd_pos, std::string str) {
   std::cout << usr << std::endl;
 }
 
+//  The USER message is used at the beginning of connection to specify
+//    the username, hostname, servername and realname of s new user.
 void  cmd::username(server &svr, int poll_fd_pos, std::string str) {
   poll_fd pollfd = svr.get_pollfd(poll_fd_pos);
   user &usr = svr.get_user(pollfd.fd);
