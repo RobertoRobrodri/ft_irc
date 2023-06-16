@@ -90,6 +90,7 @@ void	server::init_list_of_cmds(void)
 	this->list_of_cmds.insert(std::pair<std::string, command_function>("PONG", &cmd::pong));
 	this->list_of_cmds.insert(std::pair<std::string, command_function>("QUIT", &cmd::quit));
 	this->list_of_cmds.insert(std::pair<std::string, command_function>("PRIVMSG", &cmd::privmsg));
+	this->list_of_cmds.insert(std::pair<std::string, command_function>("JOIN", &cmd::join));
 }
 
 int	server::fd_ready( void )
@@ -207,6 +208,17 @@ void	server::parse_message(int poll_fd_pos, std::string msg)
 			it->second(*this, poll_fd_pos, msg);
 }
 
+void	server::create_channel(user &usr, std::string name)
+{
+	channel cnn(name);
+
+	cnn.add_member(usr);
+	this->list_of_channels.insert(std::pair<std::string, channel>(name, cnn));
+	std::cout << name << " channel created!" << std::endl;
+	std::cout << cnn << std::endl;
+}
+
+// Maybe make a template????
 user *server::get_user_from_nick(std::string nick)
 {
 	std::map<int, user>::iterator it;
@@ -214,6 +226,18 @@ user *server::get_user_from_nick(std::string nick)
 	for (it = this->list_of_users.begin(); it != this->list_of_users.end(); it++)
 	{
 		if (it->second.get_nick().compare(nick) == 0)
+			return &(it->second);
+	}
+	return NULL;
+}
+
+channel *server::get_channel_from_name(std::string name)
+{
+	std::map<std::string, channel>::iterator it;
+
+	for (it = this->list_of_channels.begin(); it != this->list_of_channels.end(); it++)
+	{
+		if (it->second.get_name().compare(name) == 0)
 			return &(it->second);
 	}
 	return NULL;

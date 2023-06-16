@@ -22,6 +22,7 @@ SUBFILE2_PATH   = autosocket
 SUBFILE3_PATH   = parser
 SUBFILE4_PATH   = user
 SUBFILE5_PATH   = command
+SUBFILE6_PATH   = channel
 
 OBJ_PATH    	= objects
 TEST_PATH		= test
@@ -33,6 +34,7 @@ SUBFILE2_SRC = autosocket.cpp
 SUBFILE3_SRC = parser.cpp
 SUBFILE4_SRC = user.cpp
 SUBFILE5_SRC = command.cpp
+SUBFILE6_SRC = channel.cpp
 
 SRC =  	main.cpp \
 		$(addprefix $(SUBFILE1_PATH)/, $(SUBFILE1_SRC)) \
@@ -40,7 +42,7 @@ SRC =  	main.cpp \
 		$(addprefix $(SUBFILE3_PATH)/, $(SUBFILE3_SRC)) \
 		$(addprefix $(SUBFILE4_PATH)/, $(SUBFILE4_SRC)) \
 		$(addprefix $(SUBFILE5_PATH)/, $(SUBFILE5_SRC)) \
-
+		$(addprefix $(SUBFILE6_PATH)/, $(SUBFILE6_SRC)) \
 
 
 # RULES #
@@ -59,7 +61,7 @@ $(OBJ_PATH):
 	mkdir -p $(addprefix $(OBJ_PATH)/, $(SUBFILE3_PATH))
 	mkdir -p $(addprefix $(OBJ_PATH)/, $(SUBFILE4_PATH))
 	mkdir -p $(addprefix $(OBJ_PATH)/, $(SUBFILE5_PATH))
-
+	mkdir -p $(addprefix $(OBJ_PATH)/, $(SUBFILE6_PATH))
 
 $(OBJ_PATH)/%.o: $(SRC_PATH)/%.cpp | $(OBJ_PATH)
 	$(CC) $(CXXFLAGS) $(INCLUDE) -c $< -o $@
