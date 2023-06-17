@@ -6,7 +6,6 @@
 #define	MAX_CLIENTS	5
 #define	TIMEOUT		-1
 #define MSG_SIZE	512
-#define TOKEN		"TE_DESCONECTO_PUTO"
 
 // COLORS
 #define BLK "\e[0;30m"

@@ -116,20 +116,23 @@ int	server::fd_ready( void )
 bool	server::accept_communication(void)
 {
 	int 	fd = 0;
+	sock_in client_addr;
+	socklen_t client_addr_size = sizeof(client_addr);
+	char ip_addres[20];
 
-	fd = accept(this->server_socket->fd, NULL, NULL);
+	fd = accept(this->server_socket->fd, (sock_addr*)&client_addr, &client_addr_size);
 	if (fd < 0)
     {
         if (errno != EWOULDBLOCK)
           perror("  accept() failed");
-		std::cout << "Ok Schizo " << std::endl;
     	return 1;
     }
+	fcntl(fd, F_SETFL, O_NONBLOCK);
 	std::cout << "Listening socket is readable fr fr no cap" << std::endl;
 	this->poll_fds[this->_active_fds].fd = fd;
 	this->poll_fds[this->_active_fds].events = POLLIN;
 	this->_active_fds++;
-	user 	new_user(fd);
+	user 	new_user(fd, inet_ntop(AF_INET, &(client_addr.sin_addr), ip_addres, sizeof(ip_addres)));
 	this->list_of_users.insert(std::pair<int, user>(fd, new_user));
 	// std::cout << "New socket: " << fd << std::endl;
 	// std::cout << "Active clients: " << this->_active_fds << std::endl;
@@ -192,20 +195,17 @@ void	server::delete_user(int poll_fd_pos)
 	//this->poll_fds[poll_fd_pos].fd = -1;
 }
 
+// Separa la cadena en COMANDO + MSG, donde mensaje es todo lo demás que es parseado de forma distinta por cada comando
 void	server::parse_message(int poll_fd_pos, std::string msg)
 {
 	cmd_map::iterator it;
-	//TODO Hacerlo bien voy a asumir que los comandos están bien y extraer el que corresponde
-	// std::vector<std::string> seglist = ft_split(msg, ' ');
-	// it = this->list_of_cmds.find(seglist[0]);
-	// 	if (it != this->list_of_cmds.end())
-	// 		it->second(*this, poll_fd_pos, seglist[1]);
+
 	int ind = msg.find(" ");
 	std::string cmd = msg.substr(0, ind);
 	msg = msg.substr(ind + 1);
 	it = this->list_of_cmds.find(cmd);
-		if (it != this->list_of_cmds.end())
-			it->second(*this, poll_fd_pos, msg);
+	if (it != this->list_of_cmds.end())
+		it->second(*this, poll_fd_pos, msg);
 }
 
 void	server::create_channel(user &usr, std::string name)

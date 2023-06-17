@@ -11,12 +11,14 @@ class	user {
 		int 			_fd;
 		std::string 	_username;
 		std::string 	_nick;
-		std::string 	_pass;
+		std::string 	_hostname;
+		std::string		_realname;
+		std::string		_servername;
 
 	public:
 
 		user 			( void );
-		user 			( int fd );
+		user 			( int fd, std::string hostname );
 		user 			( const user & var );
 		~user			( void );
 		user &operator=	(const user &tmp);
@@ -26,7 +28,9 @@ class	user {
 		############################################*/
 		std::string get_username(void) const	{return(this->_username);};
 		std::string get_nick(void) const 		{return(this->_nick);};
-		std::string get_pass(void) const 		{return(this->_pass);};
+		std::string get_hostname(void) const 	{return(this->_hostname);};
+		std::string get_servername(void) const 	{return(this->_servername);};
+		std::string get_realname(void) const 	{return(this->_realname);};
 		int 		get_fd(void) const 			{return(this->_fd);};
 		
 		/*###########################################
@@ -34,7 +38,9 @@ class	user {
 		############################################*/
 		void		set_username(std::string username) {this->_username = username;};
 		void		set_nick(std::string nick) {this->_nick = nick;};
-		void		set_pass(std::string pass) {this->_pass = pass;};
+		void		set_hostname(std::string host) {this->_hostname = host;};
+		void		set_servername(std::string srv) {this->_servername = srv;};
+		void		set_realname(std::string realname) {this->_realname = realname;};
 		void		set_fd(int fd) {this->_fd = fd;};
 };
 std::ostream &operator<<(std::ostream& os, const user &tmp);

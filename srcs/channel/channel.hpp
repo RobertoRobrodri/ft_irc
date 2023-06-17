@@ -11,7 +11,7 @@ class	channel {
 
 		std::string				_name;
 		std::string				_topic;
-		std::map<int, user> 	list_of_members;
+		std::vector<user> 		list_of_members;
 
 		channel 			( void );
 	public:
@@ -25,7 +25,7 @@ class	channel {
 		############################################*/
 		std::string get_name(void) const 			{return(this->_name);};
 		std::string get_topic(void) const 			{return(this->_topic);};
-		std::map<int, user> get_list_of_members(void) const {return(this->list_of_members);};
+		std::vector<user> get_list_of_members(void) const {return(this->list_of_members);};
 		/*###########################################
 		#				FUNCTIONS					#
 		############################################*/
