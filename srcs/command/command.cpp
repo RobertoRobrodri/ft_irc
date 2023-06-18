@@ -1,4 +1,5 @@
 #include "command.hpp"
+#include "reply.hpp"
 
 // NICKNAME
 
@@ -23,7 +24,19 @@ void cmd::nick(server &svr, int poll_fd_pos, std::string str) {
 void  cmd::username(server &svr, int poll_fd_pos, std::string str) {
   poll_fd pollfd = svr.get_pollfd(poll_fd_pos);
   user &usr = svr.get_user(pollfd.fd);
-  usr.set_username(str);
+
+  // Separar el resto del realname
+  std::vector<std::string> cmd_params = ft_split(str, ':');
+  std::vector<std::string> other_params = ft_split(cmd_params[0], ' ');
+  usr.set_username(other_params[0]);
+  usr.set_hostname(other_params[1]);
+  usr.set_servername(other_params[2]);
+  usr.set_realname(cmd_params[1]);
+
+  // IF registered --> Send RPL_WELCOME
+  //TODO meterlo en el define
+  std::string send_msg_to_user = ": 001 " + usr.get_nick() + " : welcome " + usr.get_nick() + "\r\n";
+  svr.send_message(const_cast<char *>(send_msg_to_user.c_str()), usr.get_fd(), send_msg_to_user.length());
   std::cout << usr << std::endl;
 }
 
