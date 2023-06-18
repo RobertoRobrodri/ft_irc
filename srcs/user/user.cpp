@@ -48,3 +48,11 @@ std::ostream &operator<<(std::ostream& os, const user &tmp) {
   os << "FD             |     " << tmp.get_fd() << std::endl;
 	return (os);
 }
+
+void  user::is_registered(server &svr)
+{
+  if (this->get_username().empty() || this->get_nick().empty())
+    return ;
+  std::string send_msg_to_user = ": 001 " + this->get_nick() + " : welcome " + this->get_nick() + "\r\n";
+  svr.send_message(const_cast<char *>(send_msg_to_user.c_str()), this->get_fd(), send_msg_to_user.length());
+}

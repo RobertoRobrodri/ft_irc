@@ -4,6 +4,7 @@
 #include <iostream>
 #include "../server/server.hpp"
 
+class 	server;
 class	user {
 
 	private:
@@ -42,6 +43,10 @@ class	user {
 		void		set_servername(std::string srv) {this->_servername = srv;};
 		void		set_realname(std::string realname) {this->_realname = realname;};
 		void		set_fd(int fd) {this->_fd = fd;};
+		/*###########################################
+		#				FUNCTIONS					#
+		############################################*/
+		void		is_registered(server &svr);
 };
 std::ostream &operator<<(std::ostream& os, const user &tmp);
 

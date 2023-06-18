@@ -9,13 +9,14 @@ void cmd::nick(server &svr, int poll_fd_pos, std::string str) {
   //get reference of the user
   user &usr = svr.get_user(pollfd.fd);
   //set nick
-  // if (svr.compare_nicknames(name) == 0)
-  // {
-	// name.append(":Nickname is already in use");
-	// svr.send_message(const_cast<char *>(name.c_str()), usr.get_fd(), name.length());
-	// return ;
-  // }
+  if (svr.get_user_from_nick(str) != 0)
+  {
+    std::string send_msg_to_user = ": 433 " + str + " : Nickname is already in use \r\n";
+	  svr.send_message(const_cast<char *>(send_msg_to_user.c_str()), usr.get_fd(), send_msg_to_user.length());
+	  return ;
+  }
   usr.set_nick(str);
+  usr.is_registered(svr);
   std::cout << usr << std::endl;
 }
 
@@ -35,8 +36,7 @@ void  cmd::username(server &svr, int poll_fd_pos, std::string str) {
 
   // IF registered --> Send RPL_WELCOME
   //TODO meterlo en el define
-  std::string send_msg_to_user = ": 001 " + usr.get_nick() + " : welcome " + usr.get_nick() + "\r\n";
-  svr.send_message(const_cast<char *>(send_msg_to_user.c_str()), usr.get_fd(), send_msg_to_user.length());
+  usr.is_registered(svr);
   std::cout << usr << std::endl;
 }
 
