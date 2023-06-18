@@ -58,6 +58,15 @@ std::ostream &operator<<(std::ostream& os, const server &tmp)
 }
 
 // FUNCTIONS
+void	server::init_list_of_cmds(void)
+{
+	this->list_of_cmds.insert(std::pair<std::string, command_function>("NICK", &cmd::nick));
+	this->list_of_cmds.insert(std::pair<std::string, command_function>("USER", &cmd::username));
+	this->list_of_cmds.insert(std::pair<std::string, command_function>("PONG", &cmd::pong));
+	this->list_of_cmds.insert(std::pair<std::string, command_function>("QUIT", &cmd::quit));
+	this->list_of_cmds.insert(std::pair<std::string, command_function>("PRIVMSG", &cmd::privmsg));
+	this->list_of_cmds.insert(std::pair<std::string, command_function>("JOIN", &cmd::join));
+}
 
 bool	server::wait_for_connection(void)
 {
@@ -66,7 +75,6 @@ bool	server::wait_for_connection(void)
 	memset(this->poll_fds, 0, sizeof(this->poll_fds));
 	this->poll_fds[0].fd 	   = this->server_socket->fd;
 	this->poll_fds[0].events   = POLLIN;
-
 	while (true)
 	{
 		ret = poll(this->poll_fds, this->_active_fds, TIMEOUT); //TODO cambiar timeout + check ping clients
@@ -83,15 +91,6 @@ bool	server::wait_for_connection(void)
 	return 0;
 }
 
-void	server::init_list_of_cmds(void)
-{
-	this->list_of_cmds.insert(std::pair<std::string, command_function>("NICK", &cmd::nick));
-	this->list_of_cmds.insert(std::pair<std::string, command_function>("USER", &cmd::username));
-	this->list_of_cmds.insert(std::pair<std::string, command_function>("PONG", &cmd::pong));
-	this->list_of_cmds.insert(std::pair<std::string, command_function>("QUIT", &cmd::quit));
-	this->list_of_cmds.insert(std::pair<std::string, command_function>("PRIVMSG", &cmd::privmsg));
-	this->list_of_cmds.insert(std::pair<std::string, command_function>("JOIN", &cmd::join));
-}
 
 int	server::fd_ready( void )
 {
@@ -119,7 +118,6 @@ bool	server::accept_communication(void)
 	sock_in client_addr;
 	socklen_t client_addr_size = sizeof(client_addr);
 	char ip_addres[20];
-
 	fd = accept(this->server_socket->fd, (sock_addr*)&client_addr, &client_addr_size);
 	if (fd < 0)
     {
@@ -127,8 +125,12 @@ bool	server::accept_communication(void)
           perror("  accept() failed");
     	return 1;
     }
-	fcntl(fd, F_SETFL, O_NONBLOCK);
-	std::cout << "Listening socket is readable fr fr no cap" << std::endl;
+	if (fcntl(fd, F_SETFL, O_NONBLOCK) == -1)
+	{
+		perror(" FCNTL failed");
+		return 1;
+	}
+	std::cout << YELLOW << "Accepted communication from: " << fd << RESET << std::endl;
 	this->poll_fds[this->_active_fds].fd = fd;
 	this->poll_fds[this->_active_fds].events = POLLIN;
 	this->_active_fds++;
@@ -138,7 +140,6 @@ bool	server::accept_communication(void)
 	// std::cout << "Active clients: " << this->_active_fds << std::endl;
 	// std::cout << "New user: " << std::endl;
 	// std::cout << this->list_of_users[fd] << std::endl;
-	
 	return 0;
 }
 
@@ -150,6 +151,7 @@ bool	server::receive_communication(int poll_fd_pos)
 	std::cout << "Message received" << std::endl;
 	memset(buffer, 0, MSG_SIZE); //Iniciar buffer con ceros porque mete mierda
 	len = recv(this->poll_fds[poll_fd_pos].fd, buffer, sizeof(buffer), 0);
+	std::cout << GREEN << buffer << RESET <<std::endl;
 	if (len < 0)
     {
 		if (errno != EWOULDBLOCK)
@@ -182,7 +184,7 @@ bool	server::send_message(char *msg, int fd, int len)
 
 void	server::delete_user(int poll_fd_pos)
 {
-	std::cout << "Deleted user: " << std::endl;
+	std::cout << RED << "Deleted user: " << RESET << std::endl;
 	close(this->poll_fds[poll_fd_pos].fd);
 	this->list_of_users.erase(this->poll_fds[poll_fd_pos].fd);
 	for (int count = poll_fd_pos; count <= this->_active_fds - 1; count++)
@@ -198,14 +200,22 @@ void	server::delete_user(int poll_fd_pos)
 // Separa la cadena en COMANDO + MSG, donde mensaje es todo lo demás que es parseado de forma distinta por cada comando
 void	server::parse_message(int poll_fd_pos, std::string msg)
 {
+	// Este split es por culpa de irssi, que lanza todos los comandos NICK y USER en una sola linea
+	// No deberia afectar a los usuarios que lanzan comandos de uno en uno
 	cmd_map::iterator it;
+	std::vector<std::string> seglist = ft_split(msg, '\n');
+	std::vector<std::string>::iterator v_it;
 
-	int ind = msg.find(" ");
-	std::string cmd = msg.substr(0, ind);
-	msg = msg.substr(ind + 1);
-	it = this->list_of_cmds.find(cmd);
-	if (it != this->list_of_cmds.end())
-		it->second(*this, poll_fd_pos, msg);
+	for (v_it = seglist.begin(); v_it != seglist.end(); v_it++)
+	{
+		int ind = v_it->find(" ");
+		std::string cmd = v_it->substr(0, ind);
+		*v_it = v_it->substr(ind + 1);
+		std::cout << CYAN << *v_it << RESET << std::endl;
+		it = this->list_of_cmds.find(cmd);
+		if (it != this->list_of_cmds.end())
+			it->second(*this, poll_fd_pos, *v_it);
+	}
 }
 
 void	server::create_channel(user &usr, std::string name)
