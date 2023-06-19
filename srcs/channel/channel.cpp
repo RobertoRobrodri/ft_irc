@@ -35,19 +35,19 @@ channel & channel::operator=(const channel &tmp) {
 }
 
 std::ostream &operator<<(std::ostream& os, const channel &tmp) {
-  	std::map<int, user>::iterator it;
-	std::map<int, user> lst = tmp.get_list_of_members();
+  std::vector<user>::iterator it;
+	std::vector<user> lst = tmp.get_list_of_members();
 
 	os << "Channel name: " << tmp.get_name() << std::endl;
 	os << "Channel topic: " << tmp.get_topic() << std::endl;
-  	os << "List of members: " << std::endl;
+  os << "List of members: " << std::endl;
 	for (it = lst.begin(); it != lst.end(); it++)
-    	os << it->second.get_nick() << std::endl;
+    	os << it->get_nick() << std::endl;
 	return (os);
 }
 
 void	channel::add_member(user &usr)
 {
-	this->list_of_members.insert(std::pair<int, user>(usr.get_fd(), usr));
+	this->list_of_members.push_back(usr);
   std::cout << *this << std::endl;
 }

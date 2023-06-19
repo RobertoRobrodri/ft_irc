@@ -1,4 +1,5 @@
 #include "command.hpp"
+#include "reply.hpp"
 
 // NICKNAME
 
@@ -8,13 +9,14 @@ void cmd::nick(server &svr, int poll_fd_pos, std::string str) {
   //get reference of the user
   user &usr = svr.get_user(pollfd.fd);
   //set nick
-  // if (svr.compare_nicknames(name) == 0)
-  // {
-	// name.append(":Nickname is already in use");
-	// svr.send_message(const_cast<char *>(name.c_str()), usr.get_fd(), name.length());
-	// return ;
-  // }
+  if (svr.get_user_from_nick(str) != 0)
+  {
+    std::string send_msg_to_user = ": 433 " + str + " : Nickname is already in use \r\n";
+	  svr.send_message(const_cast<char *>(send_msg_to_user.c_str()), usr.get_fd(), send_msg_to_user.length());
+	  return ;
+  }
   usr.set_nick(str);
+  usr.is_registered(svr);
   std::cout << usr << std::endl;
 }
 
@@ -23,15 +25,24 @@ void cmd::nick(server &svr, int poll_fd_pos, std::string str) {
 void  cmd::username(server &svr, int poll_fd_pos, std::string str) {
   poll_fd pollfd = svr.get_pollfd(poll_fd_pos);
   user &usr = svr.get_user(pollfd.fd);
-  usr.set_username(str);
+
+  // Separar el resto del realname
+  std::vector<std::string> cmd_params = ft_split(str, ':');
+  std::vector<std::string> other_params = ft_split(cmd_params[0], ' ');
+  usr.set_username(other_params[0]);
+  usr.set_hostname(other_params[1]);
+  usr.set_servername(other_params[2]);
+  usr.set_realname(cmd_params[1]);
+
+  // IF registered --> Send RPL_WELCOME
+  //TODO meterlo en el define
+  usr.is_registered(svr);
   std::cout << usr << std::endl;
 }
 
 void  cmd::pong(server &svr, int poll_fd_pos, std::string str) {
   poll_fd pollfd = svr.get_pollfd(poll_fd_pos);
   user &usr = svr.get_user(pollfd.fd);
-  if (str.compare(TOKEN) != 0)
-    return ;
   svr.send_message(const_cast<char *>(str.c_str()), usr.get_fd(), str.length());
 }
 
