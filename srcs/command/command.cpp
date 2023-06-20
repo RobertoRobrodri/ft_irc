@@ -3,12 +3,33 @@
 
 // NICKNAME
 
+static bool invalid_nick(std::string str)
+{
+  if (str.find(" ") || str.find(",") || str.find("?") || str.find("!") || str.find("@") || str.find("*")
+    || (str[0] == ':') || (str[0] == '$') || (str.length() > 9))
+    return true;
+  return false;
+}
+
 // TODO https://modern.ircdocs.horse/#errerroneusnickname-432
 void cmd::nick(server &svr, int poll_fd_pos, std::string str) {
   poll_fd pollfd = svr.get_pollfd(poll_fd_pos);
   //get reference of the user
   user &usr = svr.get_user(pollfd.fd);
+  std::vector <std::string> splitted = ft_split(str, ' ');
   //set nick
+  if (str == "NICK")
+  {
+    std::string send_msg_to_user = ": 431: No nickname was given \r\n";
+	  svr.send_message(const_cast<char *>(send_msg_to_user.c_str()), usr.get_fd(), send_msg_to_user.length());
+	  return ;
+  }
+  if ((splitted.size() > 1) || invalid_nick(std::string str))
+  {
+    std::string send_msg_to_user = ": 432 " + str + " : Erroneus nickname \r\n";
+	  svr.send_message(const_cast<char *>(send_msg_to_user.c_str()), usr.get_fd(), send_msg_to_user.length());
+	  return ;
+  }
   if (svr.get_user_from_nick(str) != 0)
   {
     std::string send_msg_to_user = ": 433 " + str + " : Nickname is already in use \r\n";
