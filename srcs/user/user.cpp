@@ -1,6 +1,6 @@
 #include "user.hpp"
 
-user::user( void ) : _fd(0), _username(""), _nick(""), _hostname(""), _realname(""), _servername("") {
+user::user( void ) : _fd(0), _username(""), _nick(""), _hostname(""), _realname(""), _servername(""), _is_registered(false) {
 
   std::cout << "User Default constructor called" << std::endl;
   return ;
@@ -35,6 +35,7 @@ user & user::operator=(const user &tmp) {
   this->set_realname(tmp.get_realname());
   this->set_servername(tmp.get_servername());
   this->set_fd(tmp.get_fd());
+  this->set_is_registered(tmp.get_is_registered());
   return (*this);
   
 }
@@ -46,13 +47,15 @@ std::ostream &operator<<(std::ostream& os, const user &tmp) {
   os << "Servername     |     " << tmp.get_servername() << std::endl;
 	os << "Realname       |     " << tmp.get_realname() << std::endl;
   os << "FD             |     " << tmp.get_fd() << std::endl;
+  os << "User registered|     " << tmp.get_is_registered() << std::endl;
 	return (os);
 }
 
 void  user::is_registered(server &svr)
 {
-  if (this->get_username().empty() || this->get_nick().empty())
-    return ;
-  std::string send_msg_to_user = ": 001 " + this->get_nick() + " : welcome " + this->get_nick() + "\r\n";
-  svr.send_message(const_cast<char *>(send_msg_to_user.c_str()), this->get_fd(), send_msg_to_user.length());
+  if (!this->get_username().empty() && !this->get_nick().empty() && !this->_is_registered)
+  {
+    this->_is_registered = true;
+    svr.send_message(": 001 " + this->get_nick() + " : welcome " + this->get_nick() + "\r\n", this->get_fd());
+  }
 }
