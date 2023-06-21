@@ -15,6 +15,7 @@ class	user {
 		std::string 	_hostname;
 		std::string		_realname;
 		std::string		_servername;
+		bool			_is_registered;
 
 	public:
 
@@ -33,6 +34,7 @@ class	user {
 		std::string get_servername(void) const 	{return(this->_servername);};
 		std::string get_realname(void) const 	{return(this->_realname);};
 		int 		get_fd(void) const 			{return(this->_fd);};
+		bool 		get_is_registered(void) const 			{return(this->_is_registered);};
 		
 		/*###########################################
 		#				SETTERS						#
@@ -43,6 +45,7 @@ class	user {
 		void		set_servername(std::string srv) {this->_servername = srv;};
 		void		set_realname(std::string realname) {this->_realname = realname;};
 		void		set_fd(int fd) {this->_fd = fd;};
+		void		set_is_registered(bool is_registered) {this->_is_registered = is_registered;};
 		/*###########################################
 		#				FUNCTIONS					#
 		############################################*/

@@ -171,9 +171,9 @@ bool	server::receive_communication(int poll_fd_pos)
 	return 0;
 }
 
-bool	server::send_message(char *msg, int fd, int len)
+bool	server::send_message(std::string msg, int fd)
 {
-	len = send(fd, msg, len, 0);
+	int len = send(fd, msg.c_str(), msg.length(), 0);
 	if (len < 0)
     {
 		perror("  send() failed");
