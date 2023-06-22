@@ -2,14 +2,14 @@
 
 std::vector<std::string> ft_split(std::string str, char separator)
 {
-	std::stringstream 	test(str);
+	std::stringstream 	test(str);	// Optimisation 1: remove this line and use getline(str)
 	std::string 		segment;
 	std::vector <std::string>seglist;
 
 	while (std::getline(test, segment, separator))
 	{
-		size_t last_char = segment.find_last_of('\r');
-		if (last_char != std::string::npos)
+		size_t last_char = segment.find_last_of('\r');	// Optimisation 2: include this in a general parser that
+		if (last_char != std::string::npos)		// checks that we only have alphanum characters
 			segment.erase(last_char);
 		seglist.push_back(segment);
 	}
@@ -18,20 +18,20 @@ std::vector<std::string> ft_split(std::string str, char separator)
 
 bool	is_good_host(std::string host)
 {
-	std::stringstream test(host);
+	std::stringstream test(host);		// Optimisation 1
 	std::string segment;
 	std::vector <int>seglist;
 
 	while (std::getline(test,segment,'.'))
 	{
-		if (segment.c_str() != std::to_string(atoi(segment.c_str())))
+		if (segment.c_str() != std::to_string(atoi(segment.c_str())))	// Doubt 1: What is happening
 			seglist.push_back(-1);
 		else
 			seglist.push_back(atoi(segment.c_str()));
 	}
 	if (seglist.size() != 4)
 		return (0);
-	for (int i = 0; i < 4; i++)
+	for (int i = 0; i < 4; i++)				
 		if (seglist[i] < 0 || seglist[i] > 255)
 			return (0);
 	return (1);
@@ -42,7 +42,7 @@ bool	is_good_port(std::string port)
 {
 	int port_i;
 
-	port_i = atoi(port.c_str());
+	port_i = atoi(port.c_str());		// Doubt 1
 	if (port != std::to_string(port_i))
 		return(0);
 	if (port_i < 6000 || port_i > 7000)
