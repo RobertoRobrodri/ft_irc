@@ -77,17 +77,28 @@ void  cmd::quit(server &svr, int poll_fd_pos, std::string str) {
 }
 
 void  cmd::privmsg(server &svr, int poll_fd_pos, std::string str) {
-  std::vector<std::string> seglist = ft_split(str, ' ');
   poll_fd pollfd = svr.get_pollfd(poll_fd_pos);
   user &usr = svr.get_user(pollfd.fd);
-  user *receiver = svr.get_user_from_nick(seglist[0]);
-  if(receiver)
+  if (str == "PRIVMSG")
   {
-    // svr.send_message(const_cast<char *>("From "), receiver->get_fd(), 1);
-    // svr.send_message(const_cast<char *>(usr.get_nick().c_str()), receiver->get_fd(), usr.get_nick().length());
-    // svr.send_message(const_cast<char *>(":\n"), receiver->get_fd(), 1);
-    // svr.send_message(const_cast<char *>(seglist[1].c_str()), receiver->get_fd(), seglist[1].length());
-    // svr.send_message(const_cast<char *>("\n"), receiver->get_fd(), 1);
+	  svr.send_message(": 411: No recipient given (PRIVMSG) \r\n", usr.get_fd());
+	  return ;
+  }
+  std::vector<std::string> msglist = ft_split(str, ' ');
+  if (msglist.size() == 1)
+  {
+    svr.send_message(": 412: No text to send \r\n", usr.get_fd());
+	  return ;
+  }
+  std::vector<std::string> rcvlist = ft_split(msglist[0], ',');
+	std::string msg = str.substr(str.find(msglist[1]));
+  for (int i = 0; i < rcvlist.size(); i++)
+  {
+    user *receiver = svr.get_user_from_nick(rcvlist[i]);
+    if(receiver)
+      svr.send_message("From " + usr.get_nick() + ":\n" + msg + "\n", receiver->get_fd());
+    else
+      svr.send_message(": 401 " + rcvlist[i] + ": No such nick/channel \r\n", usr.get_fd()); //TODO lo mismo con los canales (si no existe)
   }
 }
 
