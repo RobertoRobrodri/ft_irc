@@ -51,3 +51,14 @@ void	channel::add_member(user &usr)
 	this->list_of_members.push_back(usr);
   std::cout << *this << std::endl;
 }
+
+bool	channel::is_user_in_channel(const user &usr)
+{
+  for (std::vector<user>::iterator it = this->list_of_members.begin(); it != this->list_of_members.end(); it++)
+  {
+    std::cout << it->get_nick() << "   " << usr.get_nick() << std::endl;
+    if (it->get_nick() == usr.get_nick())
+      return true;
+  }
+  return false;
+}
