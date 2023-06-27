@@ -43,3 +43,10 @@ TAREAS
 [ ] Probar conexión irc
 [ ] Mensajes privados y avisos
 [ ] Privilegios de usuario
+
+## Errores recurrentes y cómo arreglarlos
+
+- Init socket
+  Error binding : Can't assign requested address
+  Server not listening
+= Ya hay un proceso iniciado usando el server con la misma dirección
