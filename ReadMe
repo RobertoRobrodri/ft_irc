@@ -1,36 +1,46 @@
-Good check
-./ircserv 127.0.1.16:6676:test 7000 9
-./ircserv 127.0.0.1:6676:pass 6776 pass
+# Usage
 
-Documents to take a look
+1. Start server
+	./ircserv 127.0.0.1:6676:pass 6776 pass
 
+2. Open new terminal
+3. Establish conection with server
+NETCAT - nc localhost <port>
+=======
+	nc -v 127.0.0.1 6776
+
+4. Connect with irrsi client
+IRSSI - cliente por terminal
+=======
+Cliente de referencia: IRSSI
+
+INSTALL:
+ - MACOS = brew install irssi
+ - /connect localhost
+ - En cuanto se conecta, el cliente envia tres comandos: CAP LS (ignorar), USER y NICK
+ https://ircv3.net/specs/extensions/capability-negotiation.html#connection-registration
+ - Página oficial = https://irssi.org/download/
+
+
+# Documentation
+
+https://modern.ircdocs.horse/	- Summary
+https://en.wikipedia.org/wiki/Internet_Relay_Chat - General Info
 https://www.rfc-editor.org/rfc/rfc2812  - Client Protocol
 https://www.rfc-editor.org/rfc/rfc2813  - Server Protocol
 https://www.rfc-editor.org/rfc/rfc2810  - Architecture
 https://www.rfc-editor.org/rfc/rfc2811  - Channels
-
-https://en.wikipedia.org/wiki/Internet_Relay_Chat - General Info
 https://www.w3.org/Addressing/draft-mirashi-url-irc-01.txt#:~:text=IRC%20servers%20often%20use%20the,for%20clients%20to%20connect%20to.  - Port Range - Security Measures
 https://www.geekshed.net/tag/limits/ - IRC LIMITS
 
-# Socket stuff
+### Socket stuff
 https://www.gta.ufrj.br/ensino/eel878/sockets/sockaddr_inman.html
 https://pubs.opengroup.org/onlinepubs/009695399/functions/inet_addr.html
 https://www.gnu.org/software/libc/manual/html_node/Socket_002dLevel-Options.html#Socket_002dLevel-Options
-=======
-https://modern.ircdocs.horse/ - Resume
-IRSSI - cliente por terminal
-NETCAT - nc localhost <port>
-=======
-Cliente de referencia: IRSSI
-  INSTALL:
-  - MACOS = brew install irssi
-  - Página oficial = https://irssi.org/download/
-  - /connect localhost
-  - En cuanto se conecta, el cliente envia tres comandos: CAP LS (ignorar), USER y NICK
-  https://ircv3.net/specs/extensions/capability-negotiation.html#connection-registration
-=======
-TAREAS
+
+
+# TAREAS
+
 [ ] Test unitarios (Zome)
 [✅] Encontrar cliente de referencia y probarlo (Rbrdr)
 [ ] Comandos NICK y USER (Enviar confrmación cuando existen ambos)
@@ -44,7 +54,8 @@ TAREAS
 [ ] Mensajes privados y avisos
 [ ] Privilegios de usuario
 
-## Errores recurrentes y cómo arreglarlos
+
+# Errores recurrentes y cómo arreglarlos
 
 - Init socket
   Error binding : Can't assign requested address
