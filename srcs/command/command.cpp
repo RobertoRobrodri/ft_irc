@@ -94,11 +94,31 @@ void  cmd::privmsg(server &svr, int poll_fd_pos, std::string str) {
 	std::string msg = str.substr(str.find(msglist[1]));
   for (int i = 0; i < rcvlist.size(); i++)
   {
-    user *receiver = svr.get_user_from_nick(rcvlist[i]);
-    if(receiver)
-      svr.send_message("From " + usr.get_nick() + ":\n" + msg + "\n", receiver->get_fd());
+    if ((rcvlist[i][0] == '#') || (rcvlist[i][0] == '&'))
+    {
+      channel *chn = svr.get_channel_from_name(rcvlist[i]);
+      if(chn)
+      {
+        if (chn->is_user_in_channel(usr)) //TODO habria que comprobar o de los modos también
+        {
+          for (int j = 0; j < chn->get_list_of_members().size(); j++)
+            if (chn->get_list_of_members()[j].get_nick() != usr.get_nick())
+              svr.send_message("From " + rcvlist[i] + ":\n" + msg + "\n", chn->get_list_of_members()[j].get_fd());
+        }
+        else
+          svr.send_message(": 404 " + rcvlist[i] + ": Cannot send to channel \r\n", usr.get_fd());
+      }
+      else
+        svr.send_message(": 401 " + rcvlist[i] + ": No such nick/channel \r\n", usr.get_fd());
+    }
     else
-      svr.send_message(": 401 " + rcvlist[i] + ": No such nick/channel \r\n", usr.get_fd()); //TODO lo mismo con los canales (si no existe)
+    {
+      user *receiver = svr.get_user_from_nick(rcvlist[i]);
+      if(receiver)
+        svr.send_message("From " + usr.get_nick() + ":\n" + msg + "\n", receiver->get_fd());
+      else
+        svr.send_message(": 401 " + rcvlist[i] + ": No such nick/channel \r\n", usr.get_fd());
+    }
   }
 }
 
