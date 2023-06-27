@@ -1,5 +1,6 @@
 Good check
 ./ircserv 127.0.1.16:6676:test 7000 9
+./ircserv 127.0.0.1:6676:pass 6776 pass
 
 Documents to take a look
 
