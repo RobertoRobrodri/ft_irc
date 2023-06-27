@@ -16,7 +16,7 @@ class	autosocket {
 		autosocket 			( const autosocket & var );
 		~autosocket			( void );
 
-		autosocket &operator=	(const autosocket &tmp);
+		autosocket &operator=(const autosocket &tmp);
 		void	init_socket_struct(std::string port, std::string host);
 		bool	server_listening(void);
 };

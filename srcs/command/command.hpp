@@ -3,39 +3,19 @@
 #include <string>
 #include <iostream>
 #include "../server/server.hpp"
+#include "../user/user.hpp"
 
 class user;
+class server;
+namespace cmd
+{
+	void nick(server &svr, int poll_fd_pos, std::string str);
+	void username(server &svr, int poll_fd_pos, std::string str);
+	void pong(server &svr, int poll_fd_pos, std::string str);
+	void quit(server &svr, int poll_fd_pos, std::string str);
+	void privmsg(server &svr, int poll_fd_pos, std::string str);
+	void join(server &svr, int poll_fd_pos, std::string str);
 
-class	command {
-
-	protected:
-
-		std::string 	_cmd;
- 
-	public:
-
-		command( void );
-		command(std::string cmd);
-		virtual ~command 			( void );
-		virtual void	execute(int fd, user user, std::string cmd) = 0;
-};
-
-class	context {
-	private:
-		command 	*_cmd;
-	public:
-		context(command *cmd): _cmd(cmd) {};
-		void 	set_command(command *cmd) { this->_cmd = cmd; };
-};
-
-
-class	nick : public command {
-
-	public:
-
-		nick( void );
-		~nick( void );
-		void			execute(int fd, user user, std::string cmd);
-};
+}
 
 #endif

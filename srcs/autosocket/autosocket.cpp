@@ -14,8 +14,8 @@ autosocket::autosocket( std::string port, std::string host ) {
       throw std::runtime_error("Server not listening");
   }
   catch (std::exception &ex) {
-		std::cout << ex.what() << std::endl;
-    exit (1);
+	std::cout << ex.what() << std::endl;
+    exit(1);
 	}
   return ;
 }
@@ -25,7 +25,6 @@ autosocket::autosocket( const autosocket & var ) {
   std::cout << "Autosocket Copy constructor called" << std::endl;
   *this = var;
   return ;
-  
 }
 
 autosocket::~autosocket( void ) {
@@ -33,36 +32,31 @@ autosocket::~autosocket( void ) {
   std::cout << "Autosocket Destructor called" << std::endl;
   delete this;
   return ;
-
 }
 
 // Overloading
 autosocket & autosocket::operator=(const autosocket &tmp) {
-
-  (void) tmp;
-  std::cout << "Autosocket Operator equalizer called" << std::endl;
-  return (*this);
-  
+	(void) tmp;
+	std::cout << "Autosocket Operator equalizer called" << std::endl;
+	return (*this);
 }
 
 std::ostream &operator<<(std::ostream& os, const autosocket &tmp) {
-
-  (void) tmp;
+	(void) tmp;
 	os << std::endl << "Autosocket Operator output called" << std::endl;
 	return (os);
-  
 }
 
 // Functions
 
 void	autosocket::init_socket_struct(std::string port, std::string host)
 {
-// Init struct that the socket needs
-//  IPV4 addresses
+	// Init struct that the socket needs
+	//  IPV4 addresses
 	this->addr.sin_family			 = AF_INET;
-//  Convert our port to a network address (host to network)
+	//  Convert our port to a network address (host to network)
 	this->addr.sin_port				 = htons(atoi(port.c_str()));
-//  Our address as integer
+	//  Our address as integer
 	this->addr.sin_addr.s_addr = inet_addr(host.c_str());
 }
 

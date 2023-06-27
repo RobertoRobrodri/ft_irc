@@ -1,43 +1,107 @@
 #include "command.hpp"
-
-// INFERFACE
-command::command( void ) {
-
-  std::cout << "Command Default constructor called" << std::endl;
-  return ;
-}
-
-command::command( std::string cmd ) : _cmd(cmd) {
-
-  std::cout << "Command Parameter constructor called" << std::endl;
-  return ;
-  
-}
-
-command::~command( void ) {
-  
-  std::cout << "Command Destructor called" << std::endl;
-  return ;
-
-}
-
-void	command::execute(int fd, user user, std::string cmd) {
-  std::cout << fd << user.get_username() << " did " << cmd << std::endl;
-}
+#include "reply.hpp"
 
 // NICKNAME
 
-nick::nick( void ) : command("NICK") {
-  std::cout << "Nick default constructor called" << std::endl;
-  return ;
+bool invalid_nick(std::string str)
+{
+  if ((str.find_first_of(" .:,?!@*&#$") != std::string::npos) || (str.length() > 9))
+    return true;
+  return false;
 }
 
-nick::~nick(void) {
-  std::cout << "Nick Destructor called" << std::endl;
-  return ;
+void cmd::nick(server &svr, int poll_fd_pos, std::string str) {
+  poll_fd pollfd = svr.get_pollfd(poll_fd_pos);
+  //get reference of the user
+  user &usr = svr.get_user(pollfd.fd);
+  //set nick
+  user *nick;
+  if (str == "NICK")
+  {
+	  svr.send_message(": 431: No nickname was given \r\n", usr.get_fd());
+	  return ;
+  }
+  if (invalid_nick(str))
+  {
+	  svr.send_message(": 432 " + str + " : Erroneus nickname \r\n", usr.get_fd());
+	  return ;
+  }
+  if ((nick = svr.get_user_from_nick(str)) != 0)
+  {
+    if (nick->get_nick().compare(usr.get_nick()) == 0)
+      return ;
+	  svr.send_message(": 433 " + str + " : Nickname is already in use \r\n", usr.get_fd());
+	  return ;
+  }
+  usr.set_nick(str);
+  usr.is_registered(svr);
+  std::cout << usr << std::endl;
 }
 
-void nick::execute(int fd, user user, std::string cmd) {
-	(void)fd;
-	user.set_username(cmd);
-}  
+//  The USER message is used at the beginning of connection to specify
+//    the username, hostname, servername and realname of s new user.
+void  cmd::username(server &svr, int poll_fd_pos, std::string str) {
+  poll_fd pollfd = svr.get_pollfd(poll_fd_pos);
+  user &usr = svr.get_user(pollfd.fd);
+
+  // Separar el resto del realname
+  std::vector<std::string> cmd_params = ft_split(str, ':');
+  std::vector<std::string> other_params = ft_split(cmd_params[0], ' ');
+  if (other_params.size() + 1 < 4)
+  {
+    svr.send_message(": 461 USER : <command> :Not enough parameters \r\n", usr.get_fd());
+    return ;
+  }
+  usr.set_username(other_params[0]);
+  usr.set_hostname(other_params[1]);
+  usr.set_servername(other_params[2]);
+  usr.set_realname(cmd_params[1]); //TODO sus
+
+  // IF registered --> Send RPL_WELCOME
+  //TODO meterlo en el define
+  usr.is_registered(svr);
+  std::cout << usr << std::endl;
+}
+
+void  cmd::pong(server &svr, int poll_fd_pos, std::string str) {
+  poll_fd pollfd = svr.get_pollfd(poll_fd_pos);
+  user &usr = svr.get_user(pollfd.fd);
+  //svr.send_message(const_cast<char *>(str.c_str()), usr.get_fd(), str.length());
+}
+
+void  cmd::quit(server &svr, int poll_fd_pos, std::string str) {
+  poll_fd pollfd = svr.get_pollfd(poll_fd_pos);
+  user &usr = svr.get_user(pollfd.fd);
+  //svr.send_message(const_cast<char *>(str.c_str()), usr.get_fd(), str.length());
+  svr.delete_user(poll_fd_pos);
+}
+
+void  cmd::privmsg(server &svr, int poll_fd_pos, std::string str) {
+  std::vector<std::string> seglist = ft_split(str, ' ');
+  poll_fd pollfd = svr.get_pollfd(poll_fd_pos);
+  user &usr = svr.get_user(pollfd.fd);
+  user *receiver = svr.get_user_from_nick(seglist[0]);
+  if(receiver)
+  {
+    // svr.send_message(const_cast<char *>("From "), receiver->get_fd(), 1);
+    // svr.send_message(const_cast<char *>(usr.get_nick().c_str()), receiver->get_fd(), usr.get_nick().length());
+    // svr.send_message(const_cast<char *>(":\n"), receiver->get_fd(), 1);
+    // svr.send_message(const_cast<char *>(seglist[1].c_str()), receiver->get_fd(), seglist[1].length());
+    // svr.send_message(const_cast<char *>("\n"), receiver->get_fd(), 1);
+  }
+}
+
+void  cmd::join(server &svr, int poll_fd_pos, std::string str) {
+  // Si no existe canal:
+  // SVR->crear_canal()
+  // else
+  // SVR->add_user_to_channel()
+  std::vector<std::string> seglist = ft_split(str, ' ');
+  poll_fd pollfd = svr.get_pollfd(poll_fd_pos);
+  user &usr = svr.get_user(pollfd.fd);
+  channel *cnn = svr.get_channel_from_name(seglist[0]);
+  if (cnn)
+    cnn->add_member(usr);
+  else
+    svr.create_channel(usr, seglist[0]);
+}
