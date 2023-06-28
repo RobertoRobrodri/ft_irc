@@ -220,12 +220,16 @@ void	server::parse_message(int poll_fd_pos, std::string msg)
 
 void	server::create_channel(user &usr, std::string name)
 {
-	channel cnn(name);
+	// IRSSI:  si el server NO empiza por #, lo añade el propio server incluso si empieza por &
+	// Puede contener # o & entre medias
+	if (name[0] != '#')
+		name.insert(0, "#");
 
+	channel cnn(name);
 	cnn.add_member(usr);
 	this->list_of_channels.insert(std::pair<std::string, channel>(name, cnn));
-	std::cout << name << " channel created!" << std::endl;
-	std::cout << cnn << std::endl;
+	std::cout << YELLOW << name << " channel created!" << std::endl;
+	std::cout << cnn << RESET << std::endl;
 }
 
 // Maybe make a template????

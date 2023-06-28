@@ -96,12 +96,23 @@ void  cmd::join(server &svr, int poll_fd_pos, std::string str) {
   // SVR->crear_canal()
   // else
   // SVR->add_user_to_channel()
-  std::vector<std::string> seglist = ft_split(str, ' ');
+  std::vector<std::string> channel_params = ft_split(str, ' ');
   poll_fd pollfd = svr.get_pollfd(poll_fd_pos);
   user &usr = svr.get_user(pollfd.fd);
-  channel *cnn = svr.get_channel_from_name(seglist[0]);
-  if (cnn)
-    cnn->add_member(usr);
-  else
-    svr.create_channel(usr, seglist[0]);
+  if (str == "JOIN")
+  {
+	  svr.send_message(": 461 USER : <command> :Not enough parameters \r\n", usr.get_fd());
+    return ;
+  }
+  // Me pueden pasar una serie de canales separados por ','
+  // TODO Channel_params[1] debe contener las contraseñas, si se utilizan
+  std::vector<std::string> channels_to_join = ft_split(channel_params[0], ',');
+  for (std::vector<std::string>::iterator it = channels_to_join.begin(); it != channels_to_join.end(); it++)
+  {
+    channel *cnn = svr.get_channel_from_name(*it);
+    if (cnn)
+      cnn->add_member(usr);
+    else
+      svr.create_channel(usr, *it);
+  }
 }
