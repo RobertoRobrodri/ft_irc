@@ -2,56 +2,86 @@
 #include <iostream>
 #include <iomanip>
 
-int main(int argc, char **argv)
+int main()
 {
-	(void)argc;
+	char *program = "./ircserv";
+	char *arg1 = "";
+	char *arg2 = "";
+	char *arg3 = "";
+
+	char *argv[] = {program, arg1, arg2, arg3, NULL};
 
 	std::cout << "Test check_data_correct\n";
 	std::cout << "==========================\n";
-	
-	argv = (char *[]){"./ircserv", "", "", ""};
 	std::cout << std::boolalpha;
-	std::cout << "Params: \"\" \"\" \"\" \"\" \n";
+
+	std::cout << "Params: \" \" \" \" \" \"\n";
 	std::cout << "Output: " << check_data_correct(argv) << "\n\n";
 	
-	argv = (char *[]){"./ircserv", "a", "b", "c"};
+	argv[1] = "a";
+	argv[2] = "b";
+	argv[3] = "c";
 	std::cout << "Params: a b c\n";
 	std::cout << "Output: " << check_data_correct(argv) << "\n\n";
 	
-	argv = (char *[]){"./ircserv", "0:0:a", "0", "a"};
+	argv[1] = "0:0:a";
+	argv[2] = "0";
+	argv[3] = "a";
 	std::cout << "Params: 0:0:a 0 a\n";
 	std::cout << "Output: " << check_data_correct(argv) << "\n\n";
 
-	argv = (char *[]){"./ircserv", "0.0.0.:6776:pass", "6776", "pass"};
+	argv[1] = "0.0.0.:6776:pass";
+	argv[2] = "6776";
+	argv[3] = "pass";
 	std::cout << "Params: 0.0.0.:6776:pass 6776 pass\n";
 	std::cout << "Output: " << check_data_correct(argv) << "\n\n";
 
-	argv = (char *[]){"./ircserv", "127.0.-1.1:6776:pass", "6776", "pass"};
+	argv[1] = "127.0.-1.1:6776:pass";
+	argv[2] = "6776";
+	argv[3] = "pass";
 	std::cout << "Params: 127.0.-1.1:6776:pass 6776 pass\n";
 	std::cout << "Output: " << check_data_correct(argv) << "\n\n";
 
-	argv = (char *[]){"./ircserv", "127.0.0.1:-9:pass", "6776", "pass"};
+	argv[1] = "127.0.0.1:-9:pass";
+	argv[2] = "6776";
+	argv[3] = "pass";
 	std::cout << "Params: 127.0.0.1:-9:pass 6776 pass\n";
 	std::cout << "Output: " << check_data_correct(argv) << "\n\n";
 
-	argv = (char *[]){"./ircserv", "127.0.0.1::", "6776", "pass"};
+	argv[1] = "127.0.0.1::";
+	argv[2] = "6776";
+	argv[3] = "pass";
 	std::cout << "Params: 127.0.0.1:: 6776 pass\n";
 	std::cout << "Output: " << check_data_correct(argv) << "\n\n";
 
-	argv = (char *[]){"./ircserv", "127.0.0.1", "6776", "pass"};
+	argv[1] = "127.0.0.1";
+	argv[2] = "6776";
+	argv[3] = "pass";
 	std::cout << "Params: 127.0.0.1 6776 pass\n";
+	std::cout << "Output: " << check_data_correct(argv) << "\n\n";
+
+	argv[1] = "127.0.0.1::6776:pass";
+	argv[2] = "6776";
+	argv[3] = "pass";
+	std::cout << "Params: 127.0.0.1::6776:pass 6776 pass\n";
+	std::cout << "Output: " << check_data_correct(argv) << "\n\n";
+
+	argv[1] = "127.0.0.1:6776:pass";
+	argv[2] = "6776";
+	argv[3] = "pass";
+	std::cout << "Params: 127.0.0.1:6776:pass 6776 pass\n";
 	std::cout << "Output: " << check_data_correct(argv) << "\n\n";
 
 	std::cout << "Test server construction\n";
 	std::cout << "==========================\n";
 	server *serv;
 
-	serv = new server("", "", "");
-	std::cout << "Params: \n";
-	std::cout << "Server: \n" << serv << "\n";
+	serv = new server(argv[1], argv[2], argv[3]);
+	std::cout << *serv << std::endl;
 
-
+/*
 	if (serv->wait_for_connection())
 		throw std::runtime_error("Conection failed");
-	return (0);
+*/
+		return (0);
 }

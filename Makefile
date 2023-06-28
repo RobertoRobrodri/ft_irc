@@ -70,14 +70,14 @@ $(OBJ_PATH)/%.o: $(SRC_PATH)/%.cpp | $(OBJ_PATH)
 	$(CC) $(CXXFLAGS) $(INCLUDE) -c $< -o $@
 
 $(NAME): $(OBJS)
-	$(CC) $(CXXFLAGS) $(INCLUDE) -c $(MAIN) -o main.o
-	$(CC) $(CXXFLAGS) $(INCLUDE) $(OBJS) main.o -o $(NAME)
+	$(CC) $(CXXFLAGS) $(INCLUDE) -c $(MAIN) -o objects/main.o
+	$(CC) $(CXXFLAGS) $(INCLUDE) $(OBJS) objects/main.o -o $(NAME)
 #	clear
 	$(GREEN) Program asembled $(RESET)
 
 $(TEST): $(OBJS)
-	@$(CC) $(CXXFLAGS) $(INCLUDE) -c $(TESTER_MAIN) -o main.o
-	$(CC) $(CXXFLAGS) $(INCLUDE) $(OBJS) main.o -o $(TEST)
+	@$(CC) $(CXXFLAGS) $(INCLUDE) -c $(TESTER_MAIN) -o objects/main.o
+	$(CC) $(CXXFLAGS) $(INCLUDE) $(OBJS) objects/main.o -o $(TEST)
 #	clear
 	$(GREEN) Program asembled $(RESET)
 	@echo "⠀⠀⠀	    ⣠⣴⣶⣿⣿⣷⣶⣄⣀⣀\n\
@@ -104,7 +104,6 @@ $(MAKE): make
 clean:
 	$(PURPLE) CLEANING OBJECTS $(RESET)
 	rm -rf $(OBJ_PATH)
-	rm main.o
 
 fclean: clean
 	$(PURPLE) CLEANING DIRECTORY AND EXEC $(RESET)
