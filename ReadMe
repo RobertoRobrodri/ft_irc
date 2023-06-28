@@ -43,3 +43,7 @@ TAREAS
 [ ] Probar conexión irc
 [ ] Mensajes privados y avisos
 [ ] Privilegios de usuario
+[ ] serv::wait_for_connection change TIMEOUT
+[ ] servwait_for_connection check ping clients
+[ ] autosock::server_listening revise setsockopt flags
+[ ] autosock::server_listening define max size for poll
