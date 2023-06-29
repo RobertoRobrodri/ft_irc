@@ -3,8 +3,10 @@
 #include <string>
 #include <iostream>
 #include "../server/server.hpp"
+#include "../channel/channel.hpp"
 
 class 	server;
+class 	channel;
 class	user {
 
 	private:
@@ -50,6 +52,7 @@ class	user {
 		#				FUNCTIONS					#
 		############################################*/
 		void		is_registered(server &svr);
+		void		send_to_channel(channel *chn, server &svr, std::string chn_name, std::string msg);
 };
 std::ostream &operator<<(std::ostream& os, const user &tmp);
 

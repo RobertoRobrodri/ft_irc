@@ -97,19 +97,7 @@ void  cmd::privmsg(server &svr, int poll_fd_pos, std::string str) {
     if ((rcvlist[i][0] == '#') || (rcvlist[i][0] == '&'))
     {
       channel *chn = svr.get_channel_from_name(rcvlist[i]);
-      if(chn)
-      {
-        if (chn->is_user_in_channel(usr)) //TODO habria que comprobar o de los modos también
-        {
-          for (int j = 0; j < chn->get_list_of_members().size(); j++)
-            if (chn->get_list_of_members()[j].get_nick() != usr.get_nick())
-              svr.send_message("From " + rcvlist[i] + ":\n" + msg + "\n", chn->get_list_of_members()[j].get_fd());
-        }
-        else
-          svr.send_message(": 404 " + rcvlist[i] + ": Cannot send to channel \r\n", usr.get_fd());
-      }
-      else
-        svr.send_message(": 401 " + rcvlist[i] + ": No such nick/channel \r\n", usr.get_fd());
+      usr.send_to_channel(chn, svr, rcvlist[i], msg);
     }
     else
     {
