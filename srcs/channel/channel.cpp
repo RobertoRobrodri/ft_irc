@@ -6,7 +6,7 @@ channel::channel( void ) : _name(""), _topic("") {
   return ;
 }
 
-channel::channel( std::string str ) : _name(str), _topic("Default topic") {
+channel::channel( std::string str ) : _name(str), _topic("") {
   std::cout << "Parameter channel constructor called" << std::endl;
   return ;
 }
