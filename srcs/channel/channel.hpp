@@ -27,6 +27,12 @@ class	channel {
 		std::string get_name(void) const 			{return(this->_name);};
 		std::string get_topic(void) const 			{return(this->_topic);};
 		std::vector<user> get_list_of_members(void) const {return(this->list_of_members);};
+
+		/*###########################################
+		#				SETTERS						#
+		############################################*/
+		void set_topic(std::string topic) {this->_topic = topic;};
+
 		/*###########################################
 		#				FUNCTIONS					#
 		############################################*/
