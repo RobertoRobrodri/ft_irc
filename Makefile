@@ -108,8 +108,8 @@ $(MAKE): make
 clean:
 	$(PURPLE) CLEANING OBJECTS $(RESET)
 	rm -rf $(OBJ_PATH)
-	rm $(TEST_PATH)/main.o
-	rm $(TEST_PATH)/*/*.o
+	rm -f $(TEST_PATH)/main.o
+	rm -f $(TEST_PATH)/*/*.o
 
 fclean: clean
 	$(PURPLE) CLEANING OBJECTS AND EXEC $(RESET)
