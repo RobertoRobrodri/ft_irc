@@ -54,7 +54,7 @@ https://www.gnu.org/software/libc/manual/html_node/Socket_002dLevel-Options.html
 [ ] Mensajes privados y avisos
 [ ] Privilegios de usuario
 [ ] serv::wait_for_connection change TIMEOUT
-[ ] servwait_for_connection check ping clients
+[ ] serv::wait_for_connection check ping clients
 [ ] autosock::server_listening revise setsockopt flags
 [ ] autosock::server_listening define max size for poll
 =======
