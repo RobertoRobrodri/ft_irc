@@ -99,7 +99,12 @@ int main()
 	{
 		std::cout << (int)serv->server_socket->addr.sin_zero[i] << " ";
 	}
-	std::cout << "]\n";
+	std::cout << "]\n\n";
+	/*
+	 * NOT WORKING YET, INFINITE LOOP
+	std::cout << "CONNECT\n" << std::boolalpha
+		<< serv->wait_for_connection() << std::endl;
+	*/
 
 	return (0);
 }

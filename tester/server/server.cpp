@@ -72,11 +72,12 @@ void	server::init_list_of_cmds(void)
 bool	server::wait_for_connection(void)
 {
 	int ret;
+	int time = 0;
 	// Init pollfd struct
 	memset(this->poll_fds, 0, sizeof(this->poll_fds));
 	this->poll_fds[0].fd 	   = this->server_socket->fd;
 	this->poll_fds[0].events   = POLLIN;
-	while (true)
+	while (time < INT_MAX)
 	{
 		ret = poll(this->poll_fds, this->_active_fds, TIMEOUT); //TODO cambiar timeout + check ping clients
 		if (ret < 0) {
@@ -88,6 +89,7 @@ bool	server::wait_for_connection(void)
 		if (this->fd_ready() == 1)
 			return 1;
 		// ping  users and disconnect inactive
+		time++;
 	}
 	return 0;
 }
