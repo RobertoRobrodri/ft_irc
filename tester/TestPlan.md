@@ -53,4 +53,3 @@ The path of a message being delivered is the shortest path between any two point
    [ ] Many clients. All messages traverse a path as if
        they were private messages between the two clients outside a
        channel.
-
