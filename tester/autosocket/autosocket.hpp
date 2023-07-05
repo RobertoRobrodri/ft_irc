@@ -6,10 +6,9 @@
 
 class	autosocket {
 
-	private:
+	public:
 		sock_in				addr;
 		autosocket 			( void );
-	public:
 		int 				fd;
 
 		autosocket 			( std::string port, std::string host );

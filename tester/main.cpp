@@ -86,5 +86,20 @@ int main()
 	{
     	std::cout << it->first << std::endl;
 	}
+    std::cout << std::endl;
+
+    std::cout << "Socket:" << std::endl;
+	std::cout << "File descriptor " << serv->server_socket->fd << std::endl
+		<< "Sock_in \n" 
+		<< " - sin_family '\\x0" << (int)serv->server_socket->addr.sin_family << "'" << std::endl
+		<< " - sin_port " << serv->server_socket->addr.sin_port << std::endl
+		<< " - sin_addr " << serv->server_socket->addr.sin_addr.s_addr << std::endl
+		<< " - sin_zero [ ";
+   	for (int i = 0; i < 8; i++)
+	{
+		std::cout << (int)serv->server_socket->addr.sin_zero[i] << " ";
+	}
+	std::cout << "]\n";
+
 	return (0);
 }
