@@ -67,6 +67,7 @@ void	server::init_list_of_cmds(void)
 	this->list_of_cmds.insert(std::pair<std::string, command_function>("PRIVMSG", &cmd::privmsg));
 	this->list_of_cmds.insert(std::pair<std::string, command_function>("JOIN", &cmd::join));
 	this->list_of_cmds.insert(std::pair<std::string, command_function>("TOPIC", &cmd::topic));
+	this->list_of_cmds.insert(std::pair<std::string, command_function>("INVITE", &cmd::invite));
 }
 
 bool	server::wait_for_connection(void)
