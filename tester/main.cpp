@@ -1,4 +1,4 @@
-#include "../srcs/server/server.hpp"
+#include "server/server.hpp"
 #include <iostream>
 #include <iomanip>
 
@@ -79,9 +79,12 @@ int main()
 	serv = new server(argv[1], argv[2], argv[3]);
 	std::cout << *serv << std::endl;
 
-/*
-	if (serv->wait_for_connection())
-		throw std::runtime_error("Conection failed");
-*/
-		return (0);
+	std::map<std::string, command_function>::iterator it;
+
+    std::cout << "Commands:" << std::endl;
+	for (it = serv->list_of_cmds.begin(); it != serv->list_of_cmds.end(); it++)
+	{
+    	std::cout << it->first << std::endl;
+	}
+	return (0);
 }

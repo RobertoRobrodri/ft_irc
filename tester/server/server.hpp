@@ -54,7 +54,7 @@ typedef struct t_Data_Server {             //Struct para almacenar los datos del
 
 class	server {
 
-	private:
+	public:
 		int 							_active_fds;
 		autosocket						*server_socket;
 		poll_fd							poll_fds[MAX_CLIENTS];
@@ -69,7 +69,6 @@ class	server {
 		bool	receive_communication(int i);
 		void	parse_message(int poll_fd_pos, std::string msg);
 		void	init_list_of_cmds(void);
-	public:
 
 		server				( std::string network , std::string port , std::string pass );
 		server 				( const server & var );
