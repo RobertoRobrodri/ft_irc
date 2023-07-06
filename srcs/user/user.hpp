@@ -18,6 +18,7 @@ class	user {
 		std::string		_realname;
 		std::string		_servername;
 		bool			_is_registered;
+		std::string	 	_mode;
 
 	public:
 
