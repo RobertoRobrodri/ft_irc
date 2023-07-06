@@ -100,11 +100,11 @@ int main()
 		std::cout << (int)serv->server_socket->addr.sin_zero[i] << " ";
 	}
 	std::cout << "]\n\n";
-	/*
-	 * NOT WORKING YET, INFINITE LOOP
-	std::cout << "CONNECT\n" << std::boolalpha
+
+
+	/* UNCOMMENT TO TEST CONNECTION (this will block the program)
+	std::cout << "CONNECT\n" << "Open a new terminal and type nc -v 127.0.0.1 6776 to test new connection.\n"
 		<< serv->wait_for_connection() << std::endl;
 	*/
-
 	return (0);
 }
