@@ -38,6 +38,34 @@ https://www.gta.ufrj.br/ensino/eel878/sockets/sockaddr_inman.html
 https://pubs.opengroup.org/onlinepubs/009695399/functions/inet_addr.html
 https://www.gnu.org/software/libc/manual/html_node/Socket_002dLevel-Options.html#Socket_002dLevel-Options
 
+### Used functions
+
+	int     poll(struct pollfd fds[], nfds_t nfds, int timeout);
+	
+poll() examines a set of file descriptors to see if some of them are ready for I/O or if certain events have occurred on them.
+poll() will wait at least timeout milliseconds for an event to occur on any of the descriptors. If the value of timeout is 0, poll() will return immediately.
+If the value of timeout is -1, poll() will block until a requested event occurs or until the call is interrupted.
+	
+	struct pollfd {
+         int    fd;       /* file descriptor */
+         short  events;   /* events to look for */
+         short  revents;  /* events returned */
+     	};
+
+
+	int     accept(int socket, struct sockaddr *restrict address, socklen_t *restrict address_len);
+
+accept() extracts the first connection request on the queue of pending connections, creates a new socket with the same properties of socket, and allocates a new file descriptor for the socket. 
+If no pending connections are present on the queue, and the socket is not marked as non-blocking, accept() blocks the caller until a connection is present.
+If the socket is marked non-blocking and no pending connections are present on the queue, accept() returns an error as described below.
+The accepted socket may not be used to accept more connections.  The original socket remains open.
+
+
+	int	fcntl(int fildes, int cmd, ...);
+
+fcntl() provides for control over descriptors.  The argument fildes is a descriptor to be operated on by cmd.
+F_SETFD            Set the file descriptor flags to arg.
+O_NONBLOCK   Non-blocking I/O; if no data is available to a read call, or if a write operation would block, the read or write call returns -1 with the error EAGAIN.
 
 # TAREAS
 
@@ -53,6 +81,11 @@ https://www.gnu.org/software/libc/manual/html_node/Socket_002dLevel-Options.html
 [ ] Probar conexión irc
 [ ] Mensajes privados y avisos
 [ ] Privilegios de usuario
+[ ] serv::wait_for_connection change TIMEOUT
+[ ] serv::wait_for_connection check ping clients
+[ ] autosock::server_listening revise setsockopt flags
+[ ] autosock::server_listening define max size for poll
+=======
 
 
 # Errores recurrentes y cómo arreglarlos

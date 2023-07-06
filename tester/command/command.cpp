@@ -93,50 +93,11 @@ void  cmd::privmsg(server &svr, int poll_fd_pos, std::string str) {
   std::vector<std::string> rcvlist = ft_split(msglist[0], ',');
 	std::string msg = str.substr(str.find(msglist[1]));
   for (int i = 0; i < rcvlist.size(); i++)
-  if (str == "PRIVMSG")
-  {
-	  svr.send_message(": 411: No recipient given (PRIVMSG) \r\n", usr.get_fd());
-	  return ;
-  }
-  std::vector<std::string> msglist = ft_split(str, ' ');
-  if (msglist.size() == 1)
-  {
-    svr.send_message(": 412: No text to send \r\n", usr.get_fd());
-	  return ;
-  }
-  std::vector<std::string> rcvlist = ft_split(msglist[0], ',');
-	std::string msg = str.substr(str.find(msglist[1]));
-  for (int i = 0; i < rcvlist.size(); i++)
   {
     if ((rcvlist[i][0] == '#') || (rcvlist[i][0] == '&'))
     {
       channel *chn = svr.get_channel_from_name(rcvlist[i]);
       usr.send_to_channel(chn, svr, rcvlist[i], msg);
-    }
-    else
-    {
-      user *receiver = svr.get_user_from_nick(rcvlist[i]);
-      if(receiver)
-        svr.send_message("From " + usr.get_nick() + ":\n" + msg + "\n", receiver->get_fd());
-      else
-        svr.send_message(": 401 " + rcvlist[i] + ": No such nick/channel \r\n", usr.get_fd());
-    }
-    if ((rcvlist[i][0] == '#') || (rcvlist[i][0] == '&'))
-    {
-      channel *chn = svr.get_channel_from_name(rcvlist[i]);
-      if(chn)
-      {
-        if (chn->is_user_in_channel(usr)) //TODO habria que comprobar o de los modos también
-        {
-          for (int j = 0; j < chn->get_list_of_members().size(); j++)
-            if (chn->get_list_of_members()[j].get_nick() != usr.get_nick())
-              svr.send_message("From " + rcvlist[i] + ":\n" + msg + "\n", chn->get_list_of_members()[j].get_fd());
-        }
-        else
-          svr.send_message(": 404 " + rcvlist[i] + ": Cannot send to channel \r\n", usr.get_fd());
-      }
-      else
-        svr.send_message(": 401 " + rcvlist[i] + ": No such nick/channel \r\n", usr.get_fd());
     }
     else
     {
@@ -154,24 +115,9 @@ void  cmd::join(server &svr, int poll_fd_pos, std::string str) {
   // SVR->crear_canal()
   // else
   // SVR->add_user_to_channel()
-  std::vector<std::string> channel_params = ft_split(str, ' ');
+  std::vector<std::string> seglist = ft_split(str, ' ');
   poll_fd pollfd = svr.get_pollfd(poll_fd_pos);
   user &usr = svr.get_user(pollfd.fd);
-  if (str == "JOIN")
-  {
-	  svr.send_message(": 461 USER : <command> :Not enough parameters \r\n", usr.get_fd());
-    return ;
-  }
-  // Me pueden pasar una serie de canales separados por ','
-  // TODO Channel_params[1] debe contener las contraseñas, si se utilizan
-  std::vector<std::string> channels_to_join = ft_split(channel_params[0], ',');
-  for (std::vector<std::string>::iterator it = channels_to_join.begin(); it != channels_to_join.end(); it++)
-  {
-    channel *cnn = svr.get_channel_from_name(*it);
-    if (cnn)
-      cnn->add_member(usr);
-    else
-      svr.create_channel(usr, *it);
   channel *cnn = svr.get_channel_from_name(seglist[0]);
   if (cnn)
     cnn->add_member(usr);
@@ -222,77 +168,5 @@ void cmd::topic(server &svr, int poll_fd_pos, std::string str) //TODO los modos
   {
     svr.send_message(": 403 " + msglist[0] + ": No such channel\r\n", usr.get_fd());
     return ;
-  }
-}
-
-void cmd::invite(server &svr, int poll_fd_pos, std::string str)
-{
-  poll_fd pollfd = svr.get_pollfd(poll_fd_pos);
-  user &usr = svr.get_user(pollfd.fd);
-  std::vector<std::string> msglist = ft_split(str, ' ');
-  if (msglist.size() < 2)
-  {
-    svr.send_message(": 461 INVITE: Not enough parameters \r\n", usr.get_fd());
-    return ;
-  }
-  user *new_user = svr.get_user_from_nick(msglist[0]);
-  channel *chn = svr.get_channel_from_name(msglist[1]);
-  if (!new_user)
-  {
-    svr.send_message(": 401 " + msglist[0] + ": No such nick/channel \r\n", usr.get_fd());
-    return ;
-  }
-  if (!chn)
-  {
-    svr.send_message(": 401 " + msglist[1] + ": No such nick/channel \r\n", usr.get_fd());
-    return ;
-  }
-  if (!chn->is_user_in_channel(usr))
-  {
-      svr.send_message(": 442 " + msglist[1] + ": You're not on that channel \r\n", usr.get_fd());
-      return ;
-  }
-  if (chn->is_user_in_channel(*new_user))
-  {
-      svr.send_message(": 443 " + msglist[0] + " " + msglist[1] + ": is already on channel \r\n", usr.get_fd());
-      return ;
-  }
-  chn->add_member(*new_user);
-  svr.send_message(": 341 " + msglist[0] + " " + msglist[1] + " \r\n", usr.get_fd());
-}
-
-void cmd::kick(server &svr, int poll_fd_pos, std::string str)
-{
-  poll_fd pollfd = svr.get_pollfd(poll_fd_pos);
-  user &usr = svr.get_user(pollfd.fd);
-  std::vector<std::string> msglist = ft_split(str, ' ');
-  if (msglist.size() < 2)
-  {
-    svr.send_message(": 461 KICK: Not enough parameters \r\n", usr.get_fd());
-    return ;
-  }
-  std::vector<std::string> chnlist = ft_split(msglist[0], ',');
-  std::vector<std::string> usrlist = ft_split(msglist[1], ',');
-  if (msglist.size() > 2)
-	  std::string msg = str.substr(str.find(msglist[2]));
-  for (int i = 0; i < chnlist.size(); i++)
-  {
-    channel *chn = svr.get_channel_from_name(chnlist[i]);
-    if (!chn)
-      svr.send_message(": 401 " + chnlist[i] + ": No such nick/channel \r\n", usr.get_fd());
-    else
-    {
-      if (!chn->is_user_in_channel(usr))
-      {
-        svr.send_message(": 442 " + chnlist[i] + ": You're not on that channel \r\n", usr.get_fd());
-        continue ;
-      }
-      for (int j = 0; j < usrlist.size(); j++)
-      {
-        user *rcv = svr.get_user_from_nick(usrlist[j]);
-        if (rcv)
-          chn->rmv_member(*rcv);
-      }
-    }
   }
 }

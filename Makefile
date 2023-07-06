@@ -11,9 +11,11 @@ RESET 	= "\033[1;0m"
 NAME 		= ircserv
 CC 			= c++
 INCLUDE 	= -std=c++98
-CXXFLAGS 	= -Wall -Wextra -Wfatal-errors -g -fsanitize=address #-Werror
+CXXFLAGS 	= -Wall -Wextra -g -fsanitize=address #-Werror
+TEST		= ircTester
 
-# PATHs #
+
+# PATHS #
 #
 SRC_PATH    	= srcs
 
@@ -25,10 +27,11 @@ SUBFILE5_PATH   = command
 SUBFILE6_PATH   = channel
 
 OBJ_PATH    	= objects
-TEST_PATH		= test
+TEST_PATH		= tester
+
 
 # SOURCES #
-
+#
 SUBFILE1_SRC = server.cpp
 SUBFILE2_SRC = autosocket.cpp
 SUBFILE3_SRC = parser.cpp
@@ -36,7 +39,7 @@ SUBFILE4_SRC = user.cpp
 SUBFILE5_SRC = command.cpp
 SUBFILE6_SRC = channel.cpp
 
-SRC =  	main.cpp \
+SRC =	main.cpp	\
 		$(addprefix $(SUBFILE1_PATH)/, $(SUBFILE1_SRC)) \
 		$(addprefix $(SUBFILE2_PATH)/, $(SUBFILE2_SRC)) \
 		$(addprefix $(SUBFILE3_PATH)/, $(SUBFILE3_SRC)) \
@@ -46,13 +49,18 @@ SRC =  	main.cpp \
 
 
 # RULES #
+#
 all: $(NAME)
+
+test: $(TEST)
 
 SRCS = $(addprefix $(SRC_PATH)/, $(SRC))
 
 OBJS =  $(addprefix $(OBJ_PATH)/, $(SRC:%.cpp=%.o))
 
+SRCS_TEST = $(addprefix $(TEST_PATH)/, $(SRC))
 
+OBJS_TEST =  $(addprefix $(TEST_PATH)/, $(SRC:%.cpp=%.o))
 
 $(OBJ_PATH):
 	mkdir -p $(OBJ_PATH)
@@ -64,37 +72,20 @@ $(OBJ_PATH):
 	mkdir -p $(addprefix $(OBJ_PATH)/, $(SUBFILE6_PATH))
 
 $(OBJ_PATH)/%.o: $(SRC_PATH)/%.cpp | $(OBJ_PATH)
-	$(CC) $(CXXFLAGS) $(INCLUDE) -c $< -o $@
+	$(CC) $(INCLUDE) -c $< -o $@
 
 $(NAME): $(OBJS)
 	$(CC) $(CXXFLAGS) $(INCLUDE) $(OBJS) -o $(NAME)
 #	clear
 	$(GREEN) Program asembled $(RESET)
 
-##RULES
-$(MAKE): make
+$(TEST_PATH)/%.o: $(TEST_PATH)/%.cpp
+	$(CC) $(CXXFLAGS) $(INCLUDE) -c $< -o $@
 
-clean:
-	$(PURPLE) CLEANING OBJECTS $(RESET)
-	rm -rf $(OBJ_PATH)
-
-fclean: clean
-	$(PURPLE) CLEANING DIRECTORY AND EXEC $(RESET)
-	rm -rf $(NAME)
-	rm -rf $(OBJ_PATH)
-
-re: fclean all
-
-test:
-	@echo "##################################################################################"
-	@echo "#                         Generating test folder                                 #"
-	@echo "##################################################################################"
-	@mkdir -p $(TEST_PATH)
-	@for FILE in $(SRC_PATH)/$(SUBFILE1_PATH)/* ; do Ln -sf $(PWD)/$(SRC_PATH)/$(SUBFILE1_PATH)/* $(PWD)/$(TEST_PATH)/$(basename($$FILE)) ; done;
-	@echo "int main(int argc, char **argv)" >> $(PWD)/$(TEST_PATH)/main.cpp
-	@echo "{" >> $(PWD)/$(TEST_PATH)/main.cpp
-	@echo "return (0);" >> $(PWD)/$(TEST_PATH)/main.cpp
-	@echo "}" >> $(PWD)/$(TEST_PATH)/main.cpp
+$(TEST): $(OBJS_TEST)
+	$(CC) $(CXXFLAGS) $(INCLUDE) $(OBJS_TEST) -o $(TEST)
+#	clear
+	$(GREEN) Program asembled $(RESET)
 	@echo "⠀⠀⠀	    ⣠⣴⣶⣿⣿⣷⣶⣄⣀⣀\n\
 ⠀⠀⠀⠀⠀⠀⠀⠀⠀⣰⣾⣿⣿⡿⢿⣿⣿⣿⣿⣿⣿⣿⣷⣦⡀⠀⠀⠀⠀⠀\n\
 ⠀⠀⠀⠀⠀⠀⠀⢀⣾⣿⣿⡟⠁⣰⣿⣿⣿⡿⠿⠻⠿⣿⣿⣿⣿⣧⠀⠀⠀⠀\n\
@@ -111,11 +102,21 @@ test:
 ⠀⠀⠀⠀⠀⠀⠀⠹⣿⣿⣿⣿⣦⣤⣤⣤⣤⣾⣿⣿⣿⣿⣿⣿⣿⣿⡟⠀⠀⠀\n\
 ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠉⠻⢿⣿⣿⣿⣿⣿⣿⠿⠋⠉⠛⠋⠉⠉⠁⠀⠀⠀⠀\n\
 ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠈⠉⠉⠉⠁\n"
-	@echo "##################################################################################"
-	@echo "#               Test ready pls edit main.cpp with you own test                   #"
-	@echo "##################################################################################"
 
-tclean:
-	rm -rf $(TEST_PATH)
+$(MAKE): make
+
+clean:
+	$(PURPLE) CLEANING OBJECTS $(RESET)
+	rm -rf $(OBJ_PATH)
+	rm -f $(TEST_PATH)/main.o
+	rm -f $(TEST_PATH)/*/*.o
+
+fclean: clean
+	$(PURPLE) CLEANING OBJECTS AND EXEC $(RESET)
+	rm -rf $(NAME)
+	rm -rf $(TEST)
+
+re: fclean all
+
 
 PHONY.: all clean fclean re

@@ -1,3 +1,13 @@
+# Compilation
+[ ] Compile source files and generate program with c++98 flag
+[ ] No relink
+[ ] Rules $(NAME), all, clean, fclean and re in Makefile
+
+# Restrictions
+[ ] No external libraries
+[ ] C libraries and functions only used when needed
+[ ] No forks
+
 # Clients
 
 ## Client Location
@@ -43,4 +53,3 @@ The path of a message being delivered is the shortest path between any two point
    [ ] Many clients. All messages traverse a path as if
        they were private messages between the two clients outside a
        channel.
-

@@ -67,18 +67,17 @@ void	server::init_list_of_cmds(void)
 	this->list_of_cmds.insert(std::pair<std::string, command_function>("PRIVMSG", &cmd::privmsg));
 	this->list_of_cmds.insert(std::pair<std::string, command_function>("JOIN", &cmd::join));
 	this->list_of_cmds.insert(std::pair<std::string, command_function>("TOPIC", &cmd::topic));
-	this->list_of_cmds.insert(std::pair<std::string, command_function>("INVITE", &cmd::invite));
-	this->list_of_cmds.insert(std::pair<std::string, command_function>("KICK", &cmd::kick));
 }
 
 bool	server::wait_for_connection(void)
 {
 	int ret;
+	int time = 0;
 	// Init pollfd struct
 	memset(this->poll_fds, 0, sizeof(this->poll_fds));
 	this->poll_fds[0].fd 	   = this->server_socket->fd;
 	this->poll_fds[0].events   = POLLIN;
-	while (true)
+	while (time < INT_MAX)
 	{
 		ret = poll(this->poll_fds, this->_active_fds, TIMEOUT); //TODO cambiar timeout + check ping clients
 		if (ret < 0) {
@@ -90,6 +89,7 @@ bool	server::wait_for_connection(void)
 		if (this->fd_ready() == 1)
 			return 1;
 		// ping  users and disconnect inactive
+		time++;
 	}
 	return 0;
 }
@@ -223,16 +223,12 @@ void	server::parse_message(int poll_fd_pos, std::string msg)
 
 void	server::create_channel(user &usr, std::string name)
 {
-	// IRSSI:  si el server NO empiza por #, lo añade el propio server incluso si empieza por &
-	// Puede contener # o & entre medias
-	if (name[0] != '#')
-		name.insert(0, "#");
-
 	channel cnn(name);
+
 	cnn.add_member(usr);
 	this->list_of_channels.insert(std::pair<std::string, channel>(name, cnn));
-	std::cout << YELLOW << name << " channel created!" << std::endl;
-	std::cout << cnn << RESET << std::endl;
+	std::cout << name << " channel created!" << std::endl;
+	std::cout << cnn << std::endl;
 }
 
 // Maybe make a template????

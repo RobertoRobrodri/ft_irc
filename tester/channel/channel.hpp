@@ -37,7 +37,6 @@ class	channel {
 		#				FUNCTIONS					#
 		############################################*/
 		void	add_member(user &usr);
-		void	rmv_member(user &usr);
 		bool	is_user_in_channel(const user &usr);
 };
 std::ostream &operator<<(std::ostream& os, const channel &tmp);
