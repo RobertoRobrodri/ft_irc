@@ -1,4 +1,4 @@
-#include "../srcs/server/server.hpp"
+#include "server/server.hpp"
 #include <iostream>
 #include <iomanip>
 
@@ -79,9 +79,32 @@ int main()
 	serv = new server(argv[1], argv[2], argv[3]);
 	std::cout << *serv << std::endl;
 
-/*
-	if (serv->wait_for_connection())
-		throw std::runtime_error("Conection failed");
-*/
-		return (0);
+	std::map<std::string, command_function>::iterator it;
+
+    std::cout << "Commands:" << std::endl;
+	for (it = serv->list_of_cmds.begin(); it != serv->list_of_cmds.end(); it++)
+	{
+    	std::cout << it->first << std::endl;
+	}
+    std::cout << std::endl;
+
+    std::cout << "Socket:" << std::endl;
+	std::cout << "File descriptor " << serv->server_socket->fd << std::endl
+		<< "Sock_in \n" 
+		<< " - sin_family '\\x0" << (int)serv->server_socket->addr.sin_family << "'" << std::endl
+		<< " - sin_port " << serv->server_socket->addr.sin_port << std::endl
+		<< " - sin_addr " << serv->server_socket->addr.sin_addr.s_addr << std::endl
+		<< " - sin_zero [ ";
+   	for (int i = 0; i < 8; i++)
+	{
+		std::cout << (int)serv->server_socket->addr.sin_zero[i] << " ";
+	}
+	std::cout << "]\n\n";
+
+
+	/* UNCOMMENT TO TEST CONNECTION (this will block the program)
+	std::cout << "CONNECT\n" << "Open a new terminal and type nc -v 127.0.0.1 6776 to test new connection.\n"
+		<< serv->wait_for_connection() << std::endl;
+	*/
+	return (0);
 }

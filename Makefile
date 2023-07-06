@@ -14,7 +14,8 @@ INCLUDE 	= -std=c++98
 CXXFLAGS 	= -Wall -Wextra -g -fsanitize=address #-Werror
 TEST		= ircTester
 
-# PATHs #
+
+# PATHS #
 #
 SRC_PATH    	= srcs
 
@@ -28,8 +29,9 @@ SUBFILE6_PATH   = channel
 OBJ_PATH    	= objects
 TEST_PATH		= tester
 
-# SOURCES #
 
+# SOURCES #
+#
 SUBFILE1_SRC = server.cpp
 SUBFILE2_SRC = autosocket.cpp
 SUBFILE3_SRC = parser.cpp
@@ -37,18 +39,17 @@ SUBFILE4_SRC = user.cpp
 SUBFILE5_SRC = command.cpp
 SUBFILE6_SRC = channel.cpp
 
-SRC =	$(addprefix $(SUBFILE1_PATH)/, $(SUBFILE1_SRC)) \
+SRC =	main.cpp	\
+		$(addprefix $(SUBFILE1_PATH)/, $(SUBFILE1_SRC)) \
 		$(addprefix $(SUBFILE2_PATH)/, $(SUBFILE2_SRC)) \
 		$(addprefix $(SUBFILE3_PATH)/, $(SUBFILE3_SRC)) \
 		$(addprefix $(SUBFILE4_PATH)/, $(SUBFILE4_SRC)) \
 		$(addprefix $(SUBFILE5_PATH)/, $(SUBFILE5_SRC)) \
 		$(addprefix $(SUBFILE6_PATH)/, $(SUBFILE6_SRC)) \
 
-MAIN =	srcs/main.cpp
-
-TESTER_MAIN = tester/main.cpp
 
 # RULES #
+#
 all: $(NAME)
 
 test: $(TEST)
@@ -56,6 +57,10 @@ test: $(TEST)
 SRCS = $(addprefix $(SRC_PATH)/, $(SRC))
 
 OBJS =  $(addprefix $(OBJ_PATH)/, $(SRC:%.cpp=%.o))
+
+SRCS_TEST = $(addprefix $(TEST_PATH)/, $(SRC))
+
+OBJS_TEST =  $(addprefix $(TEST_PATH)/, $(SRC:%.cpp=%.o))
 
 $(OBJ_PATH):
 	mkdir -p $(OBJ_PATH)
@@ -67,17 +72,18 @@ $(OBJ_PATH):
 	mkdir -p $(addprefix $(OBJ_PATH)/, $(SUBFILE6_PATH))
 
 $(OBJ_PATH)/%.o: $(SRC_PATH)/%.cpp | $(OBJ_PATH)
-	$(CC) $(CXXFLAGS) $(INCLUDE) -c $< -o $@
+	$(CC) $(INCLUDE) -c $< -o $@
 
 $(NAME): $(OBJS)
-	$(CC) $(CXXFLAGS) $(INCLUDE) -c $(MAIN) -o objects/main.o
-	$(CC) $(CXXFLAGS) $(INCLUDE) $(OBJS) objects/main.o -o $(NAME)
+	$(CC) $(CXXFLAGS) $(INCLUDE) $(OBJS) -o $(NAME)
 #	clear
 	$(GREEN) Program asembled $(RESET)
 
-$(TEST): $(OBJS)
-	@$(CC) $(CXXFLAGS) $(INCLUDE) -c $(TESTER_MAIN) -o objects/main.o
-	$(CC) $(CXXFLAGS) $(INCLUDE) $(OBJS) objects/main.o -o $(TEST)
+$(TEST_PATH)/%.o: $(TEST_PATH)/%.cpp
+	$(CC) $(CXXFLAGS) $(INCLUDE) -c $< -o $@
+
+$(TEST): $(OBJS_TEST)
+	$(CC) $(CXXFLAGS) $(INCLUDE) $(OBJS_TEST) -o $(TEST)
 #	clear
 	$(GREEN) Program asembled $(RESET)
 	@echo "⠀⠀⠀	    ⣠⣴⣶⣿⣿⣷⣶⣄⣀⣀\n\
@@ -97,19 +103,18 @@ $(TEST): $(OBJS)
 ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠉⠻⢿⣿⣿⣿⣿⣿⣿⠿⠋⠉⠛⠋⠉⠉⠁⠀⠀⠀⠀\n\
 ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠈⠉⠉⠉⠁\n"
 
-
-##RULES
 $(MAKE): make
 
 clean:
 	$(PURPLE) CLEANING OBJECTS $(RESET)
 	rm -rf $(OBJ_PATH)
+	rm -f $(TEST_PATH)/main.o
+	rm -f $(TEST_PATH)/*/*.o
 
 fclean: clean
-	$(PURPLE) CLEANING DIRECTORY AND EXEC $(RESET)
+	$(PURPLE) CLEANING OBJECTS AND EXEC $(RESET)
 	rm -rf $(NAME)
 	rm -rf $(TEST)
-	rm -rf $(OBJ_PATH)
 
 re: fclean all
 
