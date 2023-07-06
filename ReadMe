@@ -38,6 +38,11 @@ https://www.gta.ufrj.br/ensino/eel878/sockets/sockaddr_inman.html
 https://pubs.opengroup.org/onlinepubs/009695399/functions/inet_addr.html
 https://www.gnu.org/software/libc/manual/html_node/Socket_002dLevel-Options.html#Socket_002dLevel-Options
 
+### Used functions
+
+int     poll(struct pollfd fds[], nfds_t nfds, int timeout);
+	poll() examines a set of file descriptors to see if some of them are ready for I/O or if certain events have occurred on them.
+
 
 # TAREAS
 
