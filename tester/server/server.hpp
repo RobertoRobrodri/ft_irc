@@ -69,6 +69,7 @@ class	server {
 		bool	receive_communication(int i);
 		void	parse_message(int poll_fd_pos, std::string msg);
 		void	init_list_of_cmds(void);
+		void	init_pollfd(void);
 
 		server				( std::string network , std::string port , std::string pass );
 		server 				( const server & var );

@@ -12,8 +12,8 @@ server::server( void )
 
 }
 
-server::server( std::string network , std::string port , std::string pass ) : _active_fds(1) {
-	
+server::server( std::string network , std::string port , std::string pass ) : _active_fds(1) 
+{	
 	std::cout << "Server Parameter constructor called" << std::endl;
 	std::vector <std::string>seglist = ft_split(network, ':');
 	this->data.host 		= seglist[0];
@@ -71,13 +71,18 @@ void	server::init_list_of_cmds(void)
 	this->list_of_cmds.insert(std::pair<std::string, command_function>("KICK", &cmd::kick));
 }
 
-bool	server::wait_for_connection(void)
+void	server::init_pollfd(void)
 {
-	int ret;
-	// Init pollfd struct
 	memset(this->poll_fds, 0, sizeof(this->poll_fds));
 	this->poll_fds[0].fd 	   = this->server_socket->fd;
 	this->poll_fds[0].events   = POLLIN;
+}
+
+bool	server::wait_for_connection(void)
+{
+	int ret;
+
+	this->init_pollfd();
 	while (true)
 	{
 		ret = poll(this->poll_fds, this->_active_fds, TIMEOUT); //TODO cambiar timeout + check ping clients
