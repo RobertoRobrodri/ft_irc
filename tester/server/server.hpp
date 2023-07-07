@@ -64,7 +64,7 @@ class	server {
 		std::map<std::string, channel> 	list_of_channels;
 
 		server	( void );
-		int		fd_ready(void);
+		bool	fd_ready(void);
 		bool	accept_communication(void);
 		bool	receive_communication(int i);
 		void	parse_message(int poll_fd_pos, std::string msg);

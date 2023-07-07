@@ -99,8 +99,7 @@ bool	server::wait_for_connection(void)
 	return 0;
 }
 
-
-int	server::fd_ready( void )
+bool	server::fd_ready(void)
 {
 	for (int i = 0; i < this->_active_fds; i++)
 	{
@@ -122,10 +121,11 @@ int	server::fd_ready( void )
 
 bool	server::accept_communication(void)
 {
-	int 	fd = 0;
+	int 	fd;
 	sock_in client_addr;
 	socklen_t client_addr_size = sizeof(client_addr);
 	char ip_addres[20];
+
 	fd = accept(this->server_socket->fd, (sock_addr*)&client_addr, &client_addr_size);
 	if (fd < 0)
     {
@@ -144,10 +144,10 @@ bool	server::accept_communication(void)
 	this->_active_fds++;
 	user 	new_user(fd, inet_ntop(AF_INET, &(client_addr.sin_addr), ip_addres, sizeof(ip_addres)));
 	this->list_of_users.insert(std::pair<int, user>(fd, new_user));
-	// std::cout << "New socket: " << fd << std::endl;
-	// std::cout << "Active clients: " << this->_active_fds << std::endl;
-	// std::cout << "New user: " << std::endl;
-	// std::cout << this->list_of_users[fd] << std::endl;
+	std::cout << "New socket: " << fd << std::endl;
+	std::cout << "Active clients: " << this->_active_fds << std::endl;
+	std::cout << "New user: " << std::endl;
+	std::cout << this->list_of_users[fd] << std::endl;
 	return 0;
 }
 
