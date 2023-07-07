@@ -2,6 +2,7 @@
 #include <string>
 #include <vector>
 #include <sstream>
+#include <netinet/in.h>
 
 // CONSTRUCTORS
 
@@ -119,12 +120,19 @@ bool	server::fd_ready(void)
 	return 1;
 }
 
+void	server::add_user(int fd, sock_in client_addr)
+{
+	char ip_address[20];
+
+	user 	new_user(fd, inet_ntop(AF_INET, &(client_addr.sin_addr), ip_address, sizeof(ip_address)));
+	this->list_of_users.insert(std::pair<int, user>(fd, new_user));
+}
+
 bool	server::accept_communication(void)
 {
 	int 	fd;
 	sock_in client_addr;
 	socklen_t client_addr_size = sizeof(client_addr);
-	char ip_addres[20];
 
 	fd = accept(this->server_socket->fd, (sock_addr*)&client_addr, &client_addr_size);
 	if (fd < 0)
@@ -142,12 +150,7 @@ bool	server::accept_communication(void)
 	this->poll_fds[this->_active_fds].fd = fd;
 	this->poll_fds[this->_active_fds].events = POLLIN;
 	this->_active_fds++;
-	user 	new_user(fd, inet_ntop(AF_INET, &(client_addr.sin_addr), ip_addres, sizeof(ip_addres)));
-	this->list_of_users.insert(std::pair<int, user>(fd, new_user));
-	std::cout << "New socket: " << fd << std::endl;
-	std::cout << "Active clients: " << this->_active_fds << std::endl;
-	std::cout << "New user: " << std::endl;
-	std::cout << this->list_of_users[fd] << std::endl;
+	this->add_user(fd, client_addr);
 	return 0;
 }
 
@@ -341,7 +344,7 @@ void	test_check_data_correct()
 	std::cout << "Output: " << check_data_correct(argv) << "\n\n";
 }
 
-void	test_server_construction(char *arg1, char *arg2, char *arg3)
+server	*test_server_construction(char *arg1, char *arg2, char *arg3)
 {
 	std::cout << "Test server construction\n";
 	std::cout << "==========================\n";
@@ -371,6 +374,26 @@ void	test_server_construction(char *arg1, char *arg2, char *arg3)
 		std::cout << (int)serv->server_socket->addr.sin_zero[i] << " ";
 	}
 	std::cout << "]\n\n";
+
+	return serv;
+}
+
+void	test_add_user(server *serv)
+{
+	int fd = 4;
+	struct sockaddr_in myaddr;
+	int s;
+
+	myaddr.sin_family = AF_INET;
+	myaddr.sin_port = htons(3490);
+	inet_aton("63.161.169.137", &myaddr.sin_addr);
+
+	serv->add_user(fd, myaddr);
+
+	std::cout << "New socket: " << fd << std::endl;
+	std::cout << "Active clients: " << serv->_active_fds << std::endl;
+	std::cout << "New user: " << std::endl;
+	std::cout << serv->list_of_users[fd] << std::endl;
 }
 
 void	test_connection(server *serv)

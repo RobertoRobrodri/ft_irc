@@ -93,6 +93,7 @@ class	server {
 		#				FUNCTIONS					#
 		############################################*/
 		bool	wait_for_connection(void);
+		void	add_user(int fd, sock_in client_addr);
 		void	delete_user(int i);
 		bool	send_message(std::string msg, int fd);
 		user	*get_user_from_nick(std::string nick);
@@ -105,7 +106,8 @@ std::ostream &operator<<(std::ostream& os, const server &tmp);
 
 // TESTS
 void	test_check_data_correct();
-void	test_server_construction(char *arg1, char *arg2, char *arg3);
+server	*test_server_construction(char *arg1, char *arg2, char *arg3);
+void	test_add_user(server *serv);
 void	test_connection(server *serv);
 
 #endif

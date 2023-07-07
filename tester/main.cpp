@@ -9,8 +9,8 @@ int main()
 	char *arg1 = "127.0.0.1:6776:pass";
 	char *arg2 = "6776";
 	char *arg3 = "pass";
-	test_server_construction(arg1, arg2, arg3);
-
+	server *serv = test_server_construction(arg1, arg2, arg3);
+	test_add_user(serv);
 	/* UNCOMMENT TO TEST CONNECTION (this will block the program)
 	 * test_connection(serv);
 	*/
