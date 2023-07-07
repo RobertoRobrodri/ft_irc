@@ -101,5 +101,10 @@ class	server {
 
 std::ostream &operator<<(std::ostream& os, const server &tmp);
 
-#endif
 
+// TESTS
+void	test_check_data_correct();
+void	test_server_construction(char *arg1, char *arg2, char *arg3);
+void	test_connection(server *serv);
+
+#endif
