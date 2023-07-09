@@ -174,7 +174,7 @@ bool	server::receive_communication(int poll_fd_pos)
 	return 0;
 }
 
-bool	server::send_message(std::string msg, int fd)
+bool server::send_message(std::string msg, int fd)
 {
 	int len = send(fd, msg.c_str(), msg.length(), 0);
 	if (len < 0)
@@ -223,10 +223,10 @@ void	server::parse_message(int poll_fd_pos, std::string msg)
 
 void	server::create_channel(user &usr, std::string name)
 {
-	// IRSSI:  si el server NO empiza por #, lo añade el propio server incluso si empieza por &
+	// IRSSI:  si el server NO empiza por #, lo añade
 	// Puede contener # o & entre medias
-	if (name[0] != '#')
-		name.insert(0, "#");
+	//if (name[0] != '#' || name[0] != '&')
+	//	name.insert(0, "#");
 
 	channel cnn(name);
 	cnn.add_member(usr);
@@ -251,10 +251,11 @@ user *server::get_user_from_nick(std::string nick)
 channel *server::get_channel_from_name(std::string name)
 {
 	std::map<std::string, channel>::iterator it;
+	std::string tmp(name);
 
 	for (it = this->list_of_channels.begin(); it != this->list_of_channels.end(); it++)
 	{
-		if (it->second.get_name().compare(name) == 0)
+		if (it->second.get_name().compare(tmp) == 0)
 			return &(it->second);
 	}
 	return NULL;

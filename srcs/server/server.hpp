@@ -94,7 +94,7 @@ class	server {
 		############################################*/
 		bool	wait_for_connection(void);
 		void	delete_user(int i);
-		bool	send_message(std::string msg, int fd);
+		static bool	send_message(std::string msg, int fd);
 		user	*get_user_from_nick(std::string nick);
 		channel *get_channel_from_name(std::string name);
 		void	create_channel(user &usr, std::string name);
