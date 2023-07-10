@@ -18,6 +18,7 @@ class	user {
 		std::string		_realname;
 		std::string		_servername;
 		bool			_is_registered;
+		int 			_n_channels;
 
 	public:
 
@@ -37,6 +38,7 @@ class	user {
 		std::string get_realname(void) const 	{return(this->_realname);};
 		int 		get_fd(void) const 			{return(this->_fd);};
 		bool 		get_is_registered(void) const 			{return(this->_is_registered);};
+		int 		get_n_channels(void) const 	{return(this->_n_channels);};
 		
 		/*###########################################
 		#				SETTERS						#
@@ -48,6 +50,7 @@ class	user {
 		void		set_realname(std::string realname) {this->_realname = realname;};
 		void		set_fd(int fd) {this->_fd = fd;};
 		void		set_is_registered(bool is_registered) {this->_is_registered = is_registered;};
+		void 		set_n_channels(int i) {this->_n_channels = i;};
 		/*###########################################
 		#				FUNCTIONS					#
 		############################################*/
