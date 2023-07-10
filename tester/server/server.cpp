@@ -401,3 +401,33 @@ void	test_connection(server *serv)
 	std::cout << "CONNECT\n" << "Open a new terminal and type nc -v 127.0.0.1 6776 to test new connection.\n"
 		<< serv->wait_for_connection() << std::endl;
 }
+
+void	test_delete_user(server *serv, int fd_pos)
+{
+	std::cout << "Active clients: " << serv->_active_fds << std::endl;
+	std::cout << "List of users:" << std::endl;
+	for (unsigned int i = 0; i < serv->list_of_users.size(); i++)
+		std::cout << serv->list_of_users[i] << std::endl;
+	std::cout << "Poll fd:" << std::endl;
+	for (int i = 0; i < serv->_active_fds; i++)
+	{
+		std::cout << i << "- " << std::endl;
+		std::cout << serv->poll_fds[i].fd << std::endl;
+		std::cout << serv->poll_fds[i].events << std::endl;
+	}
+	
+	serv->delete_user(fd_pos);
+	std::cout << "Deleted user number " << fd_pos << std::endl;
+	
+	std::cout << "Active clients: " << serv->_active_fds << std::endl;
+	std::cout << "List of users:" << std::endl;
+	for (unsigned int i = 0; i < serv->list_of_users.size(); i++)
+		std::cout << serv->list_of_users[i] << std::endl;
+	std::cout << "Poll fd:" << std::endl;
+	for (int i = 0; i < serv->_active_fds; i++)
+	{
+		std::cout << i << "- " << std::endl;
+		std::cout << serv->poll_fds[i].fd << std::endl;
+		std::cout << serv->poll_fds[i].events << std::endl;
+	}
+}

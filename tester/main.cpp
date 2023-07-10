@@ -11,8 +11,9 @@ int main()
 	char *arg3 = "pass";
 	server *serv = test_server_construction(arg1, arg2, arg3);
 	test_add_user(serv);
-	/* UNCOMMENT TO TEST CONNECTION (this will block the program)
-	 * test_connection(serv);
-	*/
+	test_delete_user(serv, 1);
+	//UNCOMMENT TO TEST CONNECTION (this will block the program)
+	test_connection(serv);
+	
 	return (0);
 }

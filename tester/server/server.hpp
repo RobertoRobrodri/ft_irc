@@ -108,6 +108,7 @@ std::ostream &operator<<(std::ostream& os, const server &tmp);
 void	test_check_data_correct();
 server	*test_server_construction(char *arg1, char *arg2, char *arg3);
 void	test_add_user(server *serv);
+void	test_delete_user(server *serv, int fd_pos);
 void	test_connection(server *serv);
 
 #endif
