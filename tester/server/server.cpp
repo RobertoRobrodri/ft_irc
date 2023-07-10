@@ -124,6 +124,9 @@ void	server::add_user(int fd, sock_in client_addr)
 {
 	char ip_address[20];
 
+	this->poll_fds[this->_active_fds].fd = fd;
+	this->poll_fds[this->_active_fds].events = POLLIN;
+	this->_active_fds++;
 	user 	new_user(fd, inet_ntop(AF_INET, &(client_addr.sin_addr), ip_address, sizeof(ip_address)));
 	this->list_of_users.insert(std::pair<int, user>(fd, new_user));
 }
@@ -147,9 +150,6 @@ bool	server::accept_communication(void)
 		return 1;
 	}
 	std::cout << YELLOW << "Accepted communication from: " << fd << RESET << std::endl;
-	this->poll_fds[this->_active_fds].fd = fd;
-	this->poll_fds[this->_active_fds].events = POLLIN;
-	this->_active_fds++;
 	this->add_user(fd, client_addr);
 	return 0;
 }
@@ -195,7 +195,8 @@ bool	server::send_message(std::string msg, int fd)
 
 void	server::delete_user(int poll_fd_pos)
 {
-	std::cout << RED << "Deleted user: " << RESET << std::endl;
+	std::cout << RED << "Deleted user: " << this->poll_fds[poll_fd_pos].fd
+		<< RESET << std::endl;
 	close(this->poll_fds[poll_fd_pos].fd);
 	this->list_of_users.erase(this->poll_fds[poll_fd_pos].fd);
 	for (int count = poll_fd_pos; count <= this->_active_fds - 1; count++)
@@ -203,8 +204,6 @@ void	server::delete_user(int poll_fd_pos)
 	this->poll_fds[this->_active_fds - 1].fd = 0;
 	this->poll_fds[this->_active_fds - 1].events = 0;
 	this->_active_fds--;
-	for (int i = 0; i < this->_active_fds; i++)
-		std::cout << this->poll_fds[i].fd << std::endl;
 	//this->poll_fds[poll_fd_pos].fd = -1;
 }
 
@@ -378,15 +377,17 @@ server	*test_server_construction(char *arg1, char *arg2, char *arg3)
 	return serv;
 }
 
-void	test_add_user(server *serv)
+void	test_add_user(server *serv, int fd, char *url, int port)
 {
-	int fd = 4;
+	std::cout << "Test add user" << std::endl;
+	std::cout << "==================================================" << std::endl;
+	
 	struct sockaddr_in myaddr;
 	int s;
 
 	myaddr.sin_family = AF_INET;
-	myaddr.sin_port = htons(3490);
-	inet_aton("63.161.169.137", &myaddr.sin_addr);
+	myaddr.sin_port = htons(port);
+	inet_aton(url, &myaddr.sin_addr);
 
 	serv->add_user(fd, myaddr);
 
@@ -394,6 +395,41 @@ void	test_add_user(server *serv)
 	std::cout << "Active clients: " << serv->_active_fds << std::endl;
 	std::cout << "New user: " << std::endl;
 	std::cout << serv->list_of_users[fd] << std::endl;
+}
+
+void	test_delete_user(server *serv, int fd_pos)
+{
+	std::cout << "Test delete user" << std::endl;
+	std::cout << "==================================================" << std::endl;
+	std::cout << "Active clients: " << serv->_active_fds << std::endl;
+	std::cout << "List of users:" << std::endl;
+	for (unsigned int i = 0; i < serv->list_of_users.size(); i++)
+	{
+		if (serv->list_of_users[i].get_fd() > 0)
+			std::cout << serv->list_of_users[i] << std::endl << std::endl;
+	}
+	std::cout << "Poll fd:" << std::endl;
+	for (int i = 0; i < serv->_active_fds; i++)
+	{
+		std::cout << i << " - " << "fd " << serv->poll_fds[i].fd << ", "
+			<< "events " << serv->poll_fds[i].events << std::endl;
+	}
+	
+	serv->delete_user(fd_pos);
+	
+	std::cout << "Active clients: " << serv->_active_fds << std::endl;
+	std::cout << "List of users:" << std::endl;
+	for (unsigned int i = 0; i < serv->list_of_users.size(); i++)
+	{
+		if (serv->list_of_users[i].get_fd() > 0)
+			std::cout << serv->list_of_users[i] << std::endl << std::endl;
+	}
+	std::cout << "Poll fd:" << std::endl;
+	for (int i = 0; i < serv->_active_fds; i++)
+	{
+		std::cout << i << " - " << "fd " << serv->poll_fds[i].fd << ", "
+			<< "events " << serv->poll_fds[i].events << std::endl;
+	}
 }
 
 void	test_connection(server *serv)
