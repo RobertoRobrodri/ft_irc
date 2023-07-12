@@ -80,6 +80,7 @@ bool	server::wait_for_connection(void)
 	int ret;
 	
 	this->init_pollfd();
+	std::cout << GREEN << "Server initialized! Waiting for connections..." << RESET << std::endl;
 	while (true)
 	{
 		ret = poll(this->poll_fds, this->_active_fds, TIMEOUT); //TODO check ping clients
