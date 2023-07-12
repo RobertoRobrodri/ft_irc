@@ -4,7 +4,7 @@
 #define	sock_addr	struct sockaddr
 #define	poll_fd		struct pollfd
 #define	MAX_CLIENTS	5
-#define	TIMEOUT		-1
+#define	TIMEOUT		700
 #define MSG_SIZE	512
 
 // COLORS
@@ -69,6 +69,8 @@ class	server {
 		bool	receive_communication(int i);
 		void	parse_message(int poll_fd_pos, std::string msg);
 		void	init_list_of_cmds(void);
+		void	init_pollfd(void);
+	
 	public:
 
 		server				( std::string network , std::string port , std::string pass );
@@ -93,6 +95,7 @@ class	server {
 		#				FUNCTIONS					#
 		############################################*/
 		bool	wait_for_connection(void);
+		void	add_user(int fd, sock_in client_addr);
 		void	delete_user(int i);
 		static bool	send_message(std::string msg, int fd);
 		user	*get_user_from_nick(std::string nick);

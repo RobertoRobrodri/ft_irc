@@ -7,13 +7,11 @@
 
 server::server( void )
 {
-
 	std::cout << "Server Default constructor called" << std::endl;
-
 }
 
-server::server( std::string network , std::string port , std::string pass ) : _active_fds(1) {
-	
+server::server( std::string network , std::string port , std::string pass ) : _active_fds(1)
+{	
 	std::cout << "Server Parameter constructor called" << std::endl;
 	std::vector <std::string>seglist = ft_split(network, ':');
 	this->data.host 		= seglist[0];
@@ -25,18 +23,17 @@ server::server( std::string network , std::string port , std::string pass ) : _a
 	this->server_socket = new autosocket(this->data.port, this->data.host);
 }
 
-server::server( const server & var ) {
+server::server( const server & var )
+{
 	(void)var;
 	std::cout << "Server Copy constructor called" << std::endl;
-
 }
 
 // DESTRUCTOR
-server::~server( void ) {
-
+server::~server( void )
+{
 	std::cout << "Server Destructor constructor called" << std::endl;
 	delete this;
-
 }
 
 // OVERLOADING
@@ -71,16 +68,21 @@ void	server::init_list_of_cmds(void)
 	this->list_of_cmds.insert(std::pair<std::string, command_function>("KICK", &cmd::kick));
 }
 
-bool	server::wait_for_connection(void)
+void	server::init_pollfd(void)
 {
-	int ret;
-	// Init pollfd struct
 	memset(this->poll_fds, 0, sizeof(this->poll_fds));
 	this->poll_fds[0].fd 	   = this->server_socket->fd;
 	this->poll_fds[0].events   = POLLIN;
+}
+
+bool	server::wait_for_connection(void)
+{
+	int ret;
+	
+	this->init_pollfd();
 	while (true)
 	{
-		ret = poll(this->poll_fds, this->_active_fds, TIMEOUT); //TODO cambiar timeout + check ping clients
+		ret = poll(this->poll_fds, this->_active_fds, TIMEOUT); //TODO check ping clients
 		if (ret < 0) {
 			perror("Poll error");
 			return 1;
@@ -115,6 +117,17 @@ int	server::fd_ready( void )
 	return 1;
 }
 
+void	server::add_user(int fd, sock_in client_addr)
+{
+	char ip_address[20];
+
+	this->poll_fds[this->_active_fds].fd = fd;
+	this->poll_fds[this->_active_fds].events = POLLIN;
+	this->_active_fds++;
+	user 	new_user(fd, inet_ntop(AF_INET, &(client_addr.sin_addr), ip_address, sizeof(ip_address)));
+	this->list_of_users.insert(std::pair<int, user>(fd, new_user));
+}
+
 bool	server::accept_communication(void)
 {
 	int 	fd = 0;
@@ -134,15 +147,7 @@ bool	server::accept_communication(void)
 		return 1;
 	}
 	std::cout << YELLOW << "Accepted communication from: " << fd << RESET << std::endl;
-	this->poll_fds[this->_active_fds].fd = fd;
-	this->poll_fds[this->_active_fds].events = POLLIN;
-	this->_active_fds++;
-	user 	new_user(fd, inet_ntop(AF_INET, &(client_addr.sin_addr), ip_addres, sizeof(ip_addres)));
-	this->list_of_users.insert(std::pair<int, user>(fd, new_user));
-	// std::cout << "New socket: " << fd << std::endl;
-	// std::cout << "Active clients: " << this->_active_fds << std::endl;
-	// std::cout << "New user: " << std::endl;
-	// std::cout << this->list_of_users[fd] << std::endl;
+	this->add_user(fd, client_addr);
 	return 0;
 }
 
@@ -195,8 +200,6 @@ void	server::delete_user(int poll_fd_pos)
 	this->poll_fds[this->_active_fds - 1].fd = 0;
 	this->poll_fds[this->_active_fds - 1].events = 0;
 	this->_active_fds--;
-	for (int i = 0; i < this->_active_fds; i++)
-		std::cout << this->poll_fds[i].fd << std::endl;
 	//this->poll_fds[poll_fd_pos].fd = -1;
 }
 
