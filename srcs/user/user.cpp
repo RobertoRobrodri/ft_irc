@@ -1,34 +1,28 @@
 #include "user.hpp"
 
-user::user( void ) : _fd(0), _is_registered(false), _n_channels(0) {
-
-  std::cout << "User Default constructor called" << std::endl;
+user::user( void ) : _fd(0), _is_registered(false), _n_channels(0)
+{
   return ;
 }
 
-user::user( int fd, std::string hostname ) : _fd(fd), _hostname(hostname), _n_channels(0) {
-
-  std::cout << "User Parameter constructor called" << std::endl;
+user::user( int fd, std::string hostname ) : _fd(fd), _hostname(hostname), _n_channels(0) 
+{
   return ;
 }
 
-user::user( const user & var ) {
-  
-  std::cout << "User Copy constructor called" << std::endl;
+user::user( const user & var ) 
+{
   *this = var;
   return ;
 }
 
-user::~user( void ) {
-  
-  std::cout << "User Destructor called" << std::endl;
+user::~user( void )
+{
   return ;
-
 }
 
-user & user::operator=(const user &tmp) {
-
-  std::cout << "User Operator equalizer called" << std::endl;
+user & user::operator=(const user &tmp) 
+{
   this->set_username(tmp.get_username());
   this->set_nick(tmp.get_nick());
   this->set_hostname(tmp.get_hostname());
@@ -38,18 +32,18 @@ user & user::operator=(const user &tmp) {
   this->set_is_registered(tmp.get_is_registered());
   this->set_n_channels(tmp.get_n_channels());
   return (*this);
-  
 }
 
-std::ostream &operator<<(std::ostream& os, const user &tmp) {
-  os << "Username       |     " << tmp.get_username() << std::endl;
-	os << "Nickname       |     " << tmp.get_nick() << std::endl;
-	os << "Hostname       |     " << tmp.get_hostname() << std::endl;
-  os << "Servername     |     " << tmp.get_servername() << std::endl;
-	os << "Realname       |     " << tmp.get_realname() << std::endl;
-  os << "FD             |     " << tmp.get_fd() << std::endl;
-  os << "User registered|     " << tmp.get_is_registered() << std::endl;
-  os << "Member of this many channels |  " << tmp.get_n_channels() << std::endl;
+std::ostream &operator<<(std::ostream& os, const user &tmp)
+{
+	os << "Username       				|     " << tmp.get_username() << std::endl;
+	os << "Nickname       				|     " << tmp.get_nick() << std::endl;
+	os << "Hostname       				|     " << tmp.get_hostname() << std::endl;
+	os << "Servername     				|     " << tmp.get_servername() << std::endl;
+	os << "Realname       				|     " << tmp.get_realname() << std::endl;
+	os << "FD             				|     " << tmp.get_fd() << std::endl;
+	os << "User registered				|     " << tmp.get_is_registered() << std::endl;
+	os << "Member of this many channels |  " << tmp.get_n_channels() << std::endl;
 	return (os);
 }
 
