@@ -18,5 +18,7 @@ namespace cmd
 	void topic(server &svr, int poll_fd_pos, std::string str);
 	void invite(server &svr, int poll_fd_pos, std::string str);
 	void kick(server &svr, int poll_fd_pos, std::string str);
+	void notice(server &svr, int poll_fd_pos, std::string str);
+	void part(server &svr, int poll_fd_pos, std::string str);
 }
 #endif
