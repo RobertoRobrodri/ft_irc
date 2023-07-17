@@ -68,6 +68,7 @@ void	server::init_list_of_cmds(void)
 	this->list_of_cmds.insert(std::pair<std::string, command_function>("KICK", &cmd::kick));
 	this->list_of_cmds.insert(std::pair<std::string, command_function>("NOTICE", &cmd::notice));
 	this->list_of_cmds.insert(std::pair<std::string, command_function>("PART", &cmd::part));
+	this->list_of_cmds.insert(std::pair<std::string, command_function>("MODE", &cmd::part));
 }
 
 void	server::init_pollfd(void)
