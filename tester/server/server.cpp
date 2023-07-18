@@ -68,7 +68,7 @@ void	server::init_list_of_cmds(void)
 	this->list_of_cmds.insert(std::pair<std::string, command_function>("KICK", &cmd::kick));
 	this->list_of_cmds.insert(std::pair<std::string, command_function>("NOTICE", &cmd::notice));
 	this->list_of_cmds.insert(std::pair<std::string, command_function>("PART", &cmd::part));
-	this->list_of_cmds.insert(std::pair<std::string, command_function>("MODE", &cmd::part));
+	this->list_of_cmds.insert(std::pair<std::string, command_function>("MODE", &cmd::mode));
 }
 
 void	server::init_pollfd(void)
@@ -101,7 +101,7 @@ bool	server::wait_for_connection(void)
 }
 
 
-int	server::fd_ready( void )
+bool	server::fd_ready( void )
 {
 	for (int i = 0; i < this->_active_fds; i++)
 	{
@@ -236,7 +236,9 @@ void	server::create_channel(user &usr, std::string name)
 	//	name.insert(0, "#");
 
 	channel cnn(name);
+	usr.set_op(true);
 	cnn.add_member(usr);
+	usr.set_op(false);
 	this->list_of_channels.insert(std::pair<std::string, channel>(name, cnn));
 	std::cout << YELLOW << name << " channel created!" << std::endl;
 	std::cout << cnn << RESET << std::endl;

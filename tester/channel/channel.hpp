@@ -16,7 +16,7 @@ class	channel {
 		std::vector<user> 		list_of_members;
 		std::string 			_password;
 		std::string 			_mode;
-		int 					_user_limit;
+		size_t 					_user_limit;
 
 		channel 			( void );
 	public:
@@ -33,7 +33,7 @@ class	channel {
 		std::vector<user> get_list_of_members(void) const {return(this->list_of_members);};
 		std::string get_password(void) const {return (this->_password);};
 		std::string get_mode(void) const {return (this->_mode);};
-		int get_user_limit(void) const {return (this->_user_limit);};
+		size_t get_user_limit(void) const {return (this->_user_limit);};
 
 		/*###########################################
 		#				SETTERS						#
@@ -41,7 +41,7 @@ class	channel {
 		void set_topic(std::string topic) {this->_topic = topic;};
 		void set_password(std::string pass) {this->_password = pass;};
 		void set_mode(std::string mode) {this->_mode = mode;};
-		void set_user_limit(int i) {this->_user_limit = i;};
+		void set_user_limit(size_t i) {this->_user_limit = i;};
 
 		/*###########################################
 		#				FUNCTIONS					#
@@ -49,6 +49,7 @@ class	channel {
 		void	add_member(user &usr);
 		void	rmv_member(user &usr);
 		bool	is_user_in_channel(const user &usr);
+		bool 	is_user_operator(const user &usr);
 };
 std::ostream &operator<<(std::ostream& os, const channel &tmp);
 

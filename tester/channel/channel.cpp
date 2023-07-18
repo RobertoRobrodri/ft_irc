@@ -60,12 +60,11 @@ void	channel::add_member(user &usr)
   std::cout << "Join successful! " << std::endl;
   std::cout << usr << std::endl;
   //RPL_TOPIC
-  //server::send_message(":332 " + this->get_name() + " :" + this->get_topic() + "\r\n", usr.get_fd());
+  server::send_message(":332 " + this->get_name() + " :" + this->get_topic() + "\r\n", usr.get_fd());
   //RPL_NAMREPLY
   for (std::vector<user>::iterator it = this->list_of_members.begin(); it != this->list_of_members.end(); it++)
     members += (it->get_nick() + " ");
-  
-  //server::send_message(":353 " + members + "\r\n", usr.get_fd());
+  server::send_message(":353 " + members + "\r\n", usr.get_fd());
 }
 
 void	channel::rmv_member(user &usr)
@@ -88,6 +87,18 @@ bool	channel::is_user_in_channel(const user &usr)
   {
     if (it->get_nick() == usr.get_nick())
       return true;
+  }
+  return false;
+}
+
+bool channel::is_user_operator(const user &usr)
+{
+  for (std::vector<user>::iterator it = this->list_of_members.begin(); it != this->list_of_members.end(); it++)
+  {
+    if (it->get_nick() == usr.get_nick())
+    {
+      return (it->get_op());
+    }
   }
   return false;
 }
