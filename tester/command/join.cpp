@@ -22,6 +22,7 @@ void  cmd::join(server &svr, int poll_fd_pos, std::string str) {
   for (std::vector<std::string>::iterator it = channels_to_join.begin(); it != channels_to_join.end(); it++)
   {
     channel *chn = svr.get_channel_from_name(*it);
+    std::cout << chn->get_mode() << std::endl;
     if (chn)
     {
       if (chn->is_user_in_channel(usr) == true)
