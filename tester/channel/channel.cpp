@@ -124,6 +124,7 @@ void 	channel::parse_mode_flag(std::string &modes, std::vector<std::string> mode
   std::cout << modes << std::endl;
 	for (size_t i = 0; i < modes.size(); i++)
 	{
+    std::cout << mode_params[j] << std::endl;
 		switch(modes[i])
 		{
 			case '+':
@@ -188,7 +189,6 @@ void 	channel::parse_mode_flag(std::string &modes, std::vector<std::string> mode
 			{
 				if (sign == true)
 				{
-          std::cout << "ENTROOOOO" << std::endl;
 					this->set_password(mode_params[j++]);
 					tmp = this->get_mode();
           tmp.push_back(modes[i]);
