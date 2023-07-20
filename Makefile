@@ -11,7 +11,7 @@ RESET 	= "\033[1;0m"
 NAME 		= ircserv
 CC 			= c++
 INCLUDE 	= -std=c++98
-CXXFLAGS 	= -Wall -Wextra -g -fsanitize=address #-Werror
+CXXFLAGS 	= -Wall -Wextra -g -fsanitize=address -Wno-c++11-compat-deprecated-writable-strings #-Werror
 TEST		= ircTester
 
 
