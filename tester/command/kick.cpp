@@ -15,7 +15,7 @@ void cmd::kick(server &svr, int poll_fd_pos, std::string str)
   std::vector<std::string> usrlist = ft_split(msglist[1], ',');
   if (msglist.size() > 2)
 	  std::string msg = str.substr(str.find(msglist[2]));
-  for (int i = 0; i < chnlist.size(); i++)
+  for (size_t i = 0; i < chnlist.size(); i++)
   {
     channel *chn = svr.get_channel_from_name(chnlist[i]);
     if (!chn)
@@ -27,7 +27,7 @@ void cmd::kick(server &svr, int poll_fd_pos, std::string str)
         svr.send_message(": 442 " + chnlist[i] + ": You're not on that channel \r\n", usr.get_fd());
         continue ;
       }
-      for (int j = 0; j < usrlist.size(); j++)
+      for (size_t j = 0; j < usrlist.size(); j++)
       {
         user *rcv = svr.get_user_from_nick(usrlist[j]);
         if (rcv)

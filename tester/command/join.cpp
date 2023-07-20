@@ -17,8 +17,13 @@ void  cmd::join(server &svr, int poll_fd_pos, std::string str) {
   // Me pueden pasar una serie de canales separados por ','
   // TODO Channel_params[1] debe contener las contraseñas, si se utilizan
   std::vector<std::string> channels_to_join = ft_split(channel_params[0], ',');
-  std::vector<std::string> passwords = ft_split(channel_params[1], ',');
-  std::vector<std::string>::iterator password_it = passwords.begin();
+  std::vector<std::string> passwords;
+  std::vector<std::string>::iterator password_it;
+  if (channel_params.size() >= 2)
+  {
+    passwords = ft_split(channel_params[1], ',');
+    password_it = passwords.begin();
+  }
   for (std::vector<std::string>::iterator it = channels_to_join.begin(); it != channels_to_join.end(); it++)
   {
     channel *chn = svr.get_channel_from_name(*it);
@@ -40,12 +45,16 @@ void  cmd::join(server &svr, int poll_fd_pos, std::string str) {
         // Requires password
         if (chn->get_mode().find("k") != std::string::npos)
         {
-          if (chn->get_password().compare(*password_it))
+          if (passwords.empty())
           {
             svr.send_message(": 475 " + chn->get_name() + ":Cannot join channel (+k) \r\n", usr.get_fd());
             continue ;
           }
-          password_it++;
+          if (chn->get_password().compare(*password_it++))
+          {
+            svr.send_message(": 475 " + chn->get_name() + ":Cannot join channel (+k) \r\n", usr.get_fd());
+            continue ;
+          }
         }
         if (chn->get_mode().find("l") != std::string::npos)
         {
