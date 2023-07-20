@@ -17,7 +17,7 @@ void  cmd::privmsg(server &svr, int poll_fd_pos, std::string str) {
   }
   std::vector<std::string> rcvlist = ft_split(msglist[0], ',');
 	std::string msg = str.substr(str.find(msglist[1]));
-  for (int i = 0; i < rcvlist.size(); i++)
+  for (size_t i = 0; i < rcvlist.size(); i++)
   {
     if ((rcvlist[i][0] == '#') || (rcvlist[i][0] == '&'))
     {

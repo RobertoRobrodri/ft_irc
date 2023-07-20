@@ -10,7 +10,7 @@ void  cmd::part(server &svr, int poll_fd_pos, std::string str) {
 	  return ;
   }
   std::vector<std::string> chnlist = ft_split(str, ',');
-  for (int i = 0; i < chnlist.size(); i++)
+  for (size_t i = 0; i < chnlist.size(); i++)
   {
     channel *chn = svr.get_channel_from_name(chnlist[i]);
     if (!chn)

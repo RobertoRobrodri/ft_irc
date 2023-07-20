@@ -47,7 +47,8 @@ SUBFILE5_SRC = command.cpp \
 			   topic.cpp \
 			   user.cpp \
 			   notice.cpp \
-			   part.cpp
+			   part.cpp \
+			   mode.cpp
 SUBFILE6_SRC = channel.cpp
 
 SRC =	main.cpp	\
