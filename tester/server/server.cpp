@@ -13,13 +13,10 @@ server::server( void )
 
 }
 
-server::server( std::string network , std::string port , std::string pass ) : _active_fds(1) 
+server::server( std::string port , std::string pass ) : _active_fds(1) 
 {	
 	std::cout << "Server Parameter constructor called" << std::endl;
-	std::vector <std::string>seglist = ft_split(network, ':');
-	this->data.host 		= seglist[0];
-	this->data.network_port = seglist[1];
-	this->data.network_pass = seglist[2];
+	this->data.host 		= SERVER_HOST;
 	this->data.port 		= port;
 	this->data.pass 		= pass;
 	this->init_list_of_cmds();
@@ -51,8 +48,6 @@ server & server::operator=(const server &tmp)
 std::ostream &operator<<(std::ostream& os, const server &tmp)
 {
 	os << "host           |     " << tmp.get_host() << std::endl;
-	os << "network pass   |     " << tmp.get_network_pass() << std::endl;
-	os << "network port   |     " << tmp.get_network_port() << std::endl;
 	os << "password       |     " << tmp.get_password() << std::endl;
 	os << "port           |     " << tmp.get_port() << std::endl;
 	return (os);
@@ -355,13 +350,13 @@ void	test_check_data_correct()
 	std::cout << "Output: " << check_data_correct(argv) << "\n\n";
 }
 
-server	*test_server_construction(char *arg1, char *arg2, char *arg3)
+server	*test_server_construction(char *port, char *pass)
 {
 	std::cout << "Test server construction\n";
 	std::cout << "==========================\n";
 	server *serv;
 
-	serv = new server(arg1, arg2, arg3);
+	serv = new server(port, pass);
 	std::cout << *serv << std::endl;
 
 	std::map<std::string, command_function>::iterator it;
