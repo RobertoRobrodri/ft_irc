@@ -264,11 +264,3 @@ channel *server::get_channel_from_name(std::string name)
 	}
 	return NULL;
 }
-
-user& server::get_user(int i) {
-	return(this->list_of_users.find(i)->second);
-}
-
-pollfd&	server::get_pollfd(int i) {
-	return (this->poll_fds[i]);
-}
