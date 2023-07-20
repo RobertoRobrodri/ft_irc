@@ -13,7 +13,7 @@ server::server( void )
 
 }
 
-server::server( std::string port , std::string pass ) : _active_fds(1) 
+server::server( std::string port , std::string pass ) : _active_fds(1) // Tested
 {	
 	std::cout << "Server Parameter constructor called" << std::endl;
 	this->data.host 		= SERVER_HOST;
@@ -23,14 +23,14 @@ server::server( std::string port , std::string pass ) : _active_fds(1)
 	this->server_socket = new autosocket(this->data.port, this->data.host);
 }
 
-server::server( const server & var ) {
+server::server( const server & var ) {	// No test
 	(void)var;
 	std::cout << "Server Copy constructor called" << std::endl;
 
 }
 
 // DESTRUCTOR
-server::~server( void ) {
+server::~server( void ) { // No test
 
 	std::cout << "Server Destructor constructor called" << std::endl;
 	delete this;
@@ -38,14 +38,14 @@ server::~server( void ) {
 }
 
 // OVERLOADING
-server & server::operator=(const server &tmp)
+server & server::operator=(const server &tmp)	// No test
 {
 	(void)tmp;
 	std::cout << "Server Operator equalizer called" << std::endl;
 	return *this;
 }
 
-std::ostream &operator<<(std::ostream& os, const server &tmp)
+std::ostream &operator<<(std::ostream& os, const server &tmp) // Tested
 {
 	os << "host           |     " << tmp.get_host() << std::endl;
 	os << "password       |     " << tmp.get_password() << std::endl;
@@ -54,7 +54,7 @@ std::ostream &operator<<(std::ostream& os, const server &tmp)
 }
 
 // FUNCTIONS
-void	server::init_list_of_cmds(void)
+void	server::init_list_of_cmds(void) // Update with new commands Tested
 {
 	this->list_of_cmds.insert(std::pair<std::string, command_function>("NICK", &cmd::nick));
 	this->list_of_cmds.insert(std::pair<std::string, command_function>("USER", &cmd::username));
@@ -67,14 +67,14 @@ void	server::init_list_of_cmds(void)
 	this->list_of_cmds.insert(std::pair<std::string, command_function>("KICK", &cmd::kick));
 }
 
-void	server::init_pollfd(void)
+void	server::init_pollfd(void) // Tested
 {
 	memset(this->poll_fds, 0, sizeof(this->poll_fds));
 	this->poll_fds[0].fd 	   = this->server_socket->fd;
 	this->poll_fds[0].events   = POLLIN;
 }
 
-bool	server::wait_for_connection(void)
+bool	server::wait_for_connection(void) // Tested
 {
 	int ret;
 
@@ -95,7 +95,7 @@ bool	server::wait_for_connection(void)
 	return 0;
 }
 
-bool	server::fd_ready(void)
+bool	server::fd_ready(void) // No test
 {
 	for (int i = 0; i < this->_active_fds; i++)
 	{
@@ -115,7 +115,7 @@ bool	server::fd_ready(void)
 	return 1;
 }
 
-void	server::add_user(int fd, sock_in client_addr)
+void	server::add_user(int fd, sock_in client_addr) // Tested
 {
 	char ip_address[20];
 
@@ -126,7 +126,7 @@ void	server::add_user(int fd, sock_in client_addr)
 	this->list_of_users.insert(std::pair<int, user>(fd, new_user));
 }
 
-bool	server::accept_communication(void)
+bool	server::accept_communication(void) // No test
 {
 	int 	fd;
 	sock_in client_addr;
@@ -149,7 +149,7 @@ bool	server::accept_communication(void)
 	return 0;
 }
 
-bool	server::receive_communication(int poll_fd_pos)
+bool	server::receive_communication(int poll_fd_pos) // No test
 {
 	char buffer[MSG_SIZE];
 	int len;
@@ -180,7 +180,7 @@ bool	server::receive_communication(int poll_fd_pos)
 	return 0;
 }
 
-bool	server::send_message(std::string msg, int fd)
+bool	server::send_message(std::string msg, int fd) // No test
 {
 	int len = send(fd, msg.c_str(), msg.length(), 0);
 	if (len < 0)
@@ -191,7 +191,7 @@ bool	server::send_message(std::string msg, int fd)
 	return 0;
 }
 
-void	server::delete_user(int poll_fd_pos)
+void	server::delete_user(int poll_fd_pos) // Tested
 {
 	std::cout << RED << "Deleted user: fd " << this->poll_fds[poll_fd_pos].fd
 		<< RESET << std::endl;
@@ -206,7 +206,7 @@ void	server::delete_user(int poll_fd_pos)
 }
 
 // Separa la cadena en COMANDO + MSG, donde mensaje es todo lo demás que es parseado de forma distinta por cada comando
-std::map<std::string, std::string> server::parse_message(std::string msg)
+std::map<std::string, std::string> server::parse_message(std::string msg) // Tested
 {
 	// Este split es por culpa de irssi, que lanza todos los comandos NICK y USER en una sola linea
 	// No deberia afectar a los usuarios que lanzan comandos de uno en uno
@@ -224,7 +224,7 @@ std::map<std::string, std::string> server::parse_message(std::string msg)
 	return commands;
 }
 
-void	server::execute_commands(int poll_fd_pos, std::map<std::string, std::string> commands)
+void	server::execute_commands(int poll_fd_pos, std::map<std::string, std::string> commands) // No test
 {
 	std::map<std::string, std::string>::iterator it;
 
@@ -235,7 +235,7 @@ void	server::execute_commands(int poll_fd_pos, std::map<std::string, std::string
 	}
 }
 
-void	server::create_channel(user &usr, std::string name)
+void	server::create_channel(user &usr, std::string name) // No test
 {
 	channel cnn(name);
 
@@ -246,7 +246,7 @@ void	server::create_channel(user &usr, std::string name)
 }
 
 // Maybe make a template????
-user *server::get_user_from_nick(std::string nick)
+user *server::get_user_from_nick(std::string nick) // No test
 {
 	std::map<int, user>::iterator it;
 
@@ -258,7 +258,7 @@ user *server::get_user_from_nick(std::string nick)
 	return NULL;
 }
 
-channel *server::get_channel_from_name(std::string name)
+channel *server::get_channel_from_name(std::string name) // No test
 {
 	std::map<std::string, channel>::iterator it;
 
@@ -279,7 +279,7 @@ pollfd&	server::get_pollfd(int i) {
 }
 
 // TESTS
-void	test_check_data_correct()
+void	test_check_data_correct()	// Modify
 {
 	char *program = "./ircserv";
 	char *arg1 = "";
