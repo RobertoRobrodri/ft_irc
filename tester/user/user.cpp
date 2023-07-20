@@ -9,19 +9,16 @@ user::user( int fd, std::string hostname ) : _fd(fd), _hostname(hostname), _n_ch
 }
 
 user::user( const user & var ) {
-  
   *this = var;
   return ;
 }
 
 user::~user( void ) {
-  
   return ;
 
 }
 
 user & user::operator=(const user &tmp) {
-
   this->set_username(tmp.get_username());
   this->set_nick(tmp.get_nick());
   this->set_hostname(tmp.get_hostname());

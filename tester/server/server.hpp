@@ -64,12 +64,12 @@ class	server {
 		std::map<std::string, channel> 	list_of_channels;
 
 		server	( void );
-		bool	fd_ready(void);
-		bool	accept_communication(void);
-		bool	receive_communication(int i);
-		void	parse_message(int poll_fd_pos, std::string msg);
-		void	init_list_of_cmds(void);
-		void	init_pollfd(void);
+		bool								fd_ready(void);
+		bool								accept_communication(void);
+		bool								receive_communication(int i);
+		std::map<std::string, std::string>	parse_message(std::string msg);
+		void								init_list_of_cmds(void);
+		void								init_pollfd(void);
 
 		server				( std::string network , std::string port , std::string pass );
 		server 				( const server & var );
@@ -95,6 +95,7 @@ class	server {
 		bool	wait_for_connection(void);
 		void	add_user(int fd, sock_in client_addr);
 		void	delete_user(int i);
+		void	execute_commands(int poll_fd_pos, std::map<std::string, std::string> commands);
 		static bool	send_message(std::string msg, int fd);
 		user	*get_user_from_nick(std::string nick);
 		channel *get_channel_from_name(std::string name);
@@ -109,6 +110,7 @@ void	test_check_data_correct();
 server	*test_server_construction(char *arg1, char *arg2, char *arg3);
 void	test_add_user(server *serv, int fd, char *url, int port);
 void	test_delete_user(server *serv, int fd_pos);
+void	test_parse_message(server *serv, std::string msg);
 void	test_connection(server *serv);
 
 #endif

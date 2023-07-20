@@ -179,7 +179,10 @@ bool	server::receive_communication(int poll_fd_pos)
     }
 	buffer[len-1] = 0; //El intro lo ponemos a cero
 	if (buffer[0] != 0)
-		this->parse_message(poll_fd_pos, buffer);
+	{
+		std::map<std::string, std::string> commands = this->parse_message(buffer);
+		this->execute_commands(poll_fd_pos, commands);
+	}
 	return 0;
 }
 
@@ -196,7 +199,8 @@ bool server::send_message(std::string msg, int fd)
 
 void	server::delete_user(int poll_fd_pos)
 {
-	std::cout << RED << "Deleted user: " << RESET << std::endl;
+	std::cout << RED << "Deleted user: fd " << this->poll_fds[poll_fd_pos].fd
+		<< RESET << std::endl;
 	close(this->poll_fds[poll_fd_pos].fd);
 	this->list_of_users.erase(this->poll_fds[poll_fd_pos].fd);
 	for (int count = poll_fd_pos; count <= this->_active_fds - 1; count++)
@@ -208,23 +212,32 @@ void	server::delete_user(int poll_fd_pos)
 }
 
 // Separa la cadena en COMANDO + MSG, donde mensaje es todo lo demás que es parseado de forma distinta por cada comando
-void	server::parse_message(int poll_fd_pos, std::string msg)
+std::map<std::string, std::string> server::parse_message(std::string msg)
 {
 	// Este split es por culpa de irssi, que lanza todos los comandos NICK y USER en una sola linea
 	// No deberia afectar a los usuarios que lanzan comandos de uno en uno
-	cmd_map::iterator it;
 	std::vector<std::string> seglist = ft_split(msg, '\n');
 	std::vector<std::string>::iterator v_it;
+	std::map<std::string, std::string> commands;
 
 	for (v_it = seglist.begin(); v_it != seglist.end(); v_it++)
 	{
 		int ind = v_it->find(" ");
 		std::string cmd = v_it->substr(0, ind);
-		*v_it = v_it->substr(ind + 1);
-		std::cout << CYAN << *v_it << RESET << std::endl;
-		it = this->list_of_cmds.find(cmd);
-		if (it != this->list_of_cmds.end())
-			it->second(*this, poll_fd_pos, *v_it);
+		std::string args= v_it->substr(ind + 1);
+		commands.insert(std::pair<std::string, std::string>(cmd, args));
+	}
+	return commands;
+}
+
+void	server::execute_commands(int poll_fd_pos, std::map<std::string, std::string> commands)
+{
+	std::map<std::string, std::string>::iterator it;
+
+	for (it = commands.begin(); it != commands.end(); it++)
+	{
+		if (this->list_of_cmds[it->first])
+			this->list_of_cmds[it->first](*this, poll_fd_pos, it->second);
 	}
 }
 
@@ -390,7 +403,6 @@ void	test_add_user(server *serv, int fd, char *url, int port)
 	std::cout << "==================================================" << std::endl;
 
 	struct sockaddr_in myaddr;
-	int s;
 
 	myaddr.sin_family = AF_INET;
 	myaddr.sin_port = htons(port);
@@ -413,7 +425,13 @@ void	test_delete_user(server *serv, int fd_pos)
 	for (unsigned int i = 0; i < serv->list_of_users.size(); i++)
 	{
 		if (serv->list_of_users[i].get_fd() > 0)
-			std::cout << serv->list_of_users[i] << std::endl << std::endl;
+		{
+			std::cout << "User " << i + 1 << std::endl;
+			std::cout << "------------" << std::endl;
+			std::cout << serv->list_of_users[i] << std::endl;
+		}
+		else
+			std::cout << "< empty user slot >" << std::endl;
 	}
 	std::cout << "Poll fd:" << std::endl;
 	for (int i = 0; i < serv->_active_fds; i++)
@@ -421,7 +439,7 @@ void	test_delete_user(server *serv, int fd_pos)
 		std::cout << i << " - " << "fd " << serv->poll_fds[i].fd << ", "
 			<< "events " << serv->poll_fds[i].events << std::endl;
 	}
-
+	std::cout << std::endl;
 	serv->delete_user(fd_pos);
 
 	std::cout << "Active clients: " << serv->_active_fds << std::endl;
@@ -429,7 +447,13 @@ void	test_delete_user(server *serv, int fd_pos)
 	for (unsigned int i = 0; i < serv->list_of_users.size(); i++)
 	{
 		if (serv->list_of_users[i].get_fd() > 0)
-			std::cout << serv->list_of_users[i] << std::endl << std::endl;
+		{
+			std::cout << "User " << i + 1 << std::endl;
+			std::cout << "------------" << std::endl;
+			std::cout << serv->list_of_users[i] << std::endl;
+		}
+		else
+			std::cout << "< empty user slot >" << std::endl;
 	}
 	std::cout << "Poll fd:" << std::endl;
 	for (int i = 0; i < serv->_active_fds; i++)
@@ -437,6 +461,21 @@ void	test_delete_user(server *serv, int fd_pos)
 		std::cout << i << " - " << "fd " << serv->poll_fds[i].fd << ", "
 			<< "events " << serv->poll_fds[i].events << std::endl;
 	}
+	std::cout << std::endl;
+}
+
+void	test_parse_message(server *serv, std::string msg)
+{
+	std::cout << "Test parse message" << std::endl;
+	std::cout << "==================================================" << std::endl;
+	std::cout << "Raw message: |" << msg << "|\n";
+	std::map<std::string, std::string> commands;
+	commands = serv->parse_message(msg);
+
+	std::cout << "Parsed message:\n";
+	std::map<std::string, std::string>::iterator it;
+	for (it = commands.begin(); it != commands.end(); it++)
+		std::cout << "Command: |" << it->first << "| " << "Arguments: |" << it->second << "|\n";
 }
 
 void	test_connection(server *serv)
