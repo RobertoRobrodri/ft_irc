@@ -198,7 +198,7 @@ bool	server::send_message(std::string msg, int fd)
 
 void	server::delete_user(int poll_fd_pos)
 {
-	std::cout << RED << "Deleted user: " << this->poll_fds[poll_fd_pos].fd
+	std::cout << RED << "Deleted user: fd " << this->poll_fds[poll_fd_pos].fd
 		<< RESET << std::endl;
 	close(this->poll_fds[poll_fd_pos].fd);
 	this->list_of_users.erase(this->poll_fds[poll_fd_pos].fd);
@@ -417,7 +417,13 @@ void	test_delete_user(server *serv, int fd_pos)
 	for (unsigned int i = 0; i < serv->list_of_users.size(); i++)
 	{
 		if (serv->list_of_users[i].get_fd() > 0)
-			std::cout << serv->list_of_users[i] << std::endl << std::endl;
+		{
+			std::cout << "User " << i + 1 << std::endl;
+			std::cout << "------------" << std::endl;
+			std::cout << serv->list_of_users[i] << std::endl;
+		}
+		else
+			std::cout << "< empty user slot >" << std::endl;
 	}
 	std::cout << "Poll fd:" << std::endl;
 	for (int i = 0; i < serv->_active_fds; i++)
@@ -425,6 +431,7 @@ void	test_delete_user(server *serv, int fd_pos)
 		std::cout << i << " - " << "fd " << serv->poll_fds[i].fd << ", "
 			<< "events " << serv->poll_fds[i].events << std::endl;
 	}
+	std::cout << std::endl;
 	
 	serv->delete_user(fd_pos);
 	
@@ -433,7 +440,13 @@ void	test_delete_user(server *serv, int fd_pos)
 	for (unsigned int i = 0; i < serv->list_of_users.size(); i++)
 	{
 		if (serv->list_of_users[i].get_fd() > 0)
-			std::cout << serv->list_of_users[i] << std::endl << std::endl;
+		{
+			std::cout << "User " << i + 1 << std::endl;
+			std::cout << "------------" << std::endl;
+			std::cout << serv->list_of_users[i] << std::endl;
+		}
+		else
+			std::cout << "< empty user slot >" << std::endl;
 	}
 	std::cout << "Poll fd:" << std::endl;
 	for (int i = 0; i < serv->_active_fds; i++)
@@ -441,11 +454,14 @@ void	test_delete_user(server *serv, int fd_pos)
 		std::cout << i << " - " << "fd " << serv->poll_fds[i].fd << ", "
 			<< "events " << serv->poll_fds[i].events << std::endl;
 	}
+	std::cout << std::endl;
 }
 
 void	test_parse_message(server *serv, std::string msg)
 {
-	std::cout << "Raw message: | " << msg << " |\n";
+	std::cout << "Test parse message" << std::endl;
+	std::cout << "==================================================" << std::endl;
+	std::cout << "Raw message: |" << msg << "|\n";
 	std::map<std::string, std::string> commands;
 	commands = serv->parse_message(msg);
 
