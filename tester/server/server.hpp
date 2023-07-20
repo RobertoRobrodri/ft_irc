@@ -93,7 +93,7 @@ class	server {
 		void	add_user(int fd, sock_in client_addr);
 		void	delete_user(int i);
 		void	execute_commands(int poll_fd_pos, std::map<std::string, std::string> commands);
-		bool	send_message(std::string msg, int fd);
+		static bool	send_message(std::string msg, int fd);
 		user	*get_user_from_nick(std::string nick);
 		channel *get_channel_from_name(std::string name);
 		void	create_channel(user &usr, std::string name);

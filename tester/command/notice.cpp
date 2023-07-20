@@ -1,12 +1,12 @@
 #include "command.hpp"
 #include "reply.hpp"
 
-void  cmd::privmsg(server &svr, int poll_fd_pos, std::string str) {
+void  cmd::notice(server &svr, int poll_fd_pos, std::string str) {
   poll_fd pollfd = svr.get_pollfd(poll_fd_pos);
   user &usr = svr.get_user(pollfd.fd);
   if (str == "PRIVMSG")
   {
-	  svr.send_message(": 411: No recipient given (PRIVMSG) \r\n", usr.get_fd());
+	  svr.send_message(": 411: No recipient given (NOTICE) \r\n", usr.get_fd());
 	  return ;
   }
   std::vector<std::string> msglist = ft_split(str, ' ');

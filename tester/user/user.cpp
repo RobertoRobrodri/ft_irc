@@ -1,10 +1,10 @@
 #include "user.hpp"
 
-user::user( void ) : _fd(0), _is_registered(false), _n_channels(0) {
+user::user( void ) : _fd(0), _is_registered(false), _n_channels(0), _op(false) {
   return ;
 }
 
-user::user( int fd, std::string hostname ) : _fd(fd), _hostname(hostname), _n_channels(0) {
+user::user( int fd, std::string hostname ) : _fd(fd), _hostname(hostname), _n_channels(0), _op(false) {
   return ;
 }
 
@@ -27,6 +27,7 @@ user & user::operator=(const user &tmp) {
   this->set_fd(tmp.get_fd());
   this->set_is_registered(tmp.get_is_registered());
   this->set_n_channels(tmp.get_n_channels());
+  this->set_op(tmp.get_op());
   return (*this);
   
 }
@@ -40,7 +41,8 @@ std::ostream &operator<<(std::ostream& os, const user &tmp) {
   os << "FD             |     " << tmp.get_fd() << std::endl;
   os << "User registered|     " << tmp.get_is_registered() << std::endl;
   os << "Member of this many channels |  " << tmp.get_n_channels() << std::endl;
-	return (os);
+	os << "Is operator    |     " << tmp.get_op() << std::endl; 
+  return (os);
 }
 
 void  user::is_registered(server &svr)
@@ -58,7 +60,7 @@ void		user::send_to_channel(channel *chn, server &svr, std::string chn_name, std
   {
     if (chn->is_user_in_channel(*this)) //TODO habria que comprobar o de los modos también
     {
-      for (int i = 0; i < chn->get_list_of_members().size(); i++)
+      for (size_t i = 0; i < chn->get_list_of_members().size(); i++)
         if (chn->get_list_of_members()[i].get_nick() != this->get_nick())
           svr.send_message("From " + chn_name + ":\n" + msg + "\n", chn->get_list_of_members()[i].get_fd());
     }

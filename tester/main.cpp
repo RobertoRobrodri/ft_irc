@@ -14,7 +14,6 @@ int main()
 	test_add_user(serv, 5, "63.161.169.138", 3490);
 	test_delete_user(serv, 1);
 	test_parse_message(serv, "USER paco");
-
 	//UNCOMMENT TO TEST CONNECTION (this will block the program)
 	test_connection(serv);
 	
