@@ -6,7 +6,7 @@
 #define	MAX_CLIENTS	5
 #define	TIMEOUT		-1
 #define MSG_SIZE	512
-#define SERVER_HOST	"0.0.0.0"
+#define SERVER_HOST	"127.0.0.1"
 
 // COLORS
 #define RESET "\033[1;0m"
