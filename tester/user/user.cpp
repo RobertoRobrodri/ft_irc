@@ -1,27 +1,34 @@
 #include "user.hpp"
 
 user::user( void ) : _fd(0), _is_registered(false), _n_channels(0) {
+
+  std::cout << "User Default constructor called" << std::endl;
   return ;
 }
 
 user::user( int fd, std::string hostname ) : _fd(fd), _hostname(hostname), _n_channels(0) {
+
+  std::cout << "User Parameter constructor called" << std::endl;
   return ;
 }
 
 user::user( const user & var ) {
   
+  std::cout << "User Copy constructor called" << std::endl;
   *this = var;
   return ;
 }
 
 user::~user( void ) {
   
+  std::cout << "User Destructor called" << std::endl;
   return ;
 
 }
 
 user & user::operator=(const user &tmp) {
 
+  std::cout << "User Operator equalizer called" << std::endl;
   this->set_username(tmp.get_username());
   this->set_nick(tmp.get_nick());
   this->set_hostname(tmp.get_hostname());
