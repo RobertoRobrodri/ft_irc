@@ -6,6 +6,7 @@
 #define	MAX_CLIENTS	5
 #define	TIMEOUT		-1
 #define MSG_SIZE	512
+#define SERVER_HOST	"127.0.0.1"
 
 // COLORS
 #define RESET "\033[1;0m"
@@ -46,8 +47,6 @@ typedef std::map<std::string, command_function> cmd_map;
 
 typedef struct t_Data_Server {             //Struct para almacenar los datos del servidor
 	std::string host;
-	std::string network_pass;
-	std::string network_port;
 	std::string port;
 	std::string pass;   
 } data_server;
@@ -71,7 +70,7 @@ class	server {
 		void								init_list_of_cmds(void);
 		void								init_pollfd(void);
 
-		server				( std::string network , std::string port , std::string pass );
+		server				( std::string port , std::string pass );
 		server 				( const server & var );
 		~server 			( void );
 		server &operator=	(const server &tmp);
@@ -80,8 +79,6 @@ class	server {
 		#				GETTERS						#
 		############################################*/
 		std::string get_host(void) const 			{return(this->data.host);};
-		std::string get_network_pass(void) const 	{return(this->data.network_pass);};
-		std::string get_network_port(void) const 	{return(this->data.network_port);};
 		std::string get_port(void) const 			{return(this->data.port);};
 		std::string get_password(void) const 		{return(this->data.pass);};
 		user& 	get_user(int i);
@@ -107,7 +104,7 @@ std::ostream &operator<<(std::ostream& os, const server &tmp);
 
 // TESTS
 void	test_check_data_correct();
-server	*test_server_construction(char *arg1, char *arg2, char *arg3);
+server	*test_server_construction( char *arg2, char *arg3);
 void	test_add_user(server *serv, int fd, char *url, int port);
 void	test_delete_user(server *serv, int fd_pos);
 void	test_parse_message(server *serv, std::string msg);

@@ -2,60 +2,59 @@
 #include <string>
 #include <vector>
 #include <sstream>
+#include <netinet/in.h>
 
 // CONSTRUCTORS
 
 server::server( void )
 {
+
 	std::cout << "Server Default constructor called" << std::endl;
+
 }
 
-server::server( std::string network , std::string port , std::string pass ) : _active_fds(1)
+server::server( std::string port , std::string pass ) : _active_fds(1) // Tested
 {	
 	std::cout << "Server Parameter constructor called" << std::endl;
-	std::vector <std::string>seglist = ft_split(network, ':');
-	this->data.host 		= seglist[0];
-	this->data.network_port = seglist[1];
-	this->data.network_pass = seglist[2];
+	this->data.host 		= SERVER_HOST;
 	this->data.port 		= port;
 	this->data.pass 		= pass;
 	this->init_list_of_cmds();
 	this->server_socket = new autosocket(this->data.port, this->data.host);
 }
 
-server::server( const server & var )
-{
+server::server( const server & var ) {	// No test
 	(void)var;
 	std::cout << "Server Copy constructor called" << std::endl;
+
 }
 
 // DESTRUCTOR
-server::~server( void )
-{
+server::~server( void ) { // No test
+
 	std::cout << "Server Destructor constructor called" << std::endl;
 	delete this;
+
 }
 
 // OVERLOADING
-server & server::operator=(const server &tmp)
+server & server::operator=(const server &tmp)	// No test
 {
 	(void)tmp;
 	std::cout << "Server Operator equalizer called" << std::endl;
 	return *this;
 }
 
-std::ostream &operator<<(std::ostream& os, const server &tmp)
+std::ostream &operator<<(std::ostream& os, const server &tmp) // Tested
 {
 	os << "host           |     " << tmp.get_host() << std::endl;
-	os << "network pass   |     " << tmp.get_network_pass() << std::endl;
-	os << "network port   |     " << tmp.get_network_port() << std::endl;
 	os << "password       |     " << tmp.get_password() << std::endl;
 	os << "port           |     " << tmp.get_port() << std::endl;
 	return (os);
 }
 
 // FUNCTIONS
-void	server::init_list_of_cmds(void)
+void	server::init_list_of_cmds(void) // Update with new commands Tested
 {
 	this->list_of_cmds.insert(std::pair<std::string, command_function>("NICK", &cmd::nick));
 	this->list_of_cmds.insert(std::pair<std::string, command_function>("USER", &cmd::username));
@@ -71,22 +70,21 @@ void	server::init_list_of_cmds(void)
 	this->list_of_cmds.insert(std::pair<std::string, command_function>("MODE", &cmd::mode));
 }
 
-void	server::init_pollfd(void)
+void	server::init_pollfd(void) // Tested
 {
 	memset(this->poll_fds, 0, sizeof(this->poll_fds));
 	this->poll_fds[0].fd 	   = this->server_socket->fd;
 	this->poll_fds[0].events   = POLLIN;
 }
 
-bool	server::wait_for_connection(void)
+bool	server::wait_for_connection(void) // Tested
 {
 	int ret;
-	
+
 	this->init_pollfd();
-	std::cout << GREEN << "Server initialized! Waiting for connections..." << RESET << std::endl;
 	while (true)
 	{
-		ret = poll(this->poll_fds, this->_active_fds, TIMEOUT); //TODO check ping clients
+		ret = poll(this->poll_fds, this->_active_fds, TIMEOUT); //TODO cambiar timeout + check ping clients
 		if (ret < 0) {
 			perror("Poll error");
 			return 1;
@@ -100,8 +98,7 @@ bool	server::wait_for_connection(void)
 	return 0;
 }
 
-
-bool	server::fd_ready( void )
+bool	server::fd_ready(void) // No test
 {
 	for (int i = 0; i < this->_active_fds; i++)
 	{
@@ -121,7 +118,7 @@ bool	server::fd_ready( void )
 	return 1;
 }
 
-void	server::add_user(int fd, sock_in client_addr)
+void	server::add_user(int fd, sock_in client_addr) // Tested
 {
 	char ip_address[20];
 
@@ -132,12 +129,12 @@ void	server::add_user(int fd, sock_in client_addr)
 	this->list_of_users.insert(std::pair<int, user>(fd, new_user));
 }
 
-bool	server::accept_communication(void)
+bool	server::accept_communication(void) // No test
 {
-	int 	fd = 0;
+	int 	fd;
 	sock_in client_addr;
 	socklen_t client_addr_size = sizeof(client_addr);
-	char ip_addres[20];
+
 	fd = accept(this->server_socket->fd, (sock_addr*)&client_addr, &client_addr_size);
 	if (fd < 0)
     {
@@ -155,7 +152,7 @@ bool	server::accept_communication(void)
 	return 0;
 }
 
-bool	server::receive_communication(int poll_fd_pos)
+bool	server::receive_communication(int poll_fd_pos) // No test
 {
 	char buffer[MSG_SIZE];
 	int len;
@@ -186,7 +183,7 @@ bool	server::receive_communication(int poll_fd_pos)
 	return 0;
 }
 
-bool server::send_message(std::string msg, int fd)
+bool	server::send_message(std::string msg, int fd) // No test
 {
 	int len = send(fd, msg.c_str(), msg.length(), 0);
 	if (len < 0)
@@ -197,7 +194,7 @@ bool server::send_message(std::string msg, int fd)
 	return 0;
 }
 
-void	server::delete_user(int poll_fd_pos)
+void	server::delete_user(int poll_fd_pos) // Tested
 {
 	std::cout << RED << "Deleted user: fd " << this->poll_fds[poll_fd_pos].fd
 		<< RESET << std::endl;
@@ -212,7 +209,7 @@ void	server::delete_user(int poll_fd_pos)
 }
 
 // Separa la cadena en COMANDO + MSG, donde mensaje es todo lo demás que es parseado de forma distinta por cada comando
-std::map<std::string, std::string> server::parse_message(std::string msg)
+std::map<std::string, std::string> server::parse_message(std::string msg) // Tested
 {
 	// Este split es por culpa de irssi, que lanza todos los comandos NICK y USER en una sola linea
 	// No deberia afectar a los usuarios que lanzan comandos de uno en uno
@@ -230,7 +227,7 @@ std::map<std::string, std::string> server::parse_message(std::string msg)
 	return commands;
 }
 
-void	server::execute_commands(int poll_fd_pos, std::map<std::string, std::string> commands)
+void	server::execute_commands(int poll_fd_pos, std::map<std::string, std::string> commands) // No test
 {
 	std::map<std::string, std::string>::iterator it;
 
@@ -241,24 +238,19 @@ void	server::execute_commands(int poll_fd_pos, std::map<std::string, std::string
 	}
 }
 
-void	server::create_channel(user &usr, std::string name)
+void	server::create_channel(user &usr, std::string name) // No test
 {
-	// IRSSI:  si el server NO empiza por #, lo añade
-	// Puede contener # o & entre medias
-	//if (name[0] != '#' || name[0] != '&')
-	//	name.insert(0, "#");
-
 	channel cnn(name);
 	usr.set_op(true);
 	cnn.add_member(usr);
 	usr.set_op(false);
 	this->list_of_channels.insert(std::pair<std::string, channel>(name, cnn));
-	std::cout << YELLOW << name << " channel created!" << std::endl;
-	std::cout << cnn << RESET << std::endl;
+	std::cout << name << " channel created!" << std::endl;
+	std::cout << cnn << std::endl;
 }
 
 // Maybe make a template????
-user *server::get_user_from_nick(std::string nick)
+user *server::get_user_from_nick(std::string nick) // No test
 {
 	std::map<int, user>::iterator it;
 
@@ -270,14 +262,13 @@ user *server::get_user_from_nick(std::string nick)
 	return NULL;
 }
 
-channel *server::get_channel_from_name(std::string name)
+channel *server::get_channel_from_name(std::string name) // No test
 {
 	std::map<std::string, channel>::iterator it;
-	std::string tmp(name);
 
 	for (it = this->list_of_channels.begin(); it != this->list_of_channels.end(); it++)
 	{
-		if (it->second.get_name().compare(tmp) == 0)
+		if (it->second.get_name().compare(name) == 0)
 			return &(it->second);
 	}
 	return NULL;
@@ -292,7 +283,7 @@ pollfd&	server::get_pollfd(int i) {
 }
 
 // TESTS
-void	test_check_data_correct()
+void	test_check_data_correct()	// Modify
 {
 	char *program = "./ircserv";
 	char *arg1 = "";
@@ -307,13 +298,13 @@ void	test_check_data_correct()
 
 	std::cout << "Params: \" \" \" \" \" \"\n";
 	std::cout << "Output: " << check_data_correct(argv) << "\n\n";
-
+	
 	argv[1] = "a";
 	argv[2] = "b";
 	argv[3] = "c";
 	std::cout << "Params: a b c\n";
 	std::cout << "Output: " << check_data_correct(argv) << "\n\n";
-
+	
 	argv[1] = "0:0:a";
 	argv[2] = "0";
 	argv[3] = "a";
@@ -363,13 +354,13 @@ void	test_check_data_correct()
 	std::cout << "Output: " << check_data_correct(argv) << "\n\n";
 }
 
-server	*test_server_construction(char *arg1, char *arg2, char *arg3)
+server	*test_server_construction(char *port, char *pass)
 {
 	std::cout << "Test server construction\n";
 	std::cout << "==========================\n";
 	server *serv;
 
-	serv = new server(arg1, arg2, arg3);
+	serv = new server(port, pass);
 	std::cout << *serv << std::endl;
 
 	std::map<std::string, command_function>::iterator it;
@@ -401,7 +392,7 @@ void	test_add_user(server *serv, int fd, char *url, int port)
 {
 	std::cout << "Test add user" << std::endl;
 	std::cout << "==================================================" << std::endl;
-
+	
 	struct sockaddr_in myaddr;
 
 	myaddr.sin_family = AF_INET;
@@ -440,8 +431,9 @@ void	test_delete_user(server *serv, int fd_pos)
 			<< "events " << serv->poll_fds[i].events << std::endl;
 	}
 	std::cout << std::endl;
+	
 	serv->delete_user(fd_pos);
-
+	
 	std::cout << "Active clients: " << serv->_active_fds << std::endl;
 	std::cout << "List of users:" << std::endl;
 	for (unsigned int i = 0; i < serv->list_of_users.size(); i++)
