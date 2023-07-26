@@ -241,8 +241,9 @@ void	server::execute_commands(int poll_fd_pos, std::map<std::string, std::string
 void	server::create_channel(user &usr, std::string name) // No test
 {
 	channel cnn(name);
-
+	usr.set_op(true);
 	cnn.add_member(usr);
+	usr.set_op(false);
 	this->list_of_channels.insert(std::pair<std::string, channel>(name, cnn));
 	std::cout << name << " channel created!" << std::endl;
 	std::cout << cnn << std::endl;
