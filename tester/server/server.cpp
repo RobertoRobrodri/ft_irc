@@ -293,8 +293,8 @@ void	test_check_data_correct()	// Modify
 
 	char *argv[] = {program, arg1, arg2, arg3, NULL};
 
-	std::cout << "Test check_data_correct\n";
-	std::cout << "==========================\n";
+	std::cout << BLUE << "Test check_data_correct\n";
+	std::cout << "==========================\n" << RESET;
 	std::cout << std::boolalpha;
 
 	std::cout << "Params: \" \" \" \" \" \"\n";
@@ -357,8 +357,8 @@ void	test_check_data_correct()	// Modify
 
 server	*test_server_construction(char *port, char *pass)
 {
-	std::cout << "Test server construction\n";
-	std::cout << "==========================\n";
+	std::cout << BLUE << "Test server construction\n";
+	std::cout << "==========================\n" << RESET;
 	server *serv;
 
 	serv = new server(port, pass);
@@ -391,8 +391,8 @@ server	*test_server_construction(char *port, char *pass)
 
 void	test_add_user(server *serv, int fd, char *url, int port)
 {
-	std::cout << "Test add user" << std::endl;
-	std::cout << "==================================================" << std::endl;
+	std::cout << BLUE << "Test add user" << std::endl;
+	std::cout << "==================================================\n" << RESET;
 	std::cout << "Active fds: " << serv->_active_fds << std::endl;
 	
 	struct sockaddr_in myaddr;
@@ -433,13 +433,12 @@ void	print_list_of_users(std::map<int, user> &list_of_users)
 			std::cout << "------------" << std::endl;
 			std::cout << list_of_users[fd] << std::endl;
 	}
-	std::cout << std::endl;
 }
 
 void	test_delete_user(server *serv, int fd_pos)
 {
-	std::cout << "Test delete user" << std::endl;
-	std::cout << "==================================================" << std::endl;
+	std::cout << BLUE << "Test delete user" << std::endl;
+	std::cout << "==================================================\n" << RESET;
 	
 	std::cout << "Active fds: " << serv->_active_fds << std::endl;
 	print_poll_fd(serv->_active_fds, &(serv->poll_fds[0]));
@@ -455,8 +454,8 @@ void	test_delete_user(server *serv, int fd_pos)
 
 void	test_parse_message(server *serv, std::string msg)
 {
-	std::cout << "Test parse message" << std::endl;
-	std::cout << "==================================================" << std::endl;
+	std::cout << BLUE << "Test parse message" << std::endl;
+	std::cout << "==================================================\n" << RESET;
 	
 	std::cout << "Raw message: |" << msg << "|\n";
 	std::map<std::string, std::string> commands;
@@ -472,6 +471,6 @@ void	test_parse_message(server *serv, std::string msg)
 
 void	test_connection(server *serv)
 {
-	std::cout << "CONNECT\n" << "Open a new terminal and type nc -v 127.0.0.1 6776 to test new connection.\n"
-		<< serv->wait_for_connection() << std::endl;
+	std::cout << YELLOW << "CONNECT\n" << "Open a new terminal and type nc -v 127.0.0.1 6776 to test new connection.\n"
+		<< RESET << serv->wait_for_connection() << std::endl;
 }
