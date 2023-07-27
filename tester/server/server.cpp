@@ -393,6 +393,7 @@ void	test_add_user(server *serv, int fd, char *url, int port)
 {
 	std::cout << "Test add user" << std::endl;
 	std::cout << "==================================================" << std::endl;
+	std::cout << "Active fds: " << serv->_active_fds << std::endl;
 	
 	struct sockaddr_in myaddr;
 
@@ -420,19 +421,17 @@ void	print_poll_fd(int active_fds, poll_fd *poll_fds)
 	std::cout << std::endl;
 }
 
-void	print_list_of_users(unsigned int list_size, std::map<int, user> list_of_users)
+void	print_list_of_users(std::map<int, user> &list_of_users)
 {
+	std::map<int, user>::iterator it = list_of_users.begin();
+	int fd;
 	std::cout << "List of users:" << std::endl;
-	for (unsigned int i = 0; i < list_size; i++)
+	for (; it != list_of_users.end(); it++)
 	{
-		if (list_of_users[i].get_fd() > 0)
-		{
-			std::cout << "User " << i + 1 << std::endl;
+		fd = it->first;
+			std::cout << "User fd: " << fd << std::endl;
 			std::cout << "------------" << std::endl;
-			std::cout << list_of_users[i] << std::endl;
-		}
-		else
-			std::cout << "< empty user slot >" << std::endl;
+			std::cout << list_of_users[fd] << std::endl;
 	}
 	std::cout << std::endl;
 }
@@ -442,16 +441,16 @@ void	test_delete_user(server *serv, int fd_pos)
 	std::cout << "Test delete user" << std::endl;
 	std::cout << "==================================================" << std::endl;
 	
-	std::cout << "Active clients: " << serv->_active_fds << std::endl;
+	std::cout << "Active fds: " << serv->_active_fds << std::endl;
 	print_poll_fd(serv->_active_fds, &(serv->poll_fds[0]));
-	print_list_of_users(serv->list_of_users.size(), serv->list_of_users);	
+	print_list_of_users(serv->list_of_users);	
 	
 	serv->delete_user(fd_pos);
 	std::cout << std::endl;
 	
-	std::cout << "Active clients: " << serv->_active_fds << std::endl;
+	std::cout << "Active fds: " << serv->_active_fds << std::endl;
 	print_poll_fd(serv->_active_fds, &(serv->poll_fds[0]));
-	print_list_of_users(serv->list_of_users.size(), serv->list_of_users);	
+	print_list_of_users(serv->list_of_users);	
 }
 
 void	test_parse_message(server *serv, std::string msg)
