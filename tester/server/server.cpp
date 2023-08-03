@@ -250,6 +250,16 @@ void	server::create_channel(user &usr, std::string name) // No test
 	std::cout << cnn << std::endl;
 }
 
+user& 	server::get_user(int i)
+{
+	return(this->list_of_users.find(i)->second);
+}
+
+pollfd&	server::get_pollfd(int i)
+{
+	return (this->poll_fds[i]);
+}
+
 // Maybe make a template????
 user *server::get_user_from_nick(std::string nick) // No test
 {
@@ -275,15 +285,19 @@ channel *server::get_channel_from_name(std::string name) // No test
 	return NULL;
 }
 
-user& server::get_user(int i) {
-	return(this->list_of_users.find(i)->second);
-}
-
-pollfd&	server::get_pollfd(int i) {
-	return (this->poll_fds[i]);
-}
-
 // TESTS
+void	test_getters(server *serv)
+{
+	std::cout << BLUE << "Test getters\n";
+	std::cout << "==========================\n" << RESET;
+
+	std::cout << "Host: " << serv->get_host() << std::endl;
+	std::cout << "Port: " << serv->get_port() << std::endl;
+	std::cout << "Passwords: " << serv->get_password() << std::endl;
+	std::cout << "Poll fd 1: " << serv->get_pollfd(1).fd << std::endl;
+	std::cout << "User fd 3: \n" << serv->get_user(3) << std::endl;
+}
+
 void	test_check_data_correct()	// Modify
 {
 	char *program = "./ircserv";
