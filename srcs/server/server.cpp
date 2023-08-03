@@ -239,6 +239,16 @@ void	server::create_channel(user &usr, std::string name)
 	std::cout << cnn << RESET << std::endl;
 }
 
+user& 	server::get_user(int i)
+{
+	return(this->list_of_users.find(i)->second);
+}
+
+pollfd&	server::get_pollfd(int i)
+{
+	return (this->poll_fds[i]);
+}
+
 // Maybe make a template????
 user *server::get_user_from_nick(std::string nick)
 {
