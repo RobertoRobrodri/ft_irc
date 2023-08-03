@@ -22,4 +22,8 @@ namespace cmd
 	void part(server &svr, int poll_fd_pos, std::string str);
 	void mode(server &svr, int poll_fd_pos, std::string str);
 }
+
+// TESTS
+void	test_user_cmd(server &server);
+
 #endif
