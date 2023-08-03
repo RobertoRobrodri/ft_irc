@@ -36,8 +36,7 @@ SUBFILE1_SRC = server.cpp
 SUBFILE2_SRC = autosocket.cpp
 SUBFILE3_SRC = parser.cpp
 SUBFILE4_SRC = user.cpp
-SUBFILE5_SRC = command.cpp \
-			   invite.cpp \
+SUBFILE5_SRC = invite.cpp \
 			   join.cpp \
 			   kick.cpp \
 			   nick.cpp \
