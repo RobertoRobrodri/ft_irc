@@ -33,8 +33,8 @@ int main()
 
 	// nick
 	test_nick_cmd(*serv);
-
 	// join
+	test_join_cmd(*serv);
 
 	// pong
 
