@@ -18,6 +18,7 @@ int main()
 	
 	test_add_user(serv, 3, "63.161.169.137", 3490);
 	test_add_user(serv, 4, "63.161.169.138", 3490);
+	test_add_user(serv, 5, "63.161.169.137", 3491);
 	test_delete_user(serv, 2);
 	test_getters(serv);
 	
@@ -31,6 +32,7 @@ int main()
 	test_user_cmd(*serv); 
 
 	// nick
+	test_nick_cmd(*serv);
 
 	// join
 
