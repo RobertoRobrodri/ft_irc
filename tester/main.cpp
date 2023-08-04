@@ -33,8 +33,11 @@ int main()
 
 	// nick
 	test_nick_cmd(*serv);
+	std::cout << std::endl;
+
 	// join
 	test_join_cmd(*serv);
+	std::cout << std::endl;
 
 	// pong
 
