@@ -54,21 +54,21 @@ void	test_nick_cmd(server &server)
 
 	std::cout << "Test 1: New nick\n" << RESET;
 	std::cout << YELLOW << "NICK Wiz\n" << RESET;
-	cmd::username(server, 1, "NICK Wiz");
+	cmd::nick(server, 1, "NICK Wiz");
 	
 	std::cout << "Test 2: Nick change\n" << RESET;
 	std::cout << YELLOW << ":Wiz NICK Kilroy\n" << RESET;
-	cmd::username(server, 1, ":Wiz NICK Kilroy");
+	cmd::nick(server, 1, ":Wiz NICK Kilroy");
 	
 	std::cout << "Test 3: Repeated nick\n" << RESET;
 	std::cout << YELLOW << "NICK Kilroy\n" << RESET;
-	cmd::username(server, 2, "NICK Kilroy");
+	cmd::nick(server, 2, "NICK Kilroy");
 	
 	std::cout << "Test 4: Missing nick\n" << RESET;
 	std::cout << YELLOW << "NICK\n" << RESET;
-	cmd::username(server, 1, "NICK");
+	cmd::nick(server, 1, "NICK");
 	
 	std::cout << "Test 5: Bad nick\n" << RESET;
 	std::cout << YELLOW << ":Kilroy NICK *)=.&&&\n" << RESET;
-	cmd::username(server, 1, ":Kilroy NICK *)=.&&&");
+	cmd::nick(server, 1, ":Kilroy NICK *)=.&&&");
 }
