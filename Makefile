@@ -51,8 +51,7 @@ SUBFILE5_SRC = command.cpp \
 			   mode.cpp
 SUBFILE6_SRC = channel.cpp
 
-SRC =	main.cpp	\
-		$(addprefix $(SUBFILE1_PATH)/, $(SUBFILE1_SRC)) \
+SRC =	$(addprefix $(SUBFILE1_PATH)/, $(SUBFILE1_SRC)) \
 		$(addprefix $(SUBFILE2_PATH)/, $(SUBFILE2_SRC)) \
 		$(addprefix $(SUBFILE3_PATH)/, $(SUBFILE3_SRC)) \
 		$(addprefix $(SUBFILE4_PATH)/, $(SUBFILE4_SRC)) \
@@ -94,8 +93,9 @@ $(NAME): $(OBJS)
 $(TEST_PATH)/%.o: $(TEST_PATH)/%.cpp
 	$(CC) $(CXXFLAGS) $(INCLUDE) -c $< -o $@
 
-$(TEST): $(OBJS_TEST)
-	$(CC) $(CXXFLAGS) $(INCLUDE) $(OBJS_TEST) -o $(TEST)
+$(TEST): $(OBJS_TEST) tester/main.o tester/mock_main.o
+	$(CC) $(CXXFLAGS) $(INCLUDE) $(OBJS_TEST) tester/main.o -o $(TEST)
+	$(CC) $(CXXFLAGS) $(INCLUDE) $(OBJS_TEST) tester/mock_main.o -o mock
 #	clear
 	$(GREEN) Program asembled $(RESET)
 	@echo "⠀⠀⠀	    ⣠⣴⣶⣿⣿⣷⣶⣄⣀⣀\n\
@@ -113,7 +113,8 @@ $(TEST): $(OBJS_TEST)
 ⠀⠀⠀⠛⠿⣿⣿⣿⣿⣷⣤⡀⠀⠀⠀⠀⠈⠹⣿⣿⣇⣀⠀⣠⣾⣿⣿⡇⠀⠀\n\
 ⠀⠀⠀⠀⠀⠀⠀⠹⣿⣿⣿⣿⣦⣤⣤⣤⣤⣾⣿⣿⣿⣿⣿⣿⣿⣿⡟⠀⠀⠀\n\
 ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠉⠻⢿⣿⣿⣿⣿⣿⣿⠿⠋⠉⠛⠋⠉⠉⠁⠀⠀⠀⠀\n\
-⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠈⠉⠉⠉⠁\n"
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠈⠉⠉⠉⠁			  \
+	\n"
 
 $(MAKE): make
 
