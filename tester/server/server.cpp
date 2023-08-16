@@ -293,9 +293,9 @@ void	test_getters(server *serv)
 
 	std::cout << "Host: " << serv->get_host() << std::endl;
 	std::cout << "Port: " << serv->get_port() << std::endl;
-	std::cout << "Passwords: " << serv->get_password() << std::endl;
+	std::cout << "Password: " << serv->get_password() << std::endl;
 	std::cout << "Poll fd 1: " << serv->get_pollfd(1).fd << std::endl;
-	std::cout << "User fd 3: \n" << serv->get_user(3) << std::endl;
+	std::cout << "User 1: \n" << serv->get_user(4) << std::endl;
 }
 
 void	test_check_data_correct()	// Modify
