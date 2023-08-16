@@ -112,36 +112,36 @@ void  cmd::join(server &svr, int poll_fd_pos, std::string str) {
   }
 }
 
-void	test_join_cmd(server &server)
+void	test_join_cmd(server *server)
 {
 	std::cout << BLUE << "Test join command\n";
 	std::cout << "==========================\n" << RESET;
 
 	std::cout << "Test 1: Join channel\n" << RESET;
 	std::cout << YELLOW << "JOIN #foobar\n" << RESET;
-	cmd::join(server, 1, "JOIN #foobar");
+	cmd::join(*server, 1, "JOIN #foobar");
 
 	std::cout << "Test 2: Join channel using valid key\n" << RESET;
 	std::cout << YELLOW << "JOIN &foo fubar\n" << RESET;
-	cmd::join(server, 1, "JOIN &foo fubar");
+	cmd::join(*server, 1, "JOIN &foo fubar");
 
 	std::cout << "Test 3: Join two channels\n" << RESET;
 	std::cout << YELLOW << "JOIN #foo,#bar\n" << RESET;
-	cmd::join(server, 1, "JOIN #foo,#bar");
-
+	cmd::join(*server, 1, "JOIN #foo,#bar");
+	
 	std::cout << "Test 4: Join two channels, one with password\n" << RESET;
 	std::cout << YELLOW << "JOIN #foo,&bar fubar\n" << RESET;
-	cmd::join(server, 1, "JOIN #foo,&bar fubar");
+	cmd::join(*server, 1, "JOIN #foo,&bar fubar");
 
 	std::cout << "Test 5: Not enough parameters\n" << RESET;
 	std::cout << YELLOW << "JOIN\n" << RESET;
-	cmd::join(server, 1, "JOIN");
+	cmd::join(*server, 1, "JOIN");
 
 	std::cout << "Test 6: No & or # in channel name\n" << RESET;
 	std::cout << YELLOW << "JOIN badchannel\n" << RESET;
-	cmd::join(server, 1, "JOIN badchannel");
+	cmd::join(*server, 1, "JOIN badchannel");
 
 	std::cout << "Test 7: Comma in channel name\n" << RESET;
 	std::cout << YELLOW << "JOIN #The,channel\n" << RESET;
-	cmd::join(server, 1, "JOIN #The,channel");
+	cmd::join(*server, 1, "JOIN #The,channel");
 }

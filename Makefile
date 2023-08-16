@@ -50,14 +50,14 @@ SUBFILE5_SRC = invite.cpp \
 			   mode.cpp
 SUBFILE6_SRC = channel.cpp
 
-SRC =	main.cpp	\
-		$(addprefix $(SUBFILE1_PATH)/, $(SUBFILE1_SRC)) \
+SRC =	$(addprefix $(SUBFILE1_PATH)/, $(SUBFILE1_SRC)) \
 		$(addprefix $(SUBFILE2_PATH)/, $(SUBFILE2_SRC)) \
 		$(addprefix $(SUBFILE3_PATH)/, $(SUBFILE3_SRC)) \
 		$(addprefix $(SUBFILE4_PATH)/, $(SUBFILE4_SRC)) \
 		$(addprefix $(SUBFILE5_PATH)/, $(SUBFILE5_SRC)) \
 		$(addprefix $(SUBFILE6_PATH)/, $(SUBFILE6_SRC)) \
 
+SERVER_MAIN = objects/main.o
 
 # RULES #
 #
@@ -85,16 +85,17 @@ $(OBJ_PATH):
 $(OBJ_PATH)/%.o: $(SRC_PATH)/%.cpp | $(OBJ_PATH)
 	$(CC) $(CXXFLAGS) $(INCLUDE) -c $< -o $@
 
-$(NAME): $(OBJS)
-	$(CC) $(CXXFLAGS) $(INCLUDE) $(OBJS) -o $(NAME)
+$(NAME): $(OBJS) $(SERVER_MAIN) 
+	$(CC) $(CXXFLAGS) $(INCLUDE) $(OBJS) $(SERVER_MAIN) -o $(NAME)
 #	clear
 	$(GREEN) Program asembled $(RESET)
 
 $(TEST_PATH)/%.o: $(TEST_PATH)/%.cpp
 	$(CC) $(CXXFLAGS) $(INCLUDE) -c $< -o $@
 
-$(TEST): $(OBJS_TEST)
-	$(CC) $(CXXFLAGS) $(INCLUDE) $(OBJS_TEST) -o $(TEST)
+$(TEST): $(OBJS_TEST) tester/main.o tester/mock_main.o
+	$(CC) $(CXXFLAGS) $(INCLUDE) $(OBJS_TEST) tester/main.o -o $(TEST)
+	$(CC) $(CXXFLAGS) $(INCLUDE) $(OBJS_TEST) tester/mock_main.o -o mock
 #	clear
 	$(GREEN) Program asembled $(RESET)
 	@echo "⠀⠀⠀	    ⣠⣴⣶⣿⣿⣷⣶⣄⣀⣀\n\
