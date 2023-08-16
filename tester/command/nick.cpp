@@ -47,14 +47,14 @@ void cmd::nick(server &svr, int poll_fd_pos, std::string str) {
   std::cout << usr << std::endl;
 }
 
-void	test_nick_cmd(server &server)
+void	test_nick_cmd(server *server)
 {
 	std::cout << BLUE << "Test nick command\n";
 	std::cout << "==========================\n" << RESET;
 
 	std::cout << "Test 1: New nick\n" << RESET;
 	std::cout << YELLOW << "NICK Wiz\n" << RESET;
-	cmd::nick(server, 1, "NICK Wiz");
+	cmd::nick(*server, 1, "NICK Wiz");
 	
 	std::cout << "Test 2: Nick change\n" << RESET;
 	std::cout << YELLOW << ":Wiz NICK Kilroy\n" << RESET;

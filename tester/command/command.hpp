@@ -24,8 +24,8 @@ namespace cmd
 }
 
 // TESTS
-void	test_user_cmd(server &server);
-void	test_nick_cmd(server &server);
-void	test_join_cmd(server &server);
+void	test_user_cmd(server *server);
+void	test_nick_cmd(server *server);
+void	test_join_cmd(server *server);
 
 #endif
