@@ -83,7 +83,7 @@ $(OBJ_PATH):
 	mkdir -p $(addprefix $(OBJ_PATH)/, $(SUBFILE6_PATH))
 
 $(OBJ_PATH)/%.o: $(SRC_PATH)/%.cpp | $(OBJ_PATH)
-	$(CC) $(INCLUDE) -c $< -o $@
+	$(CC) $(CXXFLAGS) $(INCLUDE) -c $< -o $@
 
 $(NAME): $(OBJS)
 	$(CC) $(CXXFLAGS) $(INCLUDE) $(OBJS) -o $(NAME)

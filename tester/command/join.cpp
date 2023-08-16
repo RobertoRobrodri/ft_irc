@@ -1,6 +1,34 @@
 #include "command.hpp"
 #include "reply.hpp"
 
+// Parameters: <channel>{,<channel>} [<key>{,<key>}]
+
+//   is used by client to start listening to an specific channel.
+//
+//   The server checks if client is allowed to join a channel.
+//   The conditions which affect this are:
+//		1.  the user must be invited if the channel is invite-only;
+//      2.  the user's nick/username/hostname must not match any
+//      	active bans;
+//      3.  the correct key (password) must be given if it is set.
+
+//   Once a user has joined a channel, they receive notice about all
+//   the MODE, KICK, PART and QUIT commands their channel receives.
+
+//   If a JOIN is successful, the user is then sent the channel's topic
+//   (using RPL_TOPIC) and the list of users who are on the channel (using
+//   RPL_NAMREPLY), which must include the user joining.
+//
+//   Numeric Replies:
+//
+//           ERR_NEEDMOREPARAMS              ERR_BANNEDFROMCHAN
+//           ERR_INVITEONLYCHAN              ERR_BADCHANNELKEY
+//           ERR_CHANNELISFULL               ERR_BADCHANMASK
+//           ERR_NOSUCHCHANNEL               ERR_TOOMANYCHANNELS
+//           RPL_TOPIC
+
+
+
 void  cmd::join(server &svr, int poll_fd_pos, std::string str) {
   // Si no existe canal:
   // SVR->crear_canal()
@@ -82,4 +110,38 @@ void  cmd::join(server &svr, int poll_fd_pos, std::string str) {
       svr.create_channel(usr, *it);
     }
   }
+}
+
+void	test_join_cmd(server &server)
+{
+	std::cout << BLUE << "Test join command\n";
+	std::cout << "==========================\n" << RESET;
+
+	std::cout << "Test 1: Join channel\n" << RESET;
+	std::cout << YELLOW << "JOIN #foobar\n" << RESET;
+	cmd::join(server, 1, "JOIN #foobar");
+
+	std::cout << "Test 2: Join channel using valid key\n" << RESET;
+	std::cout << YELLOW << "JOIN &foo fubar\n" << RESET;
+	cmd::join(server, 1, "JOIN &foo fubar");
+
+	std::cout << "Test 3: Join two channels\n" << RESET;
+	std::cout << YELLOW << "JOIN #foo,#bar\n" << RESET;
+	cmd::join(server, 1, "JOIN #foo,#bar");
+
+	std::cout << "Test 4: Join two channels, one with password\n" << RESET;
+	std::cout << YELLOW << "JOIN #foo,&bar fubar\n" << RESET;
+	cmd::join(server, 1, "JOIN #foo,&bar fubar");
+
+	std::cout << "Test 5: Not enough parameters\n" << RESET;
+	std::cout << YELLOW << "JOIN\n" << RESET;
+	cmd::join(server, 1, "JOIN");
+
+	std::cout << "Test 6: No & or # in channel name\n" << RESET;
+	std::cout << YELLOW << "JOIN badchannel\n" << RESET;
+	cmd::join(server, 1, "JOIN badchannel");
+
+	std::cout << "Test 7: Comma in channel name\n" << RESET;
+	std::cout << YELLOW << "JOIN #The,channel\n" << RESET;
+	cmd::join(server, 1, "JOIN #The,channel");
 }

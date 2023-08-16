@@ -98,7 +98,7 @@ bool	server::wait_for_connection(void) // Tested
 	return 0;
 }
 
-bool	server::fd_ready(void) // No test
+bool	server::fd_ready(void)
 {
 	for (int i = 0; i < this->_active_fds; i++)
 	{
@@ -106,6 +106,7 @@ bool	server::fd_ready(void) // No test
 			continue;
 		if (this->poll_fds[i].fd == this->server_socket->fd)
 		{
+			std::cout << "Server opening new communication" << std::endl;
 			this->accept_communication();
 			return 0;
 		}
@@ -249,6 +250,16 @@ void	server::create_channel(user &usr, std::string name) // No test
 	std::cout << cnn << std::endl;
 }
 
+user& 	server::get_user(int i)
+{
+	return(this->list_of_users.find(i)->second);
+}
+
+pollfd&	server::get_pollfd(int i)
+{
+	return (this->poll_fds[i]);
+}
+
 // Maybe make a template????
 user *server::get_user_from_nick(std::string nick) // No test
 {
@@ -274,15 +285,19 @@ channel *server::get_channel_from_name(std::string name) // No test
 	return NULL;
 }
 
-user& server::get_user(int i) {
-	return(this->list_of_users.find(i)->second);
-}
-
-pollfd&	server::get_pollfd(int i) {
-	return (this->poll_fds[i]);
-}
-
 // TESTS
+void	test_getters(server *serv)
+{
+	std::cout << BLUE << "Test getters\n";
+	std::cout << "==========================\n" << RESET;
+
+	std::cout << "Host: " << serv->get_host() << std::endl;
+	std::cout << "Port: " << serv->get_port() << std::endl;
+	std::cout << "Passwords: " << serv->get_password() << std::endl;
+	std::cout << "Poll fd 1: " << serv->get_pollfd(1).fd << std::endl;
+	std::cout << "User fd 3: \n" << serv->get_user(3) << std::endl;
+}
+
 void	test_check_data_correct()	// Modify
 {
 	char *program = "./ircserv";
@@ -292,8 +307,8 @@ void	test_check_data_correct()	// Modify
 
 	char *argv[] = {program, arg1, arg2, arg3, NULL};
 
-	std::cout << "Test check_data_correct\n";
-	std::cout << "==========================\n";
+	std::cout << BLUE << "Test check_data_correct\n";
+	std::cout << "==========================\n" << RESET;
 	std::cout << std::boolalpha;
 
 	std::cout << "Params: \" \" \" \" \" \"\n";
@@ -356,8 +371,8 @@ void	test_check_data_correct()	// Modify
 
 server	*test_server_construction(char *port, char *pass)
 {
-	std::cout << "Test server construction\n";
-	std::cout << "==========================\n";
+	std::cout << BLUE << "Test server construction\n";
+	std::cout << "==========================\n" << RESET;
 	server *serv;
 
 	serv = new server(port, pass);
@@ -390,8 +405,9 @@ server	*test_server_construction(char *port, char *pass)
 
 void	test_add_user(server *serv, int fd, char *url, int port)
 {
-	std::cout << "Test add user" << std::endl;
-	std::cout << "==================================================" << std::endl;
+	std::cout << BLUE << "Test add user" << std::endl;
+	std::cout << "==================================================\n" << RESET;
+	std::cout << "Active fds: " << serv->_active_fds << std::endl;
 	
 	struct sockaddr_in myaddr;
 
@@ -407,71 +423,68 @@ void	test_add_user(server *serv, int fd, char *url, int port)
 	std::cout << serv->list_of_users[fd] << std::endl;
 }
 
-void	test_delete_user(server *serv, int fd_pos)
+void	print_poll_fd(int active_fds, poll_fd *poll_fds)
 {
-	std::cout << "Test delete user" << std::endl;
-	std::cout << "==================================================" << std::endl;
-	std::cout << "Active clients: " << serv->_active_fds << std::endl;
-	std::cout << "List of users:" << std::endl;
-	for (unsigned int i = 0; i < serv->list_of_users.size(); i++)
-	{
-		if (serv->list_of_users[i].get_fd() > 0)
-		{
-			std::cout << "User " << i + 1 << std::endl;
-			std::cout << "------------" << std::endl;
-			std::cout << serv->list_of_users[i] << std::endl;
-		}
-		else
-			std::cout << "< empty user slot >" << std::endl;
-	}
 	std::cout << "Poll fd:" << std::endl;
-	for (int i = 0; i < serv->_active_fds; i++)
+	for (int i = 0; i < active_fds; i++)
 	{
-		std::cout << i << " - " << "fd " << serv->poll_fds[i].fd << ", "
-			<< "events " << serv->poll_fds[i].events << std::endl;
-	}
-	std::cout << std::endl;
-	
-	serv->delete_user(fd_pos);
-	
-	std::cout << "Active clients: " << serv->_active_fds << std::endl;
-	std::cout << "List of users:" << std::endl;
-	for (unsigned int i = 0; i < serv->list_of_users.size(); i++)
-	{
-		if (serv->list_of_users[i].get_fd() > 0)
-		{
-			std::cout << "User " << i + 1 << std::endl;
-			std::cout << "------------" << std::endl;
-			std::cout << serv->list_of_users[i] << std::endl;
-		}
-		else
-			std::cout << "< empty user slot >" << std::endl;
-	}
-	std::cout << "Poll fd:" << std::endl;
-	for (int i = 0; i < serv->_active_fds; i++)
-	{
-		std::cout << i << " - " << "fd " << serv->poll_fds[i].fd << ", "
-			<< "events " << serv->poll_fds[i].events << std::endl;
+		std::cout << i << " - " << "fd " << poll_fds[i].fd << ", "
+			<< "events " << poll_fds[i].events <<  ", "
+ 			<< "revents " << poll_fds[i].revents << std::endl;
 	}
 	std::cout << std::endl;
 }
 
+void	print_list_of_users(std::map<int, user> &list_of_users)
+{
+	std::map<int, user>::iterator it = list_of_users.begin();
+	int fd;
+	std::cout << "List of users:" << std::endl;
+	for (; it != list_of_users.end(); it++)
+	{
+		fd = it->first;
+			std::cout << "User fd: " << fd << std::endl;
+			std::cout << "------------" << std::endl;
+			std::cout << list_of_users[fd] << std::endl;
+	}
+}
+
+void	test_delete_user(server *serv, int fd_pos)
+{
+	std::cout << BLUE << "Test delete user" << std::endl;
+	std::cout << "==================================================\n" << RESET;
+	
+	std::cout << "Active fds: " << serv->_active_fds << std::endl;
+	print_poll_fd(serv->_active_fds, &(serv->poll_fds[0]));
+	print_list_of_users(serv->list_of_users);	
+	
+	serv->delete_user(fd_pos);
+	std::cout << std::endl;
+	
+	std::cout << "Active fds: " << serv->_active_fds << std::endl;
+	print_poll_fd(serv->_active_fds, &(serv->poll_fds[0]));
+	print_list_of_users(serv->list_of_users);	
+}
+
 void	test_parse_message(server *serv, std::string msg)
 {
-	std::cout << "Test parse message" << std::endl;
-	std::cout << "==================================================" << std::endl;
+	std::cout << BLUE << "Test parse message" << std::endl;
+	std::cout << "==================================================\n" << RESET;
+	
 	std::cout << "Raw message: |" << msg << "|\n";
 	std::map<std::string, std::string> commands;
+	
 	commands = serv->parse_message(msg);
 
 	std::cout << "Parsed message:\n";
 	std::map<std::string, std::string>::iterator it;
 	for (it = commands.begin(); it != commands.end(); it++)
 		std::cout << "Command: |" << it->first << "| " << "Arguments: |" << it->second << "|\n";
+	std::cout << std::endl;
 }
 
 void	test_connection(server *serv)
 {
-	std::cout << "CONNECT\n" << "Open a new terminal and type nc -v 127.0.0.1 6776 to test new connection.\n"
-		<< serv->wait_for_connection() << std::endl;
+	std::cout << YELLOW << "CONNECT\n" << "Open a new terminal and type nc -v 127.0.0.1 6776 to test new connection.\n"
+		<< RESET << serv->wait_for_connection() << std::endl;
 }

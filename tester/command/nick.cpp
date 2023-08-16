@@ -1,6 +1,17 @@
 #include "command.hpp"
 #include "reply.hpp"
 
+// Parameters: <nickname> [ <hopcount> ]
+//
+//   is used to give user a nickname or change the previous one.
+//
+//   The <hopcount> parameter must be ignored.
+//
+//      Numeric Replies:
+//
+//           ERR_NONICKNAMEGIVEN             ERR_ERRONEUSNICKNAME
+//           ERR_NICKNAMEINUSE
+
 bool invalid_nick(std::string str)
 {
   if ((str.find_first_of(" .:,?!@*&#$") != std::string::npos) || (str.length() > 9))
@@ -34,4 +45,30 @@ void cmd::nick(server &svr, int poll_fd_pos, std::string str) {
   usr.set_nick(str);
   usr.is_registered(svr);
   std::cout << usr << std::endl;
+}
+
+void	test_nick_cmd(server &server)
+{
+	std::cout << BLUE << "Test nick command\n";
+	std::cout << "==========================\n" << RESET;
+
+	std::cout << "Test 1: New nick\n" << RESET;
+	std::cout << YELLOW << "NICK Wiz\n" << RESET;
+	cmd::nick(server, 1, "NICK Wiz");
+	
+	std::cout << "Test 2: Nick change\n" << RESET;
+	std::cout << YELLOW << ":Wiz NICK Kilroy\n" << RESET;
+	cmd::nick(server, 1, ":Wiz NICK Kilroy");
+	
+	std::cout << "Test 3: Repeated nick\n" << RESET;
+	std::cout << YELLOW << "NICK Kilroy\n" << RESET;
+	cmd::nick(server, 2, "NICK Kilroy");
+	
+	std::cout << "Test 4: Missing nick\n" << RESET;
+	std::cout << YELLOW << "NICK\n" << RESET;
+	cmd::nick(server, 1, "NICK");
+	
+	std::cout << "Test 5: Bad nick\n" << RESET;
+	std::cout << YELLOW << ":Kilroy NICK *)=.&&&\n" << RESET;
+	cmd::nick(server, 1, ":Kilroy NICK *)=.&&&");
 }
