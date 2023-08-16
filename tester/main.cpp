@@ -16,7 +16,7 @@ int main()
 	test_add_user(serv, 6, "63.161.169.138", 3491);
 	test_delete_user(serv, 2);
 	test_getters(serv);
-	
+	// fd_ready
 	test_parse_message(serv, "USER paco");
 	
 	// execute_command 
