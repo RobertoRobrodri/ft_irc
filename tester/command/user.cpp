@@ -60,17 +60,17 @@ void	test_user_cmd(server *server)
 	
 	std::cout << "Test 5: Semicolons in hostname parameter\n" << RESET;
 	std::cout <<  YELLOW << "USER guest :tolmoon tolsun :Ronnie Reagan\n" << RESET;
-	cmd::username(server, 1, "USER guest :tolmoon tolsun :Ronnie Reagan");
+	cmd::username(*server, 1, "USER guest :tolmoon tolsun :Ronnie Reagan");
 	
 	std::cout << "Test 6: Missing semicolon for realname\n" << RESET;
 	std::cout <<  YELLOW << "USER guest tolmoon tolsun Ronnie Reagan\n" << RESET;
-	cmd::username(server, 1, "USER guest tolmoon tolsun Ronnie Reagan");
+	cmd::username(*server, 1, "USER guest tolmoon tolsun Ronnie Reagan");
 	
 	std::cout << "Test 7: Special characters in username parameter\n" << RESET;
 	std::cout <<  YELLOW << "USER pwg03[}*]g tolmoon tolsun :Ronnie Reagan\n" << RESET;
-	cmd::username(server, 1, "USER pwg03[}*]g tolmoon tolsun :Ronnie Reagan");
+	cmd::username(*server, 1, "USER pwg03[}*]g tolmoon tolsun :Ronnie Reagan");
 	
 	std::cout << "Test 8: Already registred error\n" << RESET;
 	std::cout << YELLOW << "USER ronnie tolmoon tolsun :Ronnie Reagan\n" << RESET;
-	cmd::username(server, 2, "USER ronnie tolmoon tolsun :Ronnie Reagan");
+	cmd::username(*server, 2, "USER ronnie tolmoon tolsun :Ronnie Reagan");
 }

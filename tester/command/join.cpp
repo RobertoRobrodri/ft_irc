@@ -131,17 +131,17 @@ void	test_join_cmd(server *server)
 	
 	std::cout << "Test 4: Join two channels, one with password\n" << RESET;
 	std::cout << YELLOW << "JOIN #foo,&bar fubar\n" << RESET;
-	cmd::join(server, 1, "JOIN #foo,&bar fubar");
+	cmd::join(*server, 1, "JOIN #foo,&bar fubar");
 
 	std::cout << "Test 5: Not enough parameters\n" << RESET;
 	std::cout << YELLOW << "JOIN\n" << RESET;
-	cmd::join(server, 1, "JOIN");
+	cmd::join(*server, 1, "JOIN");
 
 	std::cout << "Test 6: No & or # in channel name\n" << RESET;
 	std::cout << YELLOW << "JOIN badchannel\n" << RESET;
-	cmd::join(server, 1, "JOIN badchannel");
+	cmd::join(*server, 1, "JOIN badchannel");
 
 	std::cout << "Test 7: Comma in channel name\n" << RESET;
 	std::cout << YELLOW << "JOIN #The,channel\n" << RESET;
-	cmd::join(server, 1, "JOIN #The,channel");
+	cmd::join(*server, 1, "JOIN #The,channel");
 }
