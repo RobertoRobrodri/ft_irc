@@ -57,6 +57,7 @@ SRC =	$(addprefix $(SUBFILE1_PATH)/, $(SUBFILE1_SRC)) \
 		$(addprefix $(SUBFILE5_PATH)/, $(SUBFILE5_SRC)) \
 		$(addprefix $(SUBFILE6_PATH)/, $(SUBFILE6_SRC)) \
 
+SERVER_MAIN = objects/main.o
 
 # RULES #
 #
@@ -84,8 +85,8 @@ $(OBJ_PATH):
 $(OBJ_PATH)/%.o: $(SRC_PATH)/%.cpp | $(OBJ_PATH)
 	$(CC) $(CXXFLAGS) $(INCLUDE) -c $< -o $@
 
-$(NAME): $(OBJS)
-	$(CC) $(CXXFLAGS) $(INCLUDE) $(OBJS) -o $(NAME)
+$(NAME): $(OBJS) $(SERVER_MAIN) 
+	$(CC) $(CXXFLAGS) $(INCLUDE) $(OBJS) $(SERVER_MAIN) -o $(NAME)
 #	clear
 	$(GREEN) Program asembled $(RESET)
 
