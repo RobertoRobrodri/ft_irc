@@ -189,7 +189,10 @@ bool	server::send_message(std::string msg, int fd) // No test
 	int len = send(fd, msg.c_str(), msg.length(), 0);
 	if (len < 0)
     {
-		perror("  send() failed");
+		if (errno == 9)
+			std::cout << RED << "(mocking message) " << RESET << msg << std::endl;
+		else
+			perror("  send() failed");
 		return 1;
     }
 	return 0;
