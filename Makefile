@@ -58,6 +58,8 @@ SRC =	$(addprefix $(SUBFILE1_PATH)/, $(SUBFILE1_SRC)) \
 		$(addprefix $(SUBFILE6_PATH)/, $(SUBFILE6_SRC)) \
 
 SERVER_MAIN = objects/main.o
+TESTER_MAIN = tester/main.o
+MOCK_MAIN = tester/mock_main.o
 
 # RULES #
 #
@@ -93,9 +95,9 @@ $(NAME): $(OBJS) $(SERVER_MAIN)
 $(TEST_PATH)/%.o: $(TEST_PATH)/%.cpp
 	$(CC) $(CXXFLAGS) $(INCLUDE) -c $< -o $@
 
-$(TEST): $(OBJS_TEST) tester/main.o tester/mock_main.o
-	$(CC) $(CXXFLAGS) $(INCLUDE) $(OBJS_TEST) tester/main.o -o $(TEST)
-	$(CC) $(CXXFLAGS) $(INCLUDE) $(OBJS_TEST) tester/mock_main.o -o mock
+$(TEST): $(OBJS_TEST) $(TESTER_MAIN) $(MOCK_MAIN)
+	$(CC) $(CXXFLAGS) $(INCLUDE) $(OBJS_TEST) $(TESTER_MAIN) -o $(TEST)
+	$(CC) $(CXXFLAGS) $(INCLUDE) $(OBJS_TEST) $(MOCK_MAIN) -o mock
 #	clear
 	$(GREEN) Program asembled $(RESET)
 	@echo "⠀⠀⠀	    ⣠⣴⣶⣿⣿⣷⣶⣄⣀⣀\n\
