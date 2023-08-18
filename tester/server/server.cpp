@@ -33,6 +33,7 @@ server::server( const server & var ) {	// No test
 server::~server( void ) { // No test
 
 	std::cout << "Server Destructor constructor called" << std::endl;
+	delete this->server_socket;
 }
 
 // OVERLOADING
@@ -388,6 +389,7 @@ void	test_server_construction(char *port, char *pass)
 		std::cout << (int)test_serv->server_socket->addr.sin_zero[i] << " ";
 	}
 	std::cout << "]\n\n";
+	delete test_serv;
 }
 
 void	print_poll_fd(int active_fds, poll_fd *poll_fds)
