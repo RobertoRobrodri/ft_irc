@@ -2,17 +2,21 @@
 #include "command/command.hpp"
 #include <iostream>
 #include <iomanip>
+#include <cctype>
+#include <limits>
 #include <unistd.h>
+#include <string>
 
 int main()
 {
-	int test = -1;
+	int test_num;
+	std::string input;
 	char *port = "6776";
 	char *pass = "pass";
 	server *serv;
 	while (true)
 	{
-		std::cout << "Which test would you like to run?\n" <<
+		std::cout << BLUE << "Which test would you like to run?\n" << RESET <<
 			"  1) Server construction\n" <<
 			"  2) Add user\n" <<
 			"  3) Delete user\n" <<
@@ -28,25 +32,41 @@ int main()
 			"  13) INVITE\n" <<
 			"  14) KICK\n" <<
 			"  15) [Exit tester]\n";
-		std::cin >> test;
-		
-		if (test > 1)
+		//std::getline(std::cin, input);
+		//input = std::cin.get();
+		std::cin >> input;
+		if (std::cin.fail())
+		{
+			std::cin.clear();
+			std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+			std::cin >> input;
+		}
+		test_num = std::stoi(input);
+	
+		if (test_num < 1 || test_num > 15)
+		{
+			std::cout << RED << "Please enter a valid value\n" << RESET;
+			continue;
+		}
+		else if (test_num == 1)
+		{
+			test_server_construction(port, pass);
+			continue;
+		}
+		else if (test_num != 15)
 		{
 			serv = new server(port, pass);
 			serv->init_pollfd();
 		}
-		switch (test)
+		switch (test_num)
 		{
-			case 1:
-				test_server_construction(port, pass);
-				break;
 			case 2:
 				test_add_user(serv, 4, "63.161.169.138", 3490);
-				test_add_user(serv, 5, "63.161.169.137", 3491);
-				test_add_user(serv, 6, "63.161.169.138", 3491);
+				//test_add_user(serv, 5, "63.161.169.137", 3491);
+				//test_add_user(serv, 6, "63.161.169.138", 3491);
 				serv->delete_user(1);
-				serv->delete_user(2);
-				serv->delete_user(3);
+				//serv->delete_user(2);
+				//serv->delete_user(3);
 				break;
 			case 3:
 				serv->add_user(4, build_address("63.161.169.138", 3490));
@@ -55,17 +75,17 @@ int main()
 			case 4:
 				serv->add_user(4, build_address("63.161.169.138", 3490));
 				test_getters(serv);
-				serv->delete_user(2);
+				serv->delete_user(1);
 				break;
 			case 5:
 				test_parse_message(serv, "USER paco");
 				break;
 			case 6:
 				serv->add_user(4, build_address("63.161.169.138", 3490));
-				serv->add_user(5, build_address("63.161.169.137", 3491));
+				//serv->add_user(5, build_address("63.161.169.137", 3491));
 				test_user_cmd(serv); 
 				serv->delete_user(1);
-				serv->delete_user(2);
+				//serv->delete_user(2);
 				break;
 			case 7:
 				serv->add_user(4, build_address("63.161.169.138", 3490));
@@ -74,36 +94,38 @@ int main()
 				serv->delete_user(1);
 				serv->delete_user(2);
 				break;
-			// fd_ready? execute_command?
 			case 8:
 				serv->add_user(4, build_address("63.161.169.138", 3490));
 				test_join_cmd(serv);
 				serv->delete_user(1);
 				break;
+			// fd_ready? execute_command?
 			case 9:
 			// pong
-				break;
+				return 0;
 			case 10:
 			// quit
-				break;
+				return 0;
 			case 11:
 			// privmsg
-				break;
+				return 0;
 			case 12:
 			// topic
-				break;
+				return 0;
 			case 13:
 			// invite
-				break;
+				return 0;
 			case 14:
 			// kick	
-				break;
+				return 0;
 			case 15:
 				std::cout << MAG << "See you next time!\n";
 				return 0;
 		}
+		std::cout << std::endl;
 		delete serv;
-		test = -1;
+		test_num = -1;
+		//std::cin.clear();
 	}
 	return (0);
 }
