@@ -112,7 +112,8 @@ int main()
 			// pong
 				break;
 			case 10:
-			// quit
+				serv->add_user(4, build_address("63.161.169.138", 3490));
+				test_quit_cmd(serv);
 				break;
 			case 11:
 			// privmsg
