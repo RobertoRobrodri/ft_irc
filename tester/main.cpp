@@ -38,8 +38,6 @@ int main()
 			"  13) INVITE\n" <<
 			"  14) KICK\n" <<
 			"  15) [Exit tester]\n";
-		//std::getline(std::cin, input);
-		//input = std::cin.get();
 		std::cin >> input;
 		if (std::cin.fail())
 		{
@@ -112,22 +110,22 @@ int main()
 			// fd_ready? execute_command?
 			case 9:
 			// pong
-				return 0;
+				break;
 			case 10:
 			// quit
-				return 0;
+				break;
 			case 11:
 			// privmsg
-				return 0;
+				break;
 			case 12:
 			// topic
-				return 0;
+				break;
 			case 13:
 			// invite
-				return 0;
+				break;
 			case 14:
 			// kick	
-				return 0;
+				break;
 			case 15:
 				std::cout << MAG << "See you next time!\n";
 				return 0;
