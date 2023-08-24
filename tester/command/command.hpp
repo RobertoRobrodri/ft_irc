@@ -28,5 +28,6 @@ void	test_user_cmd(server *server);
 void	test_nick_cmd(server *server);
 void	test_join_cmd(server *server);
 void	test_quit_cmd(server *server);
+void	test_privmsg_cmd(server *server);
 
 #endif

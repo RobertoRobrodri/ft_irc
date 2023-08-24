@@ -116,7 +116,11 @@ int main()
 				test_quit_cmd(serv);
 				break;
 			case 11:
-			// privmsg
+				serv->add_user(4, build_address("63.161.169.138", 3490));
+				serv->add_user(5, build_address("63.161.169.137", 3491));
+				test_privmsg_cmd(serv);
+				serv->delete_user(2);
+				serv->delete_user(1);
 				break;
 			case 12:
 			// topic
