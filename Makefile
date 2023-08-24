@@ -13,6 +13,7 @@ CC 			= c++
 INCLUDE 	= -std=c++98
 CXXFLAGS 	= -Wall -Wextra -g -fsanitize=address -Wno-c++11-compat-deprecated-writable-strings #-Werror
 TEST		= ircTester
+MOCK		= mock
 
 
 # PATHS #
@@ -67,6 +68,8 @@ all: $(NAME)
 
 test: $(TEST)
 
+mock: $(MOCK)
+
 SRCS = $(addprefix $(SRC_PATH)/, $(SRC))
 
 OBJS =  $(addprefix $(OBJ_PATH)/, $(SRC:%.cpp=%.o))
@@ -95,9 +98,12 @@ $(NAME): $(OBJS) $(SERVER_MAIN)
 $(TEST_PATH)/%.o: $(TEST_PATH)/%.cpp
 	$(CC) $(CXXFLAGS) $(INCLUDE) -c $< -o $@
 
-$(TEST): $(OBJS_TEST) $(TESTER_MAIN) $(MOCK_MAIN)
-	$(CC) $(CXXFLAGS) $(INCLUDE) $(OBJS_TEST) $(TESTER_MAIN) -o $(TEST)
+$(MOCK): $(OBJS_TEST) $(MOCK_MAIN)
 	$(CC) $(CXXFLAGS) $(INCLUDE) $(OBJS_TEST) $(MOCK_MAIN) -o mock
+	$(GREEN) Mock program created $(RESET)
+
+$(TEST): $(OBJS_TEST) $(TESTER_MAIN)
+	$(CC) $(CXXFLAGS) $(INCLUDE) $(OBJS_TEST) $(TESTER_MAIN) -o $(TEST)
 #	clear
 	$(GREEN) Program asembled $(RESET)
 	@echo "⠀⠀⠀	    ⣠⣴⣶⣿⣿⣷⣶⣄⣀⣀\n\
@@ -123,12 +129,14 @@ clean:
 	$(PURPLE) CLEANING OBJECTS $(RESET)
 	rm -rf $(OBJ_PATH)
 	rm -f $(TEST_PATH)/main.o
+	rm -f $(TEST_PATH)/mock_main.o
 	rm -f $(TEST_PATH)/*/*.o
 
 fclean: clean
 	$(PURPLE) CLEANING OBJECTS AND EXEC $(RESET)
 	rm -rf $(NAME)
 	rm -rf $(TEST)
+	rm -rf $(MOCK)
 
 re: fclean all
 
