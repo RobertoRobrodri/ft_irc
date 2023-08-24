@@ -17,7 +17,7 @@ void  cmd::quit(server &svr, int poll_fd_pos, std::string str) {
 
 void	test_quit_cmd(server *server)
 {
-	std::cout << BLUE << "Test user command\n";
+	std::cout << BLUE << "Test quit command\n";
 	std::cout << "==========================\n" << RESET;
 
 	std::cout << CYAN << "Test 1: Quit without message\n" << RESET;
@@ -29,7 +29,7 @@ void	test_quit_cmd(server *server)
 	print_list_of_users(server->list_of_users);
 
 	server->add_user(4, build_address("63.161.169.138", 3490));
-	std::cout <<  CYAN << "Test 2: Quit with message\n" << RESET;
+	std::cout <<  CYAN << "\nTest 2: Quit with message\n" << RESET;
 	std::cout << YELLOW << "QUIT :Gone to have lunch\n" << RESET;
 	print_poll_fd(server->_active_fds, server->poll_fds);
 	print_list_of_users(server->list_of_users);

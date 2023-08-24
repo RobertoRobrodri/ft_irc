@@ -52,15 +52,15 @@ void	test_nick_cmd(server *server)
 	std::cout << BLUE << "Test nick command\n";
 	std::cout << "==========================\n" << RESET;
 
-	std::cout << "Test 1: New nick\n" << RESET;
+	std::cout << CYAN << "Test 1: New nick\n" << RESET;
 	std::cout << YELLOW << "NICK Wiz\n" << RESET;
 	cmd::nick(*server, 1, "Wiz");
 	
-	std::cout << "Test 2: Repeated nick\n" << RESET;
+	std::cout <<  CYAN << "Test 2: Repeated nick\n" << RESET;
 	std::cout << YELLOW << "NICK Kilroy\n" << RESET;
 	cmd::nick(*server, 2, "Kilroy");
 	
-	std::cout << "Test 3: Missing nick\n" << RESET;
+	std::cout <<  CYAN << "Test 3: Missing nick\n" << RESET;
 	std::cout << YELLOW << "NICK\n" << RESET;
 	cmd::nick(*server, 1, "");
 
