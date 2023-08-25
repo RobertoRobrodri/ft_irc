@@ -130,7 +130,11 @@ int main()
 				serv->delete_user(1);
 				break;
 			case 13:
-			// invite
+				serv->add_user(4, build_address("63.161.169.138", 3490));
+				serv->add_user(5, build_address("63.161.169.137", 3491));
+				test_invite_cmd(serv);
+				serv->delete_user(2);
+				serv->delete_user(1);
 				break;
 			case 14:
 			// kick	
