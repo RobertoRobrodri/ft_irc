@@ -73,4 +73,4 @@ void	test_nick_cmd(server *server)
 	std::cout << YELLOW << ":Kilroy NICK *)=.&&&\n" << RESET;
 	cmd::nick(*server, 1, ":Kilroy NICK *)=.&&&");
 */
-	}
+}
