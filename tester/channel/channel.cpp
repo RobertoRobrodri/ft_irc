@@ -7,13 +7,11 @@ channel::channel( void ) : _user_limit(0) {
 }
 
 channel::channel( std::string str ) : _name(str), _user_limit(0) {
-  std::cout << "Parameter channel constructor called" << std::endl;
   return ;
 }
 
 channel::channel( const channel & var ) {
   
-  std::cout << "Copy channel constructor called" << std::endl;
   *this = var;
   return ;
   
@@ -21,13 +19,11 @@ channel::channel( const channel & var ) {
 
 channel::~channel( void ) {
   
-  std::cout << "Destructor channel called" << std::endl;
   return ;
 
 }
 
 channel & channel::operator=(const channel &tmp) {
-  std::cout << "Operator equalizer channel called" << std::endl;
   this->_name = tmp.get_name();
   this->_topic = tmp.get_topic();
   this->list_of_members = tmp.list_of_members;

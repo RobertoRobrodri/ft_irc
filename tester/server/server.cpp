@@ -33,8 +33,7 @@ server::server( const server & var ) {	// No test
 server::~server( void ) { // No test
 
 	std::cout << "Server Destructor constructor called" << std::endl;
-	delete this;
-
+	delete this->server_socket;
 }
 
 // OVERLOADING
@@ -289,18 +288,6 @@ channel *server::get_channel_from_name(std::string name) // No test
 }
 
 // TESTS
-void	test_getters(server *serv)
-{
-	std::cout << BLUE << "Test getters\n";
-	std::cout << "==========================\n" << RESET;
-
-	std::cout << "Host: " << serv->get_host() << std::endl;
-	std::cout << "Port: " << serv->get_port() << std::endl;
-	std::cout << "Password: " << serv->get_password() << std::endl;
-	std::cout << "Poll fd 1: " << serv->get_pollfd(1).fd << std::endl;
-	std::cout << "User 1: \n" << serv->get_user(4) << std::endl;
-}
-
 void	test_check_data_correct()	// Modify
 {
 	char *program = "./ircserv";
@@ -372,58 +359,37 @@ void	test_check_data_correct()	// Modify
 	std::cout << "Output: " << check_data_correct(argv) << "\n\n";
 }
 
-server	*test_server_construction(char *port, char *pass)
+void	test_server_construction(char *port, char *pass)
 {
 	std::cout << BLUE << "Test server construction\n";
 	std::cout << "==========================\n" << RESET;
-	server *serv;
+	server *test_serv;
 
-	serv = new server(port, pass);
-	std::cout << *serv << std::endl;
+	test_serv = new server(port, pass);
+	std::cout << *test_serv << std::endl;
 
 	std::map<std::string, command_function>::iterator it;
 
     std::cout << "Commands:" << std::endl;
-	for (it = serv->list_of_cmds.begin(); it != serv->list_of_cmds.end(); it++)
+	for (it = test_serv->list_of_cmds.begin(); it != test_serv->list_of_cmds.end(); it++)
 	{
     	std::cout << it->first << std::endl;
 	}
     std::cout << std::endl;
 
     std::cout << "Socket:" << std::endl;
-	std::cout << "File descriptor " << serv->server_socket->fd << std::endl
+	std::cout << "File descriptor " << test_serv->server_socket->fd << std::endl
 		<< "Sock_in \n" 
-		<< " - sin_family '\\x0" << (int)serv->server_socket->addr.sin_family << "'" << std::endl
-		<< " - sin_port " << serv->server_socket->addr.sin_port << std::endl
-		<< " - sin_addr " << serv->server_socket->addr.sin_addr.s_addr << std::endl
+		<< " - sin_family '\\x0" << (int)test_serv->server_socket->addr.sin_family << "'" << std::endl
+		<< " - sin_port " << test_serv->server_socket->addr.sin_port << std::endl
+		<< " - sin_addr " << test_serv->server_socket->addr.sin_addr.s_addr << std::endl
 		<< " - sin_zero [ ";
    	for (int i = 0; i < 8; i++)
 	{
-		std::cout << (int)serv->server_socket->addr.sin_zero[i] << " ";
+		std::cout << (int)test_serv->server_socket->addr.sin_zero[i] << " ";
 	}
 	std::cout << "]\n\n";
-
-	return serv;
-}
-
-void	test_add_user(server *serv, int fd, char *url, int port)
-{
-	std::cout << BLUE << "Test add user" << std::endl;
-	std::cout << "==================================================\n" << RESET;
-	std::cout << "Active fds: " << serv->_active_fds << std::endl;
-	
-	struct sockaddr_in myaddr;
-
-	myaddr.sin_family = AF_INET;
-	myaddr.sin_port = htons(port);
-	inet_aton(url, &myaddr.sin_addr);
-
-	serv->add_user(fd, myaddr);
-
-	std::cout << "New socket: " << fd << std::endl;
-	std::cout << "Active clients: " << serv->_active_fds << std::endl;
-	std::cout << "New user: " << std::endl;
-	std::cout << serv->list_of_users[fd] << std::endl;
+	delete test_serv;
 }
 
 void	print_poll_fd(int active_fds, poll_fd *poll_fds)
@@ -436,6 +402,43 @@ void	print_poll_fd(int active_fds, poll_fd *poll_fds)
  			<< "revents " << poll_fds[i].revents << std::endl;
 	}
 	std::cout << std::endl;
+}
+
+void	test_getters(server *serv)
+{
+	std::cout << BLUE << "Test getters\n";
+	std::cout << "==========================\n" << RESET;
+
+	std::cout << "Host: " << serv->get_host() << std::endl;
+	std::cout << "Port: " << serv->get_port() << std::endl;
+	std::cout << "Password: " << serv->get_password() << std::endl;
+	std::cout << "Pollfd 0 fd:\n" << serv->get_pollfd(0).fd << std::endl;
+	std::cout << "User 1: \n" << serv->get_user(4) << std::endl;
+}
+
+struct sockaddr_in	build_address(char *url, int port)
+{
+	struct sockaddr_in myaddr;
+
+	myaddr.sin_family = AF_INET;
+	myaddr.sin_port = htons(port);
+	inet_aton(url, &myaddr.sin_addr);
+
+	return myaddr;
+}
+
+void	test_add_user(server *serv, int fd, char *url, int port)
+{
+	std::cout << BLUE << "Test add user" << std::endl;
+	std::cout << "==================================================\n" << RESET;
+	std::cout << "Active fds: " << serv->_active_fds << std::endl;
+	
+	serv->add_user(fd, build_address(url, port));
+
+	std::cout << "New socket: " << fd << std::endl;
+	std::cout << "Active clients: " << serv->_active_fds << std::endl;
+	std::cout << "New user: " << std::endl;
+	std::cout << serv->list_of_users[fd] << std::endl;
 }
 
 void	print_list_of_users(std::map<int, user> &list_of_users)

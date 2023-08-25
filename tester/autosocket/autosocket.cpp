@@ -30,7 +30,7 @@ autosocket::autosocket( const autosocket & var ) {
 autosocket::~autosocket( void ) {
   
   std::cout << "Autosocket Destructor called" << std::endl;
-  delete this;
+  close(this->fd);
   return ;
 }
 

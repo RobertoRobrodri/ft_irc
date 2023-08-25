@@ -42,35 +42,35 @@ void	test_user_cmd(server *server)
 	std::cout << BLUE << "Test user command\n";
 	std::cout << "==========================\n" << RESET;
 
-	std::cout << "Test 1: Valid command user 1\n" << RESET;
+	std::cout << CYAN << "Test 1: Valid command user 1\n" << RESET;
 	std::cout << YELLOW << "USER guest tolmoon tolsun :Ronnie Reagan\n" << RESET;
-	cmd::username(*server, 1, "USER guest tolmoon tolsun :Ronnie Reagan");
+	cmd::username(*server, 1, "guest tolmoon tolsun :Ronnie Reagan");
 	
-	std::cout << "Test 2: Valid command user 2\n" << RESET;
+	std::cout <<  CYAN << "Test 2: Valid command user 2\n" << RESET;
 	std::cout << YELLOW << "USER ronnie tolmoon tolsun :Ronnie Reagan\n" << RESET;
-	cmd::username(*server, 2, "USER ronnie tolmoon tolsun :Ronnie Reagan");
+	cmd::username(*server, 2, "ronnie tolmoon tolsun :Ronnie Reagan");
 	
-	std::cout << "Test 3: Missing realname parameter\n" << RESET;
+	std::cout <<  CYAN << "Test 3: Missing realname parameter\n" << RESET;
 	std::cout <<  YELLOW << "USER guest tolmoon tolsun\n" << RESET;
-	cmd::username(*server, 1, "USER guest tolmoon tolsun");
+	cmd::username(*server, 1, "guest tolmoon tolsun");
 	
-	std::cout << "Test 4: Missing servername parameter\n" << RESET;
+	std::cout <<  CYAN << "Test 4: Missing servername parameter\n" << RESET;
 	std::cout <<  YELLOW << "USER guest tolmoon :Ronnie Reagan\n" << RESET;
-	cmd::username(*server, 1, "USER guest tolmoon :Ronnie Reagan");
+	cmd::username(*server, 1, "guest tolmoon :Ronnie Reagan");
 	
-	std::cout << "Test 5: Semicolons in hostname parameter\n" << RESET;
+	std::cout <<  CYAN << "Test 5: Semicolons in hostname parameter\n" << RESET;
 	std::cout <<  YELLOW << "USER guest :tolmoon tolsun :Ronnie Reagan\n" << RESET;
-	cmd::username(*server, 1, "USER guest :tolmoon tolsun :Ronnie Reagan");
+	cmd::username(*server, 1, "guest :tolmoon tolsun :Ronnie Reagan");
 	
-	std::cout << "Test 6: Missing semicolon for realname\n" << RESET;
+	std::cout <<  CYAN << "Test 6: Missing semicolon for realname\n" << RESET;
 	std::cout <<  YELLOW << "USER guest tolmoon tolsun Ronnie Reagan\n" << RESET;
-	cmd::username(*server, 1, "USER guest tolmoon tolsun Ronnie Reagan");
+	cmd::username(*server, 1, "guest tolmoon tolsun Ronnie Reagan");
 	
-	std::cout << "Test 7: Special characters in username parameter\n" << RESET;
+	std::cout <<  CYAN << "Test 7: Special characters in username parameter\n" << RESET;
 	std::cout <<  YELLOW << "USER pwg03[}*]g tolmoon tolsun :Ronnie Reagan\n" << RESET;
-	cmd::username(*server, 1, "USER pwg03[}*]g tolmoon tolsun :Ronnie Reagan");
+	cmd::username(*server, 1, "pwg03[}*]g tolmoon tolsun :Ronnie Reagan");
 	
-	std::cout << "Test 8: Already registred error\n" << RESET;
+	std::cout <<  CYAN << "Test 8: Already registred error\n" << RESET;
 	std::cout << YELLOW << "USER ronnie tolmoon tolsun :Ronnie Reagan\n" << RESET;
-	cmd::username(*server, 2, "USER ronnie tolmoon tolsun :Ronnie Reagan");
+	cmd::username(*server, 2, "ronnie tolmoon tolsun :Ronnie Reagan");
 }

@@ -105,9 +105,10 @@ std::ostream &operator<<(std::ostream& os, const server &tmp);
 // TESTS
 void	test_getters(server *serv);
 void	test_check_data_correct();
-server	*test_server_construction( char *arg2, char *arg3);
+void	test_server_construction(char *port, char *pass);
 void	print_poll_fd(int active_fds, poll_fd *poll_fds);
 void	print_list_of_users(std::map<int, user> &list_of_users);
+struct sockaddr_in	build_address(char *url, int port);
 void	test_add_user(server *serv, int fd, char *url, int port);
 void	test_delete_user(server *serv, int fd_pos);
 void	test_parse_message(server *serv, std::string msg);

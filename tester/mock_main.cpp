@@ -6,11 +6,9 @@
 
 int main()
 {
-	test_check_data_correct();
-	
-	char *arg2 = "6776";
-	char *arg3 = "pass";
-	server *serv = test_server_construction(arg2, arg3);
+	char *port = "6776";
+	char *pass = "pass";
+	server *serv = new server(port, pass);
 	test_connection(serv);
 
 	return (0);
