@@ -21,7 +21,7 @@ void  cmd::username(server &svr, int poll_fd_pos, std::string str) {
   // Separar el resto del realname
   std::vector<std::string> cmd_params = ft_split(str, ':');
   std::vector<std::string> other_params = ft_split(cmd_params[0], ' ');
-  if (other_params.size() + 1 < 4)
+  if (other_params.size() + 1 < 4 || cmd_params.empty())
   {
     svr.send_message(": 461 USER : <command> :Not enough parameters \r\n", usr.get_fd());
     return ;

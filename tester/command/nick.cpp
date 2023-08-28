@@ -25,7 +25,7 @@ void cmd::nick(server &svr, int poll_fd_pos, std::string str) {
   user &usr = svr.get_user(pollfd.fd);
   //set nick
   user *nick;
-  if (str == "NICK")
+  if (str == "")
   {
 	  svr.send_message(": 431: No nickname was given \r\n", usr.get_fd());
 	  return ;

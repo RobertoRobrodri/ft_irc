@@ -37,7 +37,7 @@ void  cmd::join(server &svr, int poll_fd_pos, std::string str) {
   std::vector<std::string> channel_params = ft_split(str, ' ');
   poll_fd pollfd = svr.get_pollfd(poll_fd_pos);
   user &usr = svr.get_user(pollfd.fd);
-  if (str == "JOIN")
+  if (str == "")
   {
 	  svr.send_message(": 461 JOIN :Not enough parameters \r\n", usr.get_fd());
     return ;
@@ -117,6 +117,9 @@ void	test_join_cmd(server *server)
 	std::cout << BLUE << "Test join command\n";
 	std::cout << "==========================\n" << RESET;
 
+	cmd::nick(1, "nick_1");
+	cmd::nick(2, "nick_2");
+
 	std::cout <<  CYAN << "Test 1: Join and create new channel\n" << RESET;
 	std::cout << YELLOW << "JOIN #foobar\n" << RESET;
 	cmd::join(*server, 1, "#foobar");
@@ -147,7 +150,8 @@ void	test_join_cmd(server *server)
 	cmd::join(*server, 1, "");
 */
 
-	std::cout <<  CYAN << "Test 8: Comma in channel name\n" << RESET;
-	std::cout << YELLOW << "JOIN #The,channel\n" << RESET;
-	cmd::join(*server, 1, "#The,channel");
+	std::cout <<  CYAN << "Test 7: Join channel with topic\n" << RESET;
+	std::cout << YELLOW << "JOIN #oofbar\n" << RESET;
+	cmd::topic(*server, 1, "#oofbar test_topic");
+	cmd::join(*server, 2, "#oofbar");
 }
