@@ -117,8 +117,8 @@ void	test_join_cmd(server *server)
 	std::cout << BLUE << "Test join command\n";
 	std::cout << "==========================\n" << RESET;
 
-	cmd::nick(1, "nick_1");
-	cmd::nick(2, "nick_2");
+	cmd::nick(*server, 1, "nick_1");
+	cmd::nick(*server, 2, "nick_2");
 
 	std::cout <<  CYAN << "Test 1: Join and create new channel\n" << RESET;
 	std::cout << YELLOW << "JOIN #foobar\n" << RESET;
