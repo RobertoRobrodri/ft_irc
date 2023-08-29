@@ -24,7 +24,8 @@ INSTALL:
 
 # Documentation
 
-https://modern.ircdocs.horse/	- Summary
+https://www.rfc-editor.org/rfc/rfc1459.html - Docs old irc
+https://modern.ircdocs.horse/	- Summary modern irc
 https://en.wikipedia.org/wiki/Internet_Relay_Chat - General Info
 https://www.rfc-editor.org/rfc/rfc2812  - Client Protocol
 https://www.rfc-editor.org/rfc/rfc2813  - Server Protocol
@@ -34,6 +35,7 @@ https://www.w3.org/Addressing/draft-mirashi-url-irc-01.txt#:~:text=IRC%20servers
 https://www.geekshed.net/tag/limits/ - IRC LIMITS
 https://swtch.com/irc/irc.h - List of Replys
 https://www.quakenet.org/help/general/how-do-i-setunset-channeluser-modes - Useful example for mode command
+https://alien.net.au/irc/irc2numerics.html - Numeric replies
 
 ### Socket stuff
 https://www.gta.ufrj.br/ensino/eel878/sockets/sockaddr_inman.html
@@ -71,7 +73,7 @@ O_NONBLOCK   Non-blocking I/O; if no data is available to a read call, or if a w
 
 # TAREAS
 
-[ ] Test unitarios (Zome)
+[✅] Test unitarios (Zome)
 [✅] Encontrar cliente de referencia y probarlo (Rbrdr)
 [ ] Enviar confrmación cuando existen nick y user
 [ ] Sistematizar command replies (Zome)
