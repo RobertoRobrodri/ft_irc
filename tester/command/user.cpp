@@ -85,4 +85,9 @@ void	test_user_cmd(server *server)
 	std::cout <<  CYAN << "Test 7: Already registred error\n" << RESET;
 	std::cout << YELLOW << "USER ronnie tolmoon tolsun :Ronnie Reagan\n" << RESET;
 	cmd::username(*server, 2, "ronnie tolmoon tolsun :Ronnie Reagan");
+	
+	std::cout <<  CYAN << "Test 8: Fully register user\n" << RESET;
+	std::cout << YELLOW << "USER ronnie tolmoon tolsun :Ronnie Reagan\n" << 
+		"NICK Ron\n" << RESET;
+	cmd::nick(*server, 2, "Ron");
 }
