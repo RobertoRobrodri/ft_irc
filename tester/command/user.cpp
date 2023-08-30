@@ -19,18 +19,18 @@ void  cmd::username(server &svr, int poll_fd_pos, std::string str) {
   poll_fd pollfd = svr.get_pollfd(poll_fd_pos);
   user &usr = svr.get_user(pollfd.fd);
 
-  std::vector<std::string> cmd_params = ft_split(str, ':');// Separar el resto del realname 
-  std::vector<std::string> other_params = ft_split(cmd_params[0], ' ');
-  if (other_params.size() + 1 < 4 || cmd_params.size() < 2)
+  std::vector<std::string> realname_split = ft_split(str, ':');// Separate realname 
+  std::vector<std::string> first_params_split = ft_split(realname_split[0], ' ');
+  if (first_params_split.size() + 1 < 4 || realname_split.size() < 2)
   {
     svr.send_message(ERR_NEEDMOREPARAMS(command), usr.get_fd());
     return ;
   }
   
-  std::string realname = cmd_params[1];
-  std::string username = other_params[0];
-  std::string hostname = other_params[1];
-  std::string servername = other_params[2];
+  std::string username = first_params_split[0];
+  std::string hostname = first_params_split[1];
+  std::string servername = first_params_split[2];
+  std::string realname = realname_split[1];
 
   std::map<int, user> users_lst = svr.get_list_of_users();
   std::map<int, user>::iterator it;
@@ -42,13 +42,11 @@ void  cmd::username(server &svr, int poll_fd_pos, std::string str) {
 		  return ;
 	  }
   }
-  usr.set_username(other_params[0]);
-  usr.set_hostname(other_params[1]);
-  usr.set_servername(other_params[2]);
+  usr.set_username(username);
+  usr.set_hostname(hostname);
+  usr.set_servername(servername);
   usr.set_realname(realname);
  
-  // IF registered --> Send RPL_WELCOME
-  //TODO meterlo en el define
   usr.is_registered(svr);
   std::cout << usr << std::endl;
 }
