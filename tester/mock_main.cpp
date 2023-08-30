@@ -6,7 +6,7 @@
 
 int main()
 {
-	char *port = "6776";
+	char *port = "6667";
 	char *pass = "pass";
 	server *serv = new server(port, pass);
 	test_connection(serv);
