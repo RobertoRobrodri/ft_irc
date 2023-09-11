@@ -20,7 +20,7 @@ void cmd::topic(server &svr, int poll_fd_pos, std::string str) //TODO los modos
 {
   poll_fd pollfd = svr.get_pollfd(poll_fd_pos);
   user &usr = svr.get_user(pollfd.fd);
-  if (str == "TOPIC")
+  if (str == "")
   {
     svr.send_message(": 461 TOPIC: Not enough parameters \r\n", usr.get_fd());
     return ;
@@ -82,6 +82,10 @@ void	test_topic_cmd(server *server)
 
 	// Check if the server sends RPL_TOPIC
 	std::cout << CYAN << "Test 3: Check a channel's topic\n" << RESET;
-	std::cout << YELLOW << "TOPIC #TestChannel :Other topic\n" << RESET;
-	cmd::topic(*server, 1, "#TestChannel :Other topic");
+	std::cout << YELLOW << "TOPIC #TestChannel\n" << RESET;
+	cmd::topic(*server, 1, "#TestChannel");
+	
+	std::cout << CYAN << "\nTest 4: No parameters\n" << RESET;
+	std::cout << YELLOW << "TOPIC\n" << RESET;
+	cmd::topic(*server, 1, "");
 }

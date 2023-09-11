@@ -1,4 +1,5 @@
 #include "user.hpp"
+#include "../command/reply.hpp"
 
 user::user( void ) : _fd(0), _is_registered(false), _n_channels(0), _op(false) {
   return ;
@@ -47,10 +48,13 @@ std::ostream &operator<<(std::ostream& os, const user &tmp) {
 
 void  user::is_registered(server &svr)
 {
-  if (!this->get_username().empty() && !this->get_nick().empty() && !this->_is_registered)
+  if (!this->_is_registered && !this->get_username().empty() && !this->get_nick().empty())
   {
     this->_is_registered = true;
-    svr.send_message(": 001 " + this->get_nick() + " : welcome " + this->get_nick() + "\r\n", this->get_fd());
+	std::string nick = this->get_nick();
+	std::string user = this->get_username();
+	std::string host = this->get_hostname();
+    svr.send_message(RPL_WELCOME(nick, user, host), this->get_fd());
   }
 }
 

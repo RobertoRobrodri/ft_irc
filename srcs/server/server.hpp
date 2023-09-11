@@ -4,7 +4,7 @@
 #define	sock_addr	struct sockaddr
 #define	poll_fd		struct pollfd
 #define	MAX_CLIENTS	5
-#define	TIMEOUT		700
+#define	TIMEOUT		-1
 #define MSG_SIZE	512
 
 // COLORS
