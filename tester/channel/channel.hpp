@@ -23,6 +23,7 @@ class	channel {
 	public:
 
 		channel 			( std::string str );
+		channel 			( std::string c_name, std::string password );
 		channel 			( const channel & var );
 		~channel			( void );
 		channel &operator=	(const channel &tmp);

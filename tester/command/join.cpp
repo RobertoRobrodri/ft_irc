@@ -27,33 +27,33 @@
 //           ERR_NOSUCHCHANNEL               ERR_TOOMANYCHANNELS
 //           RPL_TOPIC
 
-void	join_existing_channel(channel *chn, user &usr)
+void	join_existing_channel(server &svr, channel *chn, user &usr, std::string password)
 {
 	std::string channel = chn->get_name();
 	std::string user = usr.get_nick();
 	if (chn->is_user_in_channel(usr) == true)
 	{
 		svr.send_message(ERR_USERONCHANNEL(user, channel), usr.get_fd());
-		continue ;
+		return ;
 	}
 	else
 	{ 
 		if (chn->get_mode().find("i") != std::string::npos)// Invite only channel
         {
-			svr.send_message(ERR_INVITEONLYCHAN(channel), usr.get_fd());
-			continue ;
+          svr.send_message(ERR_INVITEONLYCHAN(channel), usr.get_fd());
+			return ;
         } 
         if (chn->get_mode().find("k") != std::string::npos)// Requires password
         {
-          if (passwords.empty())
+          if (password.empty())
           {
             svr.send_message(": 475 " + chn->get_name() + ":Cannot join channel (+k) \r\n", usr.get_fd());
-            continue ;
+            return ;
           }
-          if (chn->get_password().compare(*password_it++))
+          if (chn->get_password().compare(password))
           {
             svr.send_message(": 475 " + chn->get_name() + ":Cannot join channel (+k) \r\n", usr.get_fd());
-            continue ;
+            return ;
           }
         }
         if (chn->get_mode().find("l") != std::string::npos)
@@ -61,7 +61,7 @@ void	join_existing_channel(channel *chn, user &usr)
           if (chn->get_list_of_members().size() >= chn->get_user_limit())
           {
             svr.send_message(": 471 " + chn->get_name() + ":Cannot join channel (+l) \r\n", usr.get_fd());
-            continue ;
+            return ;
           }
         }
         if (usr.get_n_channels() >= MAX_NUMBER_OF_CHN)
@@ -88,28 +88,40 @@ void  cmd::join(server &svr, int poll_fd_pos, std::string str) {
   }
   // Me pueden pasar una serie de canales separados por ','
   // TODO Channel_params[1] debe contener las contraseñas, si se utilizan
-  std::vector<std::string> channels_to_join = ft_split(channel_params[0], ',');
-  std::vector<std::string> passwords;
-  std::vector<std::string>::iterator password_it;
-  if (channel_params.size() >= 2)
+  std::map<std::string, std::string>channels_and_passwords;
+  std::vector<std::string> channels = ft_split(channel_params[0], ',');
+  std::vector<std::string>::iterator channel_it;
+  if (channel_params.size() >= 2) // we have passwords
   {
-    passwords = ft_split(channel_params[1], ',');
-    password_it = passwords.begin();
+    std::vector<std::string> passwords = ft_split(channel_params[1], ',');
+    std::vector<std::string>::iterator password_it = passwords.begin();
+    while (password_it != passwords.end())
+    {
+      channels_and_passwords.insert(std::pair<std::string, std::string>(*channel_it, *password_it));
+      password_it++;
+      channel_it++;
+    }
   }
-  for (std::vector<std::string>::iterator it = channels_to_join.begin(); it != channels_to_join.end(); it++)
+  while (channel_it != channels.end())
   {
-    channel *chn = svr.get_channel_from_name(*it);
+      channels_and_passwords.insert(std::pair<std::string, std::string>(*channel_it, ""));
+      channel_it++;
+  }
+  for (std::map<std::string, std::string>::iterator it = channels_and_passwords.begin(); it != channels_and_passwords.end(); it++)
+  {
+    channel *chn = svr.get_channel_from_name(it->first);
     if (chn)
     {
+      join_existing_channel(svr, chn, usr, it->second);
     }
     else
     {
       if (usr.get_n_channels() >= MAX_NUMBER_OF_CHN)
       {
-            svr.send_message(": 405 " + *it + ":You have joined too many channels\r\n" , usr.get_fd());
+            svr.send_message(": 405 " + it->first + ":You have joined too many channels\r\n" , usr.get_fd());
             return ;
       }
-      svr.create_channel(usr, *it);
+      svr.create_channel(usr, it->first, it->second);
     }
   }
 }

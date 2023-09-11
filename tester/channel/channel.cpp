@@ -10,6 +10,10 @@ channel::channel( std::string str ) : _name(str), _user_limit(0) {
   return ;
 }
 
+channel::channel( std::string c_name, std::string password ) : _name(c_name), _password(password), _user_limit(0) {
+  return ;
+}
+
 channel::channel( const channel & var ) {
   
   *this = var;
