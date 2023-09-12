@@ -4,6 +4,7 @@
 #include <string>
 #include <iostream>
 #include "../server/server.hpp"
+#include "../command/reply.hpp"
 #include <algorithm>
 
 class	user;
