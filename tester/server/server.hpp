@@ -96,7 +96,7 @@ class	server {
 		static bool	send_message(std::string msg, int fd);
 		user	*get_user_from_nick(std::string nick);
 		channel *get_channel_from_name(std::string name);
-		void	create_channel(user &usr, std::string name);
+		void	create_channel(user &usr, std::string name, std::string password);
 };
 
 std::ostream &operator<<(std::ostream& os, const server &tmp);
