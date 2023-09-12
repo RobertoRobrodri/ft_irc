@@ -10,6 +10,10 @@ channel::channel( std::string str ) : _name(str), _user_limit(0) {
   return ;
 }
 
+channel::channel( std::string c_name, std::string password ) : _name(c_name), _password(password), _user_limit(0) {
+  return ;
+}
+
 channel::channel( const channel & var ) {
   
   *this = var;
@@ -50,17 +54,24 @@ std::ostream &operator<<(std::ostream& os, const channel &tmp) {
 
 void	channel::add_member(user &usr)
 {
-  usr.set_n_channels(usr.get_n_channels() + 1);
+  	usr.set_n_channels(usr.get_n_channels() + 1);
 	this->list_of_members.push_back(usr);
-  std::string members;
-  std::cout << "Join successful! " << std::endl;
+  /*
+	std::cout << "Join successful! " << std::endl;
   std::cout << usr << std::endl;
-  //RPL_TOPIC
-  server::send_message(":332 " + this->get_name() + " :" + this->get_topic() + "\r\n", usr.get_fd());
-  //RPL_NAMREPLY
+  */
+  std::string channel = this->get_name();
+  
+  std::string topic = this->get_topic();
+  if (topic.empty())
+  	server::send_message(RPL_NOTOPIC(channel), usr.get_fd());
+  else
+  	server::send_message(RPL_TOPIC(channel, topic), usr.get_fd());
+  
+  std::string members;
   for (std::vector<user>::iterator it = this->list_of_members.begin(); it != this->list_of_members.end(); it++)
     members += (it->get_nick() + " ");
-  server::send_message(":353 " + members + "\r\n", usr.get_fd());
+  server::send_message(RPL_NAMREPLY(channel, members), usr.get_fd());
 }
 
 void	channel::rmv_member(user &usr)
@@ -126,12 +137,12 @@ void 	channel::parse_mode_flag(std::string &modes, std::vector<std::string> mode
 			case '+':
 			{
 				sign = true;
-        break;
+        		break;
 			}
 			case '-':
 			{
 				sign = false;
-        break;
+        		break;
 			}
 			case 'o':
 			{
@@ -140,7 +151,7 @@ void 	channel::parse_mode_flag(std::string &modes, std::vector<std::string> mode
 					break;
 				if (this->is_user_in_channel(*usr))
 					this->set_user_operator(*usr, sign);
-        break;
+        		break;
 			}
 			// Invite only
 			case 'i':
