@@ -62,15 +62,22 @@ void		user::send_to_channel(channel *chn, server &svr, std::string chn_name, std
 {
   if(chn)
   {
-    if (chn->is_user_in_channel(*this)) //TODO habria que comprobar o de los modos también
+    if (chn->is_user_in_channel(*this))//TODO habria que comprobar o de los modos también
     {
       for (size_t i = 0; i < chn->get_list_of_members().size(); i++)
         if (chn->get_list_of_members()[i].get_nick() != this->get_nick())
           svr.send_message("From " + chn_name + ":\n" + msg + "\n", chn->get_list_of_members()[i].get_fd());
     }
     else
-      svr.send_message(": 404 " + chn_name + ": Cannot send to channel \r\n", this->get_fd());
+      svr.send_message(ERR_CANNOTSENDTOCHAN(chn_name), this->get_fd());
+	/*
+	 Sent to a user who is either (a) not on a channel
+     which is mode +n or (b) not a chanop (or mode +v) on
+     a channel which has mode +m set and is trying to send
+     a PRIVMSG message to that channel.
+	*/
   }
   else
-    svr.send_message(": 401 " + chn_name + ": No such nick/channel \r\n", this->get_fd());
+    svr.send_message(ERR_NOSUCHNICK(chn_name), this->get_fd());
+
 }
