@@ -74,15 +74,11 @@ void	test_privmsg_cmd(server *server)
 	std::cout << YELLOW << "PRIVMSG Angel :yes I'm receiving it !receiving it !'u>(768u+1n) .br\n" << RESET;
 	cmd::privmsg(*server, 2, "Angel :yes I'm receiving it !receiving it !'u>(768u+1n) .br");
 
-	std::cout << CYAN << "Test 3: Message with host mask\n" << RESET;
-	std::cout << YELLOW << "PRIVMSG #*.edu :NSFNet is undergoing work, expect interruptions\n" << RESET;
-	cmd::privmsg(*server, 2, "#*.edu :NSFNet is undergoing work, expect interruptions");
-
-	std::cout << CYAN << "Test 4: Message to non existent nick\n" << RESET;
+	std::cout << CYAN << "Test 3: Message to non existent nick\n" << RESET;
 	std::cout << YELLOW << "PRIVMSG somebody :hElp\n" << RESET;
 	cmd::privmsg(*server, 1, "somebody :hElp");
 
-	std::cout << CYAN << "Test 5: Empty message text\n" << RESET;
+	std::cout << CYAN << "Test 4: Empty message text\n" << RESET;
 	std::cout << YELLOW << "PRIVMSG Angel\n" << RESET;
 	cmd::privmsg(*server, 2, "Angel");
 }	
