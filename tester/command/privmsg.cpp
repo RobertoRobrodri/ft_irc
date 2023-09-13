@@ -26,7 +26,7 @@
 void  cmd::privmsg(server &svr, int poll_fd_pos, std::string str) {
   poll_fd pollfd = svr.get_pollfd(poll_fd_pos);
   user &usr = svr.get_user(pollfd.fd);
-  if (str == "PRIVMSG")
+  if (str == "")
   {
 	  svr.send_message(": 411: No recipient given (PRIVMSG) \r\n", usr.get_fd());
 	  return ;

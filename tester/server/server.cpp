@@ -241,9 +241,14 @@ void	server::execute_commands(int poll_fd_pos, std::map<std::string, std::string
 	}
 }
 
-void	server::create_channel(user &usr, std::string name) // No test
+void	server::create_channel(user &usr, std::string name, std::string password) // No test
 {
-	channel cnn(name);
+	if (name[0] != '#' && name[0] != '&')
+	{
+		std::string channel_mark("#");
+		name.insert(0, channel_mark);
+	}
+	channel cnn(name, password);
 	usr.set_op(true);
 	cnn.add_member(usr);
 	usr.set_op(false);

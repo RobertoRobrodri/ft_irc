@@ -71,22 +71,21 @@ O_NONBLOCK   Non-blocking I/O; if no data is available to a read call, or if a w
 
 # TAREAS
 
-[ ] Test unitarios (Zome)
+[✅] Test unitarios (Zome)
 [✅] Encontrar cliente de referencia y probarlo (Rbrdr)
-[ ] Comandos NICK y USER (Enviar confrmación cuando existen ambos)
+[✅] Comandos NICK y USER (Enviar confrmación cuando existen ambos)
 [ ] Testear que los comandos no se bloquean
-[ ] Añadir comandos para crear y unirse a un canal
-[ ] Comandos incorrectos
+[✅] Añadir comandos para crear y unirse a un canal
+[✅] Comandos incorrectos
 [✅] Kill cliente
 [✅] Kill conexión
 [ ] Todos los comandos de operación de canales
-[ ] Probar conexión irc
-[ ] Mensajes privados y avisos
+[✅] Probar conexión irc
+[✅] Mensajes privados y avisos
 [ ] Privilegios de usuario
-[ ] serv::wait_for_connection change TIMEOUT
-[ ] serv::wait_for_connection check ping clients
-[ ] autosock::server_listening revise setsockopt flags
-[ ] autosock::server_listening define max size for poll
+[✅] serv::wait_for_connection change TIMEOUT
+[✅] autosock::server_listening revise setsockopt flags
+[✅] autosock::server_listening define max size for poll
 =======
 
 
