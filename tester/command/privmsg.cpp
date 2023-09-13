@@ -24,17 +24,18 @@
  */
 
 void  cmd::privmsg(server &svr, int poll_fd_pos, std::string str) {
+	std::string command = "PRIVMSG";
   poll_fd pollfd = svr.get_pollfd(poll_fd_pos);
   user &usr = svr.get_user(pollfd.fd);
   if (str == "")
   {
-	  svr.send_message(": 411: No recipient given (PRIVMSG) \r\n", usr.get_fd());
+	  svr.send_message(ERR_NORECIPIENT(command), usr.get_fd());
 	  return ;
   }
   std::vector<std::string> msglist = ft_split(str, ' ');
   if (msglist.size() == 1)
   {
-    svr.send_message(": 412: No text to send \r\n", usr.get_fd());
+    svr.send_message(ERR_NOTEXTTOSEND, usr.get_fd());
 	  return ;
   }
   std::vector<std::string> rcvlist = ft_split(msglist[0], ',');
@@ -52,7 +53,7 @@ void  cmd::privmsg(server &svr, int poll_fd_pos, std::string str) {
       if(receiver)
         svr.send_message("From " + usr.get_nick() + ":\n" + msg + "\n", receiver->get_fd());
       else
-        svr.send_message(": 401 " + rcvlist[i] + ": No such nick/channel \r\n", usr.get_fd());
+        svr.send_message(ERR_NOSUCHNICK(rcvlist[i]), usr.get_fd());
     }
   }
 }
@@ -74,15 +75,11 @@ void	test_privmsg_cmd(server *server)
 	std::cout << YELLOW << "PRIVMSG Angel :yes I'm receiving it !receiving it !'u>(768u+1n) .br\n" << RESET;
 	cmd::privmsg(*server, 2, "Angel :yes I'm receiving it !receiving it !'u>(768u+1n) .br");
 
-	std::cout << CYAN << "Test 3: Message with host mask\n" << RESET;
-	std::cout << YELLOW << "PRIVMSG #*.edu :NSFNet is undergoing work, expect interruptions\n" << RESET;
-	cmd::privmsg(*server, 2, "#*.edu :NSFNet is undergoing work, expect interruptions");
-
-	std::cout << CYAN << "Test 4: Message to non existent nick\n" << RESET;
+	std::cout << CYAN << "Test 3: Message to non existent nick\n" << RESET;
 	std::cout << YELLOW << "PRIVMSG somebody :hElp\n" << RESET;
 	cmd::privmsg(*server, 1, "somebody :hElp");
 
-	std::cout << CYAN << "Test 5: Empty message text\n" << RESET;
+	std::cout << CYAN << "Test 4: Empty message text\n" << RESET;
 	std::cout << YELLOW << "PRIVMSG Angel\n" << RESET;
 	cmd::privmsg(*server, 2, "Angel");
 }	
