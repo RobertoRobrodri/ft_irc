@@ -24,6 +24,7 @@ INSTALL:
 
 # Documentation
 
+https://www.rfc-editor.org/rfc/rfc1459.html - Docs old irc
 https://modern.ircdocs.horse/	- Summary
 https://en.wikipedia.org/wiki/Internet_Relay_Chat - General Info
 https://www.rfc-editor.org/rfc/rfc2812  - Client Protocol
