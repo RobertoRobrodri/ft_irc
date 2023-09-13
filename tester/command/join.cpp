@@ -144,14 +144,12 @@ void	test_join_cmd(server *server)
 	std::cout << YELLOW << "JOIN #foo,&bar fubar\n" << RESET;
 	cmd::join(*server, 1, "#bar,&bar fubar");
 
-/* Failed test stops the rest of the execution
-	std::cout << "Test 5: Not enough parameters\n" << RESET;
-	std::cout << YELLOW << "JOIN\n" << RESET;
-	cmd::join(*server, 1, "");
-*/
-
 	std::cout <<  CYAN << "Test 7: Join channel with topic\n" << RESET;
 	std::cout << YELLOW << "JOIN #oofbar\n" << RESET;
 	cmd::topic(*server, 1, "#oofbar test_topic");
 	cmd::join(*server, 2, "#oofbar");
+
+	std::cout  <<  CYAN << "Test 8: Not enough parameters\n" << RESET;
+	std::cout << YELLOW << "JOIN\n" << RESET;
+	cmd::join(*server, 1, "");
 }
