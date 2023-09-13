@@ -52,47 +52,6 @@
            ERR_UNKNOWNMODE                 ERR_NOSUCHCHANNEL
            ERR_USERSDONTMATCH              RPL_UMODEIS
            ERR_UMODEUNKNOWNFLAG
-
-   Examples:
-
-           Use of Channel Modes:
-
-MODE #Finnish +im               ; Makes #Finnish channel moderated and
-                                'invite-only'.
-
-MODE #Finnish +o Kilroy         ; Gives 'chanop' privileges to Kilroy on
-                                channel #Finnish.
-
-MODE #Finnish +v Wiz            ; Allow WiZ to speak on #Finnish.
-
-MODE #Fins -s                   ; Removes 'secret' flag from channel
-                                #Fins.
-
-MODE #42 +k oulu                ; Set the channel key to "oulu".
-
-MODE #eu-opers +l 10            ; Set the limit for the number of users
-                                on channel to 10.
-
-MODE &oulu +b                   ; list ban masks set for channel.
-
-MODE &oulu +b *!*@*             ; prevent all users from joining.
-
-MODE &oulu +b *!*@*.edu         ; prevent any user from a hostname
-                                matching *.edu from joining.
-
-        Use of user Modes:
-
-:MODE WiZ -w                    ; turns reception of WALLOPS messages
-                                off for WiZ.
-
-:Angel MODE Angel +i            ; Message from Angel to make themselves
-                                invisible.
-
-MODE WiZ -o                     ; WiZ 'deopping' (removing operator
-                                status).  The plain reverse of this
-                                command ("MODE WiZ +o") must not be
-                                allowed from users since would bypass
-                                the OPER command.
 */
 void cmd::mode(server &svr, int poll_fd_pos, std::string str)
 {
@@ -131,11 +90,78 @@ void	test_mode_cmd(server *server)
 	std::cout << BLUE << "Test mode command\n";
 	std::cout << "==========================\n" << RESET;
 	
+	cmd::nick(*server, 1, "nick_1");
+	cmd::nick(*server, 2, "nick_2");
+	cmd::nick(*server, 3, "nick_3");
 	cmd::join(*server, 1, "#TestChannel");
+	cmd::join(*server, 2, "#TestChannel");
+	cmd::join(*server, 3, "#TestChannel");
     channel *channel1 = server->get_channel_from_name("#TestChannel");
 
-	std::cout << CYAN << "Test 1: \n" << RESET;
-	std::cout << YELLOW << "MODE\n" << RESET;
-	cmd::topic(*server, 1, "");
+	std::cout << CYAN << "Test 1: Make channel moderated and invite-only\n" << RESET;
+	std::cout << YELLOW << "MODE #TestChannel +im\n" << RESET;
+	cmd::mode(*server, 1, "#TestChannel +im");
 	std::cout << *channel1 << std::endl;
+
+	/* Chanop not implemented
+	std::cout << CYAN << "Test 2: Give 'chanop' privileges to nick_2 on channel #TestChannel\n" << RESET;
+	std::cout << YELLOW << "MODE #TestChannel +o nick_2\n" << RESET;
+	cmd::mode(*server, 1, "#TestChannel +o nick_2");
+	std::cout << *channel1 << std::endl;
+*/
+	std::cout << CYAN << "Test 3: Allow nick_3 to speak on moderated channel #TestChannel\n" << RESET;
+	std::cout << YELLOW << "MODE #TestChannel +v nick_3\n" << RESET;
+	cmd::mode(*server, 1, "#TestChannel +v nick_3");
+	std::cout << *channel1 << std::endl;
+
+	std::cout << CYAN << "Test 4: Remove invite-only flag\n" << RESET;
+	std::cout << YELLOW << "MODE #TestChannel -i\n" << RESET;
+	cmd::mode(*server, 1, "#TestChannel -i");
+	std::cout << *channel1 << std::endl;
+
+	std::cout << CYAN << "Test 5: Set channel key to \"secretkey\"\n" << RESET;
+	std::cout << YELLOW << "MODE #TestChannel +k secretkey\n" << RESET;
+	cmd::mode(*server, 1, "#TestChannel +k secretkey");
+	std::cout << *channel1 << std::endl;
+
+	std::cout << CYAN << "Test 6: Set limit of users on channel to 10\n" << RESET;
+	std::cout << YELLOW << "MODE #TestChannel +l 10\n" << RESET;
+	cmd::mode(*server, 1, "#TestChannel +l 10");
+	std::cout << *channel1 << std::endl;
+
+	/* Do we have to implement wildcards?
+	std::cout << CYAN << "Test : Prevent all users from joining\n" << RESET;
+	std::cout << YELLOW << "MODE #TestChannel +b *!\n" << RESET;
+	cmd::mode(*server, 1, "#TestChannel +b *!");
+	std::cout << *channel1 << std::endl;
+
+	std::cout << CYAN << "Test :\n" << RESET;
+	std::cout << YELLOW << "MODE\n" << RESET;
+	cmd::mode(*server, 1, "");
+	std::cout << *channel1 << std::endl;
+
+	std::cout << CYAN << "Test :\n" << RESET;
+	std::cout << YELLOW << "MODE\n" << RESET;
+	cmd::mode(*server, 1, "");
+	std::cout << *channel1 << std::endl;
+
+	std::cout << CYAN << "Test :\n" << RESET;
+	std::cout << YELLOW << "MODE\n" << RESET;
+	cmd::mode(*server, 1, "");
+	std::cout << *channel1 << std::endl;
+
+        User Mode examples:
+
+:MODE WiZ -w                    ; turns reception of WALLOPS messages
+                                off for WiZ.
+
+:Angel MODE Angel +i            ; Message from Angel to make themselves
+                                invisible.
+
+MODE WiZ -o                     ; WiZ 'deopping' (removing operator
+                                status).  The plain reverse of this
+                                command ("MODE WiZ +o") must not be
+                                allowed from users since would bypass
+                                the OPER command.
+	*/
 }
