@@ -67,14 +67,4 @@ void	test_nick_cmd(server *server)
 	std::cout <<  CYAN << "Test 4: Erroneous nick\n" << RESET;
 	std::cout << YELLOW << "NICK @rr*bˆ\n" << RESET;
 	cmd::nick(*server, 2, "@rr*bˆ");
-
-/* still don't know if we are implementing this	
-	std::cout << "Test 4: Nick change\n" << RESET;
-	std::cout << YELLOW << ":Wiz NICK Kilroy\n" << RESET;
-	cmd::nick(*server, 1, ":Wiz NICK Kilroy");
-	
-	std::cout << "Test 5: Bad nick\n" << RESET;
-	std::cout << YELLOW << ":Kilroy NICK *)=.&&&\n" << RESET;
-	cmd::nick(*server, 1, ":Kilroy NICK *)=.&&&");
-*/
 }
