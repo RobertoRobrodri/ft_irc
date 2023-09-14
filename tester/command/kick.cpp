@@ -17,40 +17,43 @@
 
 void cmd::kick(server &svr, int poll_fd_pos, std::string str)
 {
-	std::string command = "KICK";
   poll_fd pollfd = svr.get_pollfd(poll_fd_pos);
   user &usr = svr.get_user(pollfd.fd);
-  std::vector<std::string> msglist = ft_split(str, ' ');
-  if (msglist.size() < 2)
+  if (usr.get_is_registered() == true)
   {
-    svr.send_message(ERR_NEEDMOREPARAMS(command), usr.get_fd());
-    return ;
-  }
-  std::vector<std::string> chnlist = ft_split(msglist[0], ',');
-  std::vector<std::string> usrlist = ft_split(msglist[1], ',');
-  if (msglist.size() > 2)
-	  std::string msg = str.substr(str.find(msglist[2]));
-  for (size_t i = 0; i < chnlist.size(); i++)
-  {
-    channel *chn = svr.get_channel_from_name(chnlist[i]);
-    if (!chn)
-      svr.send_message(ERR_NOSUCHNICK(chnlist[i]), usr.get_fd());
-    else
-    {
-      if (!chn->is_user_in_channel(usr))
+      std::string command = "KICK";
+      std::vector<std::string> msglist = ft_split(str, ' ');
+      if (msglist.size() < 2)
       {
-        svr.send_message(ERR_NOTONCHANNEL(chnlist[i]), usr.get_fd());
-        continue ;
+        svr.send_message(ERR_NEEDMOREPARAMS(command), usr.get_fd());
+        return ;
       }
-      for (size_t j = 0; j < usrlist.size(); j++)
+      std::vector<std::string> chnlist = ft_split(msglist[0], ',');
+      std::vector<std::string> usrlist = ft_split(msglist[1], ',');
+      if (msglist.size() > 2)
+        std::string msg = str.substr(str.find(msglist[2]));
+      for (size_t i = 0; i < chnlist.size(); i++)
       {
-        user *rcv = svr.get_user_from_nick(usrlist[j]);
-        if (rcv)
-          chn->rmv_member(*rcv);
+        channel *chn = svr.get_channel_from_name(chnlist[i]);
+        if (!chn)
+          svr.send_message(ERR_NOSUCHNICK(chnlist[i]), usr.get_fd());
+        else
+        {
+          if (!chn->is_user_in_channel(usr))
+          {
+            svr.send_message(ERR_NOTONCHANNEL(chnlist[i]), usr.get_fd());
+            continue ;
+          }
+          for (size_t j = 0; j < usrlist.size(); j++)
+          {
+            user *rcv = svr.get_user_from_nick(usrlist[j]);
+            if (rcv)
+              chn->rmv_member(*rcv);
+          }
+        }
       }
     }
   }
-}
 
 void	test_kick_cmd(server *server)
 {

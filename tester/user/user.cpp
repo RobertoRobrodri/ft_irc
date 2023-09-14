@@ -51,9 +51,9 @@ void  user::is_registered(server &svr)
   if (!this->_is_registered && !this->get_username().empty() && !this->get_nick().empty())
   {
     this->_is_registered = true;
-	std::string nick = this->get_nick();
-	std::string user = this->get_username();
-	std::string host = this->get_hostname();
+	  std::string nick = this->get_nick();
+	  std::string user = this->get_username();
+	  std::string host = this->get_hostname();
     svr.send_message(RPL_WELCOME(nick, user, host), this->get_fd());
   }
 }

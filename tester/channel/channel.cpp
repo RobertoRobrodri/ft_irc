@@ -54,7 +54,7 @@ std::ostream &operator<<(std::ostream& os, const channel &tmp) {
 
 void	channel::add_member(user &usr)
 {
-  	usr.set_n_channels(usr.get_n_channels() + 1);
+  usr.set_n_channels(usr.get_n_channels() + 1);
 	this->list_of_members.push_back(usr);
   /*
 	std::cout << "Join successful! " << std::endl;
