@@ -11,15 +11,9 @@
    Modes available for channels:
 
            o - give/take channel operator privileges;
-           p - private channel flag;
-           s - secret channel flag;
            i - invite-only channel flag;
            t - topic settable by channel operator only flag;
-           n - no messages to channel from clients on the outside;
-           m - moderated channel;
            l - set the user limit to channel;
-           b - set a ban mask to keep users out;
-           v - give/take the ability to speak on a moderated channel;
            k - set a channel key (password).
 
    When using the 'o' and 'b' options, a restriction on a total of three
@@ -34,10 +28,6 @@
    message and the nickname given as a parameter are both the same.
 
    The available modes are as follows:
-
-           i - marks a users as invisible;
-           s - marks a user for receipt of server notices;
-           w - user receives wallops;
            o - operator flag.
    If a user attempts to make themselves an operator using the "+o"
    flag, the attempt should be ignored.  There is no restriction,
@@ -103,12 +93,11 @@ void	test_mode_cmd(server *server)
 	cmd::mode(*server, 1, "#TestChannel +im");
 	std::cout << *channel1 << std::endl;
 
-	/* Chanop not implemented
 	std::cout << CYAN << "Test 2: Give 'chanop' privileges to nick_2 on channel #TestChannel\n" << RESET;
 	std::cout << YELLOW << "MODE #TestChannel +o nick_2\n" << RESET;
 	cmd::mode(*server, 1, "#TestChannel +o nick_2");
 	std::cout << *channel1 << std::endl;
-*/
+	
 	std::cout << CYAN << "Test 3: Allow nick_3 to speak on moderated channel #TestChannel\n" << RESET;
 	std::cout << YELLOW << "MODE #TestChannel +v nick_3\n" << RESET;
 	cmd::mode(*server, 1, "#TestChannel +v nick_3");
@@ -129,39 +118,8 @@ void	test_mode_cmd(server *server)
 	cmd::mode(*server, 1, "#TestChannel +l 10");
 	std::cout << *channel1 << std::endl;
 
-	/* Do we have to implement wildcards?
-	std::cout << CYAN << "Test : Prevent all users from joining\n" << RESET;
-	std::cout << YELLOW << "MODE #TestChannel +b *!\n" << RESET;
-	cmd::mode(*server, 1, "#TestChannel +b *!");
-	std::cout << *channel1 << std::endl;
-
-	std::cout << CYAN << "Test :\n" << RESET;
-	std::cout << YELLOW << "MODE\n" << RESET;
+	std::cout << CYAN << "Test 7: nick_1 deopping themselve\n" << RESET;
+	std::cout << YELLOW << "MODE nick_1 -o\n" << RESET;
 	cmd::mode(*server, 1, "");
 	std::cout << *channel1 << std::endl;
-
-	std::cout << CYAN << "Test :\n" << RESET;
-	std::cout << YELLOW << "MODE\n" << RESET;
-	cmd::mode(*server, 1, "");
-	std::cout << *channel1 << std::endl;
-
-	std::cout << CYAN << "Test :\n" << RESET;
-	std::cout << YELLOW << "MODE\n" << RESET;
-	cmd::mode(*server, 1, "");
-	std::cout << *channel1 << std::endl;
-
-        User Mode examples:
-
-:MODE WiZ -w                    ; turns reception of WALLOPS messages
-                                off for WiZ.
-
-:Angel MODE Angel +i            ; Message from Angel to make themselves
-                                invisible.
-
-MODE WiZ -o                     ; WiZ 'deopping' (removing operator
-                                status).  The plain reverse of this
-                                command ("MODE WiZ +o") must not be
-                                allowed from users since would bypass
-                                the OPER command.
-	*/
 }
