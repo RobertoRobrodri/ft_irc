@@ -64,6 +64,7 @@ void	server::init_list_of_cmds(void) // Update with new commands Tested
 	this->list_of_cmds.insert(std::pair<std::string, command_function>("TOPIC", &cmd::topic));
 	this->list_of_cmds.insert(std::pair<std::string, command_function>("INVITE", &cmd::invite));
 	this->list_of_cmds.insert(std::pair<std::string, command_function>("KICK", &cmd::kick));
+	this->list_of_cmds.insert(std::pair<std::string, command_function>("PART", &cmd::part));
 //	this->list_of_cmds.insert(std::pair<std::string, command_function>("NOTICE", &cmd::notice));
 //	this->list_of_cmds.insert(std::pair<std::string, command_function>("PART", &cmd::part));
 	this->list_of_cmds.insert(std::pair<std::string, command_function>("MODE", &cmd::mode));
@@ -240,6 +241,8 @@ void	server::execute_commands(int poll_fd_pos, std::map<std::string, std::string
 	{
 		std::cout << it->first << std::endl;
 		if (this->list_of_cmds[it->first])
+		{
+			std::cout << "PUTO COMANDO: " << this->list_of_cmds[it->second] << std::endl;
 			this->list_of_cmds[it->first](*this, poll_fd_pos, it->second);
 		else if (usr.get_is_registered())
 			this->send_message(ERR_UNKNOWNCOMMAND(it->first), usr.get_fd());
@@ -248,11 +251,11 @@ void	server::execute_commands(int poll_fd_pos, std::map<std::string, std::string
 
 void	server::create_channel(user &usr, std::string name, std::string password) // No test
 {
-	if (name[0] != '#' && name[0] != '&')
-	{
-		std::string channel_mark("#");
-		name.insert(0, channel_mark);
-	}
+	// if (name[0] != '#' && name[0] != '&')
+	// {
+	// 	std::string channel_mark("#");
+	// 	name.insert(0, channel_mark);
+	// }
 	channel cnn(name, password);
 	if (!password.empty())
 		cnn.set_mode("k");
