@@ -26,15 +26,17 @@ void cmd::kick(server &svr, int poll_fd_pos, std::string str)
     svr.send_message(ERR_NEEDMOREPARAMS(command), usr.get_fd());
     return ;
   }
+  //TODO check user is channel oper
+  //TODO svr.send_message(ERR_CHANOPRIVSNEEDED(chn?), usr.get_fd());
   std::vector<std::string> chnlist = ft_split(msglist[0], ',');
   std::vector<std::string> usrlist = ft_split(msglist[1], ',');
   if (msglist.size() > 2)
-	  std::string msg = str.substr(str.find(msglist[2]));
+	  std::string msg = str.substr(str.find(msglist[2])); //TODO se necesita el mensaje para algo ???
   for (size_t i = 0; i < chnlist.size(); i++)
   {
     channel *chn = svr.get_channel_from_name(chnlist[i]);
     if (!chn)
-      svr.send_message(ERR_NOSUCHNICK(chnlist[i]), usr.get_fd());
+      svr.send_message(ERR_NOSUCHCHANNEL, usr.get_fd());
     else
     {
       if (!chn->is_user_in_channel(usr))
@@ -47,6 +49,8 @@ void cmd::kick(server &svr, int poll_fd_pos, std::string str)
         user *rcv = svr.get_user_from_nick(usrlist[j]);
         if (rcv)
           chn->rmv_member(*rcv);
+        //TODO Send channel notification
+        //TODO :WiZ KICK #Finnish John
       }
     }
   }

@@ -64,8 +64,8 @@ void	server::init_list_of_cmds(void) // Update with new commands Tested
 	this->list_of_cmds.insert(std::pair<std::string, command_function>("TOPIC", &cmd::topic));
 	this->list_of_cmds.insert(std::pair<std::string, command_function>("INVITE", &cmd::invite));
 	this->list_of_cmds.insert(std::pair<std::string, command_function>("KICK", &cmd::kick));
+	this->list_of_cmds.insert(std::pair<std::string, command_function>("PART", &cmd::part));
 //	this->list_of_cmds.insert(std::pair<std::string, command_function>("NOTICE", &cmd::notice));
-//	this->list_of_cmds.insert(std::pair<std::string, command_function>("PART", &cmd::part));
 //	this->list_of_cmds.insert(std::pair<std::string, command_function>("MODE", &cmd::mode));
 }
 
@@ -237,17 +237,20 @@ void	server::execute_commands(int poll_fd_pos, std::map<std::string, std::string
 	for (it = commands.begin(); it != commands.end(); it++)
 	{
 		if (this->list_of_cmds[it->first])
+		{
+			std::cout << "PUTO COMANDO: " << this->list_of_cmds[it->second] << std::endl;
 			this->list_of_cmds[it->first](*this, poll_fd_pos, it->second);
+		}
 	}
 }
 
 void	server::create_channel(user &usr, std::string name, std::string password) // No test
 {
-	if (name[0] != '#' && name[0] != '&')
-	{
-		std::string channel_mark("#");
-		name.insert(0, channel_mark);
-	}
+	// if (name[0] != '#' && name[0] != '&')
+	// {
+	// 	std::string channel_mark("#");
+	// 	name.insert(0, channel_mark);
+	// }
 	channel cnn(name, password);
 	usr.set_op(true);
 	cnn.add_member(usr);

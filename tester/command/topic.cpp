@@ -16,13 +16,14 @@
            ERR_CHANOPRIVSNEEDED
 
  */
-void cmd::topic(server &svr, int poll_fd_pos, std::string str) //TODO los modos
+void cmd::topic(server &svr, int poll_fd_pos, std::string str)
 {
   poll_fd pollfd = svr.get_pollfd(poll_fd_pos);
   user &usr = svr.get_user(pollfd.fd);
   if (str == "")
   {
-    svr.send_message(": 461 TOPIC: Not enough parameters \r\n", usr.get_fd());
+    std::string cmd = "TOPIC";
+    svr.send_message(ERR_NEEDMOREPARAMS(cmd), usr.get_fd());
     return ;
   }
   std::vector<std::string> msglist = ft_split(str, ' ');
@@ -36,28 +37,32 @@ void cmd::topic(server &svr, int poll_fd_pos, std::string str) //TODO los modos
         std::string topic = chn->get_topic();
         if (topic.empty())
         {
-          svr.send_message(": 331 " + msglist[0] + ": No topic is set \r\n", usr.get_fd());
+          svr.send_message(RPL_NOTOPIC(msglist[0]), usr.get_fd());
           return ;
         }
-        svr.send_message(": 332 " + msglist[0] + ": " + topic + "\r\n", usr.get_fd());
+        svr.send_message(RPL_TOPIC(msglist[0], topic), usr.get_fd());
       }
       else
       {
+        //TODO else if para chequear los modos del canal
+        //TODO else if (find(chn->get_mode(), 't') != -1) && usr->get_op()) ->se cambia el topic
+        //TODO else svr.send_message(ERR_CHANOPRIVSNEEDED(msglist[0]), usr.get_fd());
         std::string new_topic = str.substr(str.find(msglist[1]));
         chn->set_topic(str.substr(str.find(msglist[1])));
         return ;
+        //TODO mandar mensaje al canal de que se ha seteado el topic
       }
 
     }
     else
     {
-      svr.send_message(": 442 " + msglist[0] + ": You're not on that channel \r\n", usr.get_fd());
+      svr.send_message(ERR_NOTONCHANNEL(msglist[0]), usr.get_fd());
       return ;
     }
   }
   else
   {
-    svr.send_message(": 403 " + msglist[0] + ": No such channel\r\n", usr.get_fd());
+    svr.send_message(ERR_NOSUCHCHANNEL, usr.get_fd());
     return ;
   }
 }

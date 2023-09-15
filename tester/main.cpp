@@ -20,6 +20,8 @@ int main()
 	char *port = "6776";
 	char *pass = "pass";
 	server *serv;
+	serv = new server("6667", "pass");
+	serv->wait_for_connection();
 	while (true)
 	{
 		std::cout << BLUE << "Which test would you like to run?\n" << RESET <<
