@@ -32,5 +32,6 @@ void	test_privmsg_cmd(server *server);
 void	test_topic_cmd(server *server);
 void	test_invite_cmd(server *server);
 void	test_kick_cmd(server *server);
+void	test_mode_cmd(server *server);
 
 #endif
