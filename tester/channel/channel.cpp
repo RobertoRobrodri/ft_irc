@@ -1,16 +1,14 @@
 #include "channel.hpp"
 
-channel::channel( void ) : _user_limit(0) {
-
-  std::cout << "Default channel constructor called" << std::endl;
+channel::channel( void ) : _server(NULL), _user_limit(0) {
   return ;
 }
 
-channel::channel( std::string str ) : _name(str), _user_limit(0) {
+channel::channel( std::string str, server *svr ) :  _server(svr), _name(str), _user_limit(0) {
   return ;
 }
 
-channel::channel( std::string c_name, std::string password ) : _name(c_name), _password(password), _user_limit(0) {
+channel::channel( std::string c_name, std::string password, server *svr ) :  _server(svr), _name(c_name), _password(password), _user_limit(0) {
   return ;
 }
 
@@ -122,7 +120,7 @@ void	channel::set_user_operator(const user &usr, const bool &flag)
   }
 }
 
-void 	channel::parse_mode_flag(std::string &modes, std::vector<std::string> mode_params, server &svr)
+void 	channel::parse_mode_flag(std::string &modes, std::vector<std::string> mode_params)
 {
 	bool sign = 0;
 	size_t j = 0;
@@ -148,7 +146,7 @@ void 	channel::parse_mode_flag(std::string &modes, std::vector<std::string> mode
 			{
         if (mode_params.empty())
           break ;
-				user *usr = svr.get_user_from_nick(mode_params[j++]);
+				user *usr = _server->get_user_from_nick(mode_params[j++]);
 				if (!usr)
 					break;
 				if (this->is_user_in_channel(*usr))
