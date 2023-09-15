@@ -137,24 +137,41 @@ void 	channel::parse_mode_flag(std::string &modes, std::vector<std::string> mode
 			case '+':
 			{
 				sign = true;
-        		break;
+        break;
 			}
 			case '-':
 			{
 				sign = false;
-        		break;
+        break;
 			}
 			case 'o':
 			{
+        if (mode_params.empty())
+          break ;
 				user *usr = svr.get_user_from_nick(mode_params[j++]);
 				if (!usr)
 					break;
 				if (this->is_user_in_channel(*usr))
 					this->set_user_operator(*usr, sign);
-        		break;
+        break;
 			}
 			// Invite only
 			case 'i':
+      {
+        if (sign == true)
+        {
+					tmp = this->get_mode();
+          tmp.push_back(modes[i]);
+          this->set_mode(tmp);
+        }
+				else
+				{
+					size_t pos = this->get_mode().find(modes[i]);
+					tmp = this->get_mode().erase(pos);
+          this->set_mode(tmp);
+				}
+        break;
+      }
 			// topic settable by channel operator only flag
 			case 't':
 			{
@@ -177,6 +194,8 @@ void 	channel::parse_mode_flag(std::string &modes, std::vector<std::string> mode
 			{
 				if (sign == true)
 				{
+          if (mode_params.empty())
+            break ;
 					this->set_user_limit(atoi(mode_params[j++].c_str()));
 					tmp = this->get_mode();
           tmp.push_back(modes[i]);
@@ -196,6 +215,8 @@ void 	channel::parse_mode_flag(std::string &modes, std::vector<std::string> mode
 			{
 				if (sign == true)
 				{
+          if (mode_params.empty())
+            break ;
 					this->set_password(mode_params[j++]);
 					tmp = this->get_mode();
           tmp.push_back(modes[i]);
