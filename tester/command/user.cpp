@@ -47,7 +47,7 @@ void  cmd::username(server &svr, int poll_fd_pos, std::string str) {
   usr.set_servername(servername);
   usr.set_realname(realname);
  
-  usr.is_registered(svr);
+  usr.is_registered();
   std::cout << usr << std::endl;
 }
 
@@ -60,25 +60,25 @@ void	test_user_cmd(server *server)
 	std::cout << YELLOW << "USER guest tolmoon tolsun :Ronnie Reagan\n" << RESET;
 	cmd::username(*server, 1, "guest tolmoon tolsun :Ronnie Reagan");
 	
-	std::cout <<  CYAN << "Test 2: Valid command user 2\n" << RESET;
-	std::cout << YELLOW << "USER ronnie tolmoon tolsun :Ronnie Reagan\n" << RESET;
-	cmd::username(*server, 2, "ronnie tolmoon tolsun :Ronnie Reagan");
-	
-	std::cout <<  CYAN << "Test 3: Missing realname parameter\n" << RESET;
+	std::cout <<  CYAN << "Test 2: Missing realname parameter\n" << RESET;
 	std::cout <<  YELLOW << "USER guest tolmoon tolsun\n" << RESET;
 	cmd::username(*server, 1, "guest tolmoon tolsun");
 	
-	std::cout <<  CYAN << "Test 4: Missing servername parameter\n" << RESET;
+	std::cout <<  CYAN << "Test 3: Missing servername parameter\n" << RESET;
 	std::cout <<  YELLOW << "USER guest tolmoon :Ronnie Reagan\n" << RESET;
 	cmd::username(*server, 1, "guest tolmoon :Ronnie Reagan");
 	
-	std::cout <<  CYAN << "Test 5: Semicolons in hostname parameter\n" << RESET;
+	std::cout <<  CYAN << "Test 4: Semicolons in hostname parameter\n" << RESET;
 	std::cout <<  YELLOW << "USER guest :tolmoon tolsun :Ronnie Reagan\n" << RESET;
 	cmd::username(*server, 1, "guest :tolmoon tolsun :Ronnie Reagan");
 	
-	std::cout <<  CYAN << "Test 6: Missing semicolon for realname\n" << RESET;
+	std::cout <<  CYAN << "Test 5: Missing semicolon for realname\n" << RESET;
 	std::cout <<  YELLOW << "USER guest tolmoon tolsun Ronnie Reagan\n" << RESET;
 	cmd::username(*server, 1, "guest tolmoon tolsun Ronnie Reagan");
+	
+	std::cout <<  CYAN << "Test 6: Valid command user 2\n" << RESET;
+	std::cout << YELLOW << "USER ronnie tolmoon tolsun :Ronnie Reagan\n" << RESET;
+	cmd::username(*server, 2, "ronnie tolmoon tolsun :Ronnie Reagan");
 	
 	std::cout <<  CYAN << "Test 7: Already registred error\n" << RESET;
 	std::cout << YELLOW << "USER ronnie tolmoon tolsun :Ronnie Reagan\n" << RESET;

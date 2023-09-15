@@ -25,7 +25,7 @@ void  cmd::notice(server &svr, int poll_fd_pos, std::string str) {
       if ((rcvlist[i][0] == '#') || (rcvlist[i][0] == '&'))
       {
         channel *chn = svr.get_channel_from_name(rcvlist[i]);
-        usr.send_to_channel(chn, svr, rcvlist[i], msg);
+        usr.send_to_channel(chn, rcvlist[i], msg);
       }
       else
       {
