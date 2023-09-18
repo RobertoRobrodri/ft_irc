@@ -16,14 +16,6 @@
            ERR_NOTONCHANNEL                ERR_USERONCHANNEL
            ERR_CHANOPRIVSNEEDED
            RPL_INVITING                    RPL_AWAY
-
-   Examples:
-
-   :Angel INVITE Wiz #Dust         ; User Angel inviting WiZ to channel
-                                   #Dust
-
-   INVITE Wiz #Twilight_Zone       ; Command to invite WiZ to
-                                   #Twilight_zone
  */
 
 void cmd::invite(server &svr, int poll_fd_pos, std::string str)
@@ -44,22 +36,25 @@ void cmd::invite(server &svr, int poll_fd_pos, std::string str)
     svr.send_message(ERR_NOSUCHNICK(msglist[0]), usr.get_fd());
     return ;
   }
-  if (!chn)
+  if (chn)
   {
-    svr.send_message(ERR_NOSUCHNICK(msglist[1]), usr.get_fd());
-    return ;
+	  if (!chn->is_user_in_channel(usr))
+	  {
+		  svr.send_message(ERR_NOTONCHANNEL(msglist[1]), usr.get_fd());
+		  return ;
+	  }
+	  if (chn->is_user_in_channel(*new_user))
+	  {
+		  svr.send_message(ERR_USERONCHANNEL(msglist[0], msglist[1]), usr.get_fd());
+		  return ;
+	  }
+	  if (chn->get_mode().find('i') != std::string::npos && usr.get_op() == false)
+	  {
+		  ERR_CHANOPRIVSNEEDED(channel);
+		  return ;
+	  }
+	  chn->add_member(*new_user);
   }
-  if (!chn->is_user_in_channel(usr))
-  {
-      svr.send_message(ERR_NOTONCHANNEL(msglist[1]), usr.get_fd());
-      return ;
-  }
-  if (chn->is_user_in_channel(*new_user))
-  {
-      svr.send_message(ERR_USERONCHANNEL(msglist[0], msglist[1]), usr.get_fd());
-      return ;
-  }
-  chn->add_member(*new_user);
   svr.send_message(RPL_INVITING(msglist[0], msglist[1]), usr.get_fd());
 }
 
