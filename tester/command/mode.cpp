@@ -78,10 +78,11 @@ void cmd::mode(server &svr, int poll_fd_pos, std::string str)
 		{
 			svr.send_message(ERR_CHANOPRIVSNEEDED(msglist[0]), usr.get_fd());
 			return;
+		}
+		std::vector<std::string> mode_params = msglist;
+		mode_params.erase(mode_params.begin(), mode_params.begin() + 2);
+		chn->parse_mode_flag(msglist[1], mode_params);
 	}
-	std::vector<std::string> mode_params = msglist;
-	mode_params.erase(mode_params.begin(), mode_params.begin() + 2);
-	chn->parse_mode_flag(msglist[1], mode_params);
 }
 void	test_mode_cmd(server *server)
 {
