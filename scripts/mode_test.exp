@@ -1,0 +1,35 @@
+#!/usr/bin/expect
+
+set timeout 2
+spawn nc -v 127.0.0.1 6667
+
+sleep 2
+send -- "NICK pizapaco\r"
+sleep 2
+send -- "USER 1 2 3 :4\r"
+expect ": 001 :Welcome to the Internet Relay Network pizapaco!\r"
+send -- "JOIN #elpacochannel\r"
+sleep 2
+send -- "MODE #elpacochannel +t\r"
+sleep 2
+send -- "MODE #elpacochannel +ñ\r"
+sleep 2
+send -- "MODE #elpacochannel +l 10\r"
+sleep 2
+send -- "MODE #elpacochannel +k pepe\r"
+sleep 2
+send -- "MODE #elpacochannel +p\r"
+sleep 2
+send -- "MODE #elpacochannel +s\r"
+sleep 2
+send -- "MODE #elpacochannel -s\r"
+sleep 2
+send -- "MODE #elpacochannel -s\r"
+interact
+
+
+## ERRORES
+
+## Eliminar un modo que no está seteado
+## Añadir un modo dos o más veces
+## Añadir muchos + o -

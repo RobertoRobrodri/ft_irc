@@ -66,7 +66,7 @@ void	server::init_list_of_cmds(void) // Update with new commands Tested
 	this->list_of_cmds.insert(std::pair<std::string, command_function>("KICK", &cmd::kick));
 //	this->list_of_cmds.insert(std::pair<std::string, command_function>("NOTICE", &cmd::notice));
 //	this->list_of_cmds.insert(std::pair<std::string, command_function>("PART", &cmd::part));
-//	this->list_of_cmds.insert(std::pair<std::string, command_function>("MODE", &cmd::mode));
+	this->list_of_cmds.insert(std::pair<std::string, command_function>("MODE", &cmd::mode));
 }
 
 void	server::init_pollfd(void) // Tested
@@ -236,6 +236,7 @@ void	server::execute_commands(int poll_fd_pos, std::map<std::string, std::string
 
 	for (it = commands.begin(); it != commands.end(); it++)
 	{
+		std::cout << it->first << std::endl;
 		if (this->list_of_cmds[it->first])
 			this->list_of_cmds[it->first](*this, poll_fd_pos, it->second);
 	}

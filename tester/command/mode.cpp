@@ -13,8 +13,10 @@
            o - give/take channel operator privileges;
            i - invite-only channel flag;
            t - topic settable by channel operator only flag;
+		   p - set channel to private;
+		   r - set channel to secret;
            l - set the user limit to channel;
-           k - set a channel key (password).
+           k - set a channel key (password);
 
    When using the 'o' and 'b' options, a restriction on a total of three
    per mode command has been imposed.
@@ -53,9 +55,12 @@ void cmd::mode(server &svr, int poll_fd_pos, std::string str)
 		return ;
 	if (msglist.size() < 2)
 	{
-  		svr.send_message(ERR_NEEDMOREPARAMS(command), usr.get_fd());
-  		return;
-	}
+		std::vector<std::string> msglist = ft_split(str, ' ');
+		if (msglist.size() < 2)
+		{
+  	  svr.send_message(ERR_NEEDMOREPARAMS(command), usr.get_fd());
+  	  return;
+  	}
 	channel *chn = svr.get_channel_from_name(msglist[0]);
 	if (chn == NULL)
 	{
@@ -76,7 +81,6 @@ void cmd::mode(server &svr, int poll_fd_pos, std::string str)
 	mode_params.erase(mode_params.begin(), mode_params.begin() + 2);
 	chn->parse_mode_flag(msglist[1], mode_params);
 }
-
 void	test_mode_cmd(server *server)
 {
 	std::cout << BLUE << "Test mode command\n";
