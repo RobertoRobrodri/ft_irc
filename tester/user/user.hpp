@@ -7,10 +7,12 @@
 
 class 	server;
 class 	channel;
-class	user {
+class	user
+{
 
 	private:
 
+		server			*_server;
 		int 			_fd;
 		std::string 	_username;
 		std::string 	_nick;
@@ -24,7 +26,7 @@ class	user {
 	public:
 
 		user 			( void );
-		user 			( int fd, std::string hostname );
+		user 			( int fd, std::string hostname, server *svr);
 		user 			( const user & var );
 		~user			( void );
 		user &operator=	(const user &tmp);
@@ -57,8 +59,8 @@ class	user {
 		/*###########################################
 		#				FUNCTIONS					#
 		############################################*/
-		void		is_registered(server &svr);
-		void		send_to_channel(channel *chn, server &svr, std::string chn_name, std::string msg);
+		void		is_registered();
+		void		send_to_channel(channel *chn, std::string chn_name, std::string msg);
 };
 std::ostream &operator<<(std::ostream& os, const user &tmp);
 

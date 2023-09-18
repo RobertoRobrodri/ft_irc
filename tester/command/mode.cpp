@@ -14,8 +14,10 @@
            o - give/take channel operator privileges;
            i - invite-only channel flag;
            t - topic settable by channel operator only flag;
+		   p - set channel to private;
+		   r - set channel to secret;
            l - set the user limit to channel;
-           k - set a channel key (password).
+           k - set a channel key (password);
 
    When using the 'o' and 'b' options, a restriction on a total of three
    per mode command has been imposed.
@@ -50,7 +52,10 @@ void cmd::mode(server &svr, int poll_fd_pos, std::string str)
 	std::string command = "MODE";
 	poll_fd pollfd = svr.get_pollfd(poll_fd_pos);
   	user &usr = svr.get_user(pollfd.fd);
-	if (usr.get_is_registered() == true)
+	std::vector<std::string> msglist = ft_split(str, ' ');
+	if (usr.get_is_registered() == false)
+		return ;
+	if (msglist.size() < 2)
 	{
 		std::vector<std::string> msglist = ft_split(str, ' ');
 		if (msglist.size() < 2)
@@ -73,13 +78,11 @@ void cmd::mode(server &svr, int poll_fd_pos, std::string str)
 		{
 			svr.send_message(ERR_CHANOPRIVSNEEDED(msglist[0]), usr.get_fd());
 			return;
-		}
-		std::vector<std::string> mode_params = msglist;
-		mode_params.erase(mode_params.begin(), mode_params.begin() + 2);
-		chn->parse_mode_flag(msglist[1], mode_params, svr);
 	}
+	std::vector<std::string> mode_params = msglist;
+	mode_params.erase(mode_params.begin(), mode_params.begin() + 2);
+	chn->parse_mode_flag(msglist[1], mode_params);
 }
-
 void	test_mode_cmd(server *server)
 {
 	std::cout << BLUE << "Test mode command\n";

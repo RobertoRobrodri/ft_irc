@@ -126,7 +126,7 @@ void	server::add_user(int fd, sock_in client_addr) // Tested
 	this->poll_fds[this->_active_fds].fd = fd;
 	this->poll_fds[this->_active_fds].events = POLLIN;
 	this->_active_fds++;
-	user 	new_user(fd, inet_ntop(AF_INET, &(client_addr.sin_addr), ip_address, sizeof(ip_address)));
+	user 	new_user(fd, inet_ntop(AF_INET, &(client_addr.sin_addr), ip_address, sizeof(ip_address)), this);
 	this->list_of_users.insert(std::pair<int, user>(fd, new_user));
 }
 
@@ -237,6 +237,7 @@ void	server::execute_commands(int poll_fd_pos, std::map<std::string, std::string
 
 	for (it = commands.begin(); it != commands.end(); it++)
 	{
+		std::cout << it->first << std::endl;
 		if (this->list_of_cmds[it->first])
 		{
 			std::cout << "PUTO COMANDO: " << this->list_of_cmds[it->second] << std::endl;
@@ -247,12 +248,12 @@ void	server::execute_commands(int poll_fd_pos, std::map<std::string, std::string
 
 void	server::create_channel(user &usr, std::string name, std::string password) // No test
 {
-	// if (name[0] != '#' && name[0] != '&')
-	// {
-	// 	std::string channel_mark("#");
-	// 	name.insert(0, channel_mark);
-	// }
-	channel cnn(name, password);
+	if (name[0] != '#' && name[0] != '&')
+	{
+		std::string channel_mark("#");
+		name.insert(0, channel_mark);
+	}
+	channel cnn(name, password, this);
 	if (!password.empty())
 		cnn.set_mode("k");
 	usr.set_op(true);
