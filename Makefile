@@ -47,9 +47,8 @@ SUBFILE5_SRC = invite.cpp \
 			   topic.cpp \
 			   user.cpp \
 			   notice.cpp \
-			   part.cpp \
-			   mode.cpp 
-
+			   mode.cpp \
+			   names.cpp
 SUBFILE6_SRC = channel.cpp
 
 SRC =	$(addprefix $(SUBFILE1_PATH)/, $(SUBFILE1_SRC)) \
