@@ -50,7 +50,7 @@ void cmd::invite(server &svr, int poll_fd_pos, std::string str)
 	  }
 	  if (chn->get_mode().find('i') != std::string::npos && usr.get_op() == false)
 	  {
-		  ERR_CHANOPRIVSNEEDED(channel);
+		  ERR_CHANOPRIVSNEEDED(msglist[1]);
 		  return ;
 	  }
 	  chn->add_member(*new_user);

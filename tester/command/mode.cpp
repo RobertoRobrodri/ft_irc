@@ -58,8 +58,9 @@ void cmd::mode(server &svr, int poll_fd_pos, std::string str)
 		std::vector<std::string> msglist = ft_split(str, ' ');
 		if (msglist.size() < 2)
 		{
-  	  svr.send_message(ERR_NEEDMOREPARAMS(command), usr.get_fd());
-  	  return;
+  	  		svr.send_message(ERR_NEEDMOREPARAMS(command), usr.get_fd());
+  	  		return;
+		}
   	}
 	channel *chn = svr.get_channel_from_name(msglist[0]);
 	if (chn == NULL)
