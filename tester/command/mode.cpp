@@ -1,5 +1,6 @@
 #include "command.hpp"
 #include "reply.hpp"
+
 /*
  	CHANNEL MODES
    Parameters: <channel> {[+|-]|o|p|s|i|t|n|b|v} [<limit>] [<user>] [<ban mask>]
@@ -45,6 +46,7 @@
            ERR_USERSDONTMATCH              RPL_UMODEIS
            ERR_UMODEUNKNOWNFLAG
 */
+
 void cmd::mode(server &svr, int poll_fd_pos, std::string str)
 {
 	std::string command = "MODE";
@@ -52,14 +54,12 @@ void cmd::mode(server &svr, int poll_fd_pos, std::string str)
   	user &usr = svr.get_user(pollfd.fd);
 	if (usr.get_is_registered() == false)
 	{
-		svr.send_message(ERR_NOTREGISTERED, usr.get_fd());
-		return ;
-	}
-	std::vector<std::string> msglist = ft_split(str, ' ');
-	if (msglist.size() < 2)
-	{
-  	  	svr.send_message(ERR_NEEDMOREPARAMS(command), usr.get_fd());
-  	  	return;
+
+		std::vector<std::string> msglist = ft_split(str, ' ');
+		if (msglist.size() < 2)
+		{
+  	  svr.send_message(ERR_NEEDMOREPARAMS(command), usr.get_fd());
+  	  return;
   	}
 	channel *chn = svr.get_channel_from_name(msglist[0]);
 	if (chn == NULL)
