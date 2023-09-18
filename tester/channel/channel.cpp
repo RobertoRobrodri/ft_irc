@@ -126,86 +126,88 @@ void 	channel::parse_mode_flag(std::string &modes, std::vector<std::string> mode
 {
 	bool sign = 0;
 	size_t j = 0;
-  std::string tmp;
+  	std::string tmp;
 
-  std::cout << modes << std::endl;
+  	//std::cout << modes << std::endl;
 	for (size_t i = 0; i < modes.size(); i++)
 	{
-    std::cout << mode_params[j] << std::endl;
+    	//std::cout << mode_params[j] << std::endl;
 		switch(modes[i])
 		{
 			case '+':
 			{
 				sign = true;
-        break;
+        		break;
 			}
 			case '-':
 			{
 				sign = false;
-        break;
+        		break;
 			}
 			case 'o':
 			{
-        if (mode_params.empty())
-          break ;
+        		if (mode_params.empty())
+          			break ;
 				user *usr = svr.get_user_from_nick(mode_params[j++]);
 				if (!usr)
 					break;
 				if (this->is_user_in_channel(*usr))
 					this->set_user_operator(*usr, sign);
-        break;
+        		break;
 			}
-			// Invite only
-			case 'i':
-			// topic settable by channel operator only flag
-      case 't':
-      // set channel to private
-      case 'p':
-      // set channel to secret
-      case 's':
-      {
-        if (sign == true)
-        {
+			case 'i':	// Invite only
+			{
+			}
+      		case 't':	// topic settable by channel operator only flag
+			{
+			}
+      		case 'p':	// set channel to private
+			{
+			}
+      		case 's':	// set channel to secret
+      		{
+        		if (sign == true)
+        		{
 					tmp = this->get_mode();
-          tmp.push_back(modes[i]);
-          this->set_mode(tmp);
-        }
+          			tmp.push_back(modes[i]);
+          			this->set_mode(tmp);
+        		}
 				else
 				{
 					size_t pos = this->get_mode().find(modes[i]);
 					tmp = this->get_mode().erase(pos);
-          this->set_mode(tmp);
+          			this->set_mode(tmp);
 				}
-        break;
-      }
-			// set user limit
-			case 'l':
-			// set password for channel
-      case 'k':
+        		break;
+      		}
+			case 'l':	// set user limit
+			{
+			}
+      		case 'k':	// set password for channel
 			{
 				if (sign == true)
 				{
-          if (mode_params.empty())
-            break ;
+          			if (mode_params.empty())
+            			break ;
 					this->set_user_limit(atoi(mode_params[j++].c_str()));
 					tmp = this->get_mode();
-          tmp.push_back(modes[i]);
-          this->set_mode(tmp);
+          			tmp.push_back(modes[i]);
+          			this->set_mode(tmp);
 				}
 				else
 				{
 					this->set_user_limit(0);
 					size_t pos = this->get_mode().find('l');
 					tmp = this->get_mode().erase(pos);
-          this->set_mode(tmp);
+          			this->set_mode(tmp);
 				}
-        break;
+        		break;
 			}
-      default :
-      {
-        std::cout << "No existe el modo: " << modes[i] << std::endl;
-        break;
-      }
+      		default :
+      		{
+        		std::cout << "Mode not recognised: " << modes[i] << std::endl;
+        		break;
+      		}
 		}
 	}
 }

@@ -13,8 +13,10 @@
            o - give/take channel operator privileges;
            i - invite-only channel flag;
            t - topic settable by channel operator only flag;
+		   p - set channel to private;
+		   r - set channel to secret;
            l - set the user limit to channel;
-           k - set a channel key (password).
+           k - set a channel key (password);
 
    When using the 'o' and 'b' options, a restriction on a total of three
    per mode command has been imposed.
