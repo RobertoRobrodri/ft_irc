@@ -23,7 +23,7 @@
 # define ERR_INVITEONLYCHAN(channel) ": 473 " + channel + " :Cannot join channel (+i)\r\n"
 # define ERR_BADCHANNELKEY(channel) ": 475 " + channel + " :Cannot join channel (+k)\r\n"
 # define ERR_CHANOPRIVSNEEDED(channel) ": 482 " + channel + " :You're not channel operator\r\n"
-# define ERR_ ": 4 :\r\n"
+# define RPL_INVITING(channel, nich) ": 341 :" + channel + " " + nick + "\r\n"
 # define ERR_ ": 4 :\r\n"
 # define ERR_ ": 4 :\r\n"
 # define ERR_ ": 4 :\r\n"
