@@ -5,7 +5,7 @@ user::user( void ) : _fd(0), _is_registered(false), _n_channels(0), _op(false) {
   return ;
 }
 
-user::user( int fd, std::string hostname ) : _fd(fd), _hostname(hostname), _n_channels(0), _op(false) {
+user::user( int fd, std::string hostname ) : _fd(fd), _hostname(hostname), _is_registered(false), _n_channels(0), _op(false) {
   return ;
 }
 

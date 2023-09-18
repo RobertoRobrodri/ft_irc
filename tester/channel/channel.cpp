@@ -131,7 +131,10 @@ void 	channel::parse_mode_flag(std::string &modes, std::vector<std::string> mode
   	//std::cout << modes << std::endl;
 	for (size_t i = 0; i < modes.size(); i++)
 	{
+<<<<<<< HEAD
     	//std::cout << mode_params[j] << std::endl;
+=======
+>>>>>>> 1c8a488 (Mode and tests)
 		switch(modes[i])
 		{
 			case '+':
@@ -200,15 +203,33 @@ void 	channel::parse_mode_flag(std::string &modes, std::vector<std::string> mode
 				}
         		break;
 			}
-      		case 'k':	// set password for channel
+			// set password for channel
+			case 'k':
 			{
-        		break;
+				if (sign == true)
+				{
+          if (mode_params.empty())
+            break ;
+					this->set_password(mode_params[j++]);
+					tmp = this->get_mode();
+          tmp.push_back(modes[i]);
+          this->set_mode(tmp);
+        }
+				else
+				{
+					this->set_password("");
+					size_t pos = this->get_mode().find('k');
+					tmp = this->get_mode().erase(pos);
+          this->set_mode(tmp);
+				}
+        break ;
 			}
-      		default :
-      		{
-        		std::cout << "Mode not recognised: " << modes[i] << std::endl;
-        		break;
-      		}
+      default :
+      {
+        std::cout << "No existe el modo: " << modes[i] << std::endl;
+        break;
+      }
 		}
 	}
+  std::cout << *this << std::endl;
 }
