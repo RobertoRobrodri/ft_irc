@@ -47,7 +47,7 @@ SUBFILE5_SRC = invite.cpp \
 			   topic.cpp \
 			   user.cpp \
 			   part.cpp \
-#			   notice.cpp \
+			   notice.cpp \
 			   mode.cpp
 SUBFILE6_SRC = channel.cpp
 

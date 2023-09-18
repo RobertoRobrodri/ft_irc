@@ -65,53 +65,55 @@ void	join_existing_channel(server &svr, channel *chn, user &usr, std::string pas
 }
 
 void  cmd::join(server &svr, int poll_fd_pos, std::string str) {
-	std::string command = "JOIN";
-  std::vector<std::string> channel_params = ft_split(str, ' ');
   poll_fd pollfd = svr.get_pollfd(poll_fd_pos);
   user &usr = svr.get_user(pollfd.fd);
-  if (str == "")
+	if (usr.get_is_registered() == true)
   {
-	  svr.send_message(ERR_NEEDMOREPARAMS(command), usr.get_fd());
-	  return ;
-  }
-  std::map<std::string, std::string>channels_and_passwords;
-  std::vector<std::string> channels = ft_split(channel_params[0], ',');
-  std::vector<std::string>::iterator channel_it = channels.begin();
-  if (channel_params.size() >= 2) // we have passwords
-  {
-    std::vector<std::string> passwords = ft_split(channel_params[1], ',');
-    std::vector<std::string>::iterator password_it = passwords.begin();
-    while (password_it != passwords.end())
+    std::string command = "JOIN";
+    std::vector<std::string> channel_params = ft_split(str, ' ');
+    if (str == "")
     {
-      channels_and_passwords.insert(std::pair<std::string, std::string>(*channel_it, *password_it));
-      password_it++;
-      channel_it++;
+      svr.send_message(ERR_NEEDMOREPARAMS(command), usr.get_fd());
+      return ;
     }
-  }
-  while (channel_it != channels.end())
-  {
-      channels_and_passwords.insert(std::pair<std::string, std::string>(*channel_it, ""));
-      channel_it++;
-  }
-  for (std::map<std::string, std::string>::iterator it = channels_and_passwords.begin(); it != channels_and_passwords.end(); it++)
-  {
-    channel *chn = svr.get_channel_from_name(it->first);
-    if (chn)
+    std::map<std::string, std::string>channels_and_passwords;
+    std::vector<std::string> channels = ft_split(channel_params[0], ',');
+    std::vector<std::string>::iterator channel_it = channels.begin();
+    if (channel_params.size() >= 2) // we have passwords
     {
-      join_existing_channel(svr, chn, usr, it->second);
-    }
-    else
-    {
-      if (usr.get_n_channels() >= MAX_NUMBER_OF_CHN)
+      std::vector<std::string> passwords = ft_split(channel_params[1], ',');
+      std::vector<std::string>::iterator password_it = passwords.begin();
+      while (password_it != passwords.end())
       {
-            svr.send_message(ERR_TOOMANYCHANNELS(chn->get_name()), usr.get_fd());
-            return ;
+        channels_and_passwords.insert(std::pair<std::string, std::string>(*channel_it, *password_it));
+        password_it++;
+        channel_it++;
       }
-      svr.create_channel(usr, it->first, it->second);
+    }
+    while (channel_it != channels.end())
+    {
+        channels_and_passwords.insert(std::pair<std::string, std::string>(*channel_it, ""));
+        channel_it++;
+    }
+    for (std::map<std::string, std::string>::iterator it = channels_and_passwords.begin(); it != channels_and_passwords.end(); it++)
+    {
+      channel *chn = svr.get_channel_from_name(it->first);
+      if (chn)
+      {
+        join_existing_channel(svr, chn, usr, it->second);
+      }
+      else
+      {
+        if (usr.get_n_channels() >= MAX_NUMBER_OF_CHN)
+        {
+              svr.send_message(ERR_TOOMANYCHANNELS(chn->get_name()), usr.get_fd());
+              return ;
+        }
+        svr.create_channel(usr, it->first, it->second);
+      }
     }
   }
 }
-
 void	test_join_cmd(server *server)
 {
 	std::cout << BLUE << "Test join command\n";

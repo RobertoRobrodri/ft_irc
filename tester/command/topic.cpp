@@ -20,19 +20,20 @@ void cmd::topic(server &svr, int poll_fd_pos, std::string str)
 {
   poll_fd pollfd = svr.get_pollfd(poll_fd_pos);
   user &usr = svr.get_user(pollfd.fd);
-  if (str == "")
-  {
-    std::string cmd = "TOPIC";
-    svr.send_message(ERR_NEEDMOREPARAMS(cmd), usr.get_fd());
-    return ;
-  }
-  std::vector<std::string> msglist = ft_split(str, ' ');
-  channel *chn = svr.get_channel_from_name(msglist[0]);
-  if (chn)
-  {
-	  if (chn->is_user_in_channel(usr))
+  
+  if (usr.get_is_registered() == true)
+  { 
+    if (str == "")
     {
-      if (msglist.size() == 1)
+      std::string cmd = "TOPIC";
+      svr.send_message(ERR_NEEDMOREPARAMS(cmd), usr.get_fd());
+      return ;
+    }
+    std::vector<std::string> msglist = ft_split(str, ' ');
+    channel *chn = svr.get_channel_from_name(msglist[0]);
+    if (chn)
+    {
+      if (chn->is_user_in_channel(usr))
       {
         std::string topic = chn->get_topic();
         if (topic.empty())
@@ -52,7 +53,6 @@ void cmd::topic(server &svr, int poll_fd_pos, std::string str)
         return ;
         //TODO mandar mensaje al canal de que se ha seteado el topic
       }
-
     }
     else
     {

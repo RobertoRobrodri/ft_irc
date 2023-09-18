@@ -252,6 +252,8 @@ void	server::create_channel(user &usr, std::string name, std::string password) /
 	// 	name.insert(0, channel_mark);
 	// }
 	channel cnn(name, password);
+	if (!password.empty())
+		cnn.set_mode("k");
 	usr.set_op(true);
 	cnn.add_member(usr);
 	usr.set_op(false);

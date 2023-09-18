@@ -33,7 +33,7 @@ int main()
 			"  6) USER\n" <<
 			"  7) NICK\n" <<
 			"  8) JOIN\n" <<
-			"  9) PONG\n" <<
+			"  9) MODE\n" <<
 			"  10) QUIT\n" <<
 			"  11) PRIVMSG\n" <<
 			"  12) TOPIC\n" <<
@@ -111,9 +111,12 @@ int main()
 				serv->delete_user(2);
 				serv->delete_user(1);
 				break;
-			// fd_ready? execute_command?
 			case 9:
-			// pong
+				serv->add_user(4, build_address("63.161.169.138", 3490));
+				serv->add_user(5, build_address("63.161.169.137", 3491));
+				test_mode_cmd(serv);
+				serv->delete_user(2);
+				serv->delete_user(1);
 				break;
 			case 10:
 				serv->add_user(4, build_address("63.161.169.138", 3490));
