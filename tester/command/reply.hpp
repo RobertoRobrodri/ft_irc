@@ -8,6 +8,7 @@
 # define RPL_TOPIC(channel, topic) ": 332 " + channel + " :" + topic + "\r\n"
 # define RPL_INVITING(channel, nick) ": 341 " + channel + " " + nick + "\r\n"
 # define RPL_NAMREPLY(channel, members) ": 353 " + channel + " :" + members + "\r\n"
+# define RPL_ENDOFNAMES(channel) ": 366 " + channel + " :End of /NAMES list\r\n"
 # define ERR_NOSUCHNICK(rcv) ": 401 " + rcv + " :No such nick/channel\r\n"
 # define ERR_NOSUCHCHANNEL ": 403 :No such channel\r\n"
 # define ERR_CANNOTSENDTOCHAN(channel) ": 404 " + channel + " :Cannot send to channel\r\n"
