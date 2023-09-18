@@ -57,32 +57,28 @@ void cmd::mode(server &svr, int poll_fd_pos, std::string str)
 		return ;
 	if (msglist.size() < 2)
 	{
-		std::vector<std::string> msglist = ft_split(str, ' ');
-		if (msglist.size() < 2)
-		{
-			svr.send_message(ERR_NEEDMOREPARAMS(command), usr.get_fd());
-			return;
-		}
-		channel *chn = svr.get_channel_from_name(msglist[0]);
-		if (chn == NULL)
-		{
-			svr.send_message(ERR_NOSUCHCHANNEL, usr.get_fd());
-			return;
-		}
-		if (chn->is_user_in_channel(usr) == false)
-		{
-			svr.send_message(ERR_NOTONCHANNEL(msglist[0]), usr.get_fd());
-			return;
-		}
-		if (chn->is_user_operator(usr) == false)
-		{
-			svr.send_message(ERR_CHANOPRIVSNEEDED(msglist[0]), usr.get_fd());
-			return;
-		}
-		std::vector<std::string> mode_params = msglist;
-		mode_params.erase(mode_params.begin(), mode_params.begin() + 2);
-		chn->parse_mode_flag(msglist[1], mode_params);
+		svr.send_message(ERR_NEEDMOREPARAMS(command), usr.get_fd());
+		return;
 	}
+	channel *chn = svr.get_channel_from_name(msglist[0]);
+	if (chn == NULL)
+	{
+		svr.send_message(ERR_NOSUCHCHANNEL, usr.get_fd());
+		return;
+	}
+	if (chn->is_user_in_channel(usr) == false)
+	{
+		svr.send_message(ERR_NOTONCHANNEL(msglist[0]), usr.get_fd());
+		return;
+	}
+	if (chn->is_user_operator(usr) == false)
+	{
+		svr.send_message(ERR_CHANOPRIVSNEEDED(msglist[0]), usr.get_fd());
+		return;
+	}
+	std::vector<std::string> mode_params = msglist;
+	mode_params.erase(mode_params.begin(), mode_params.begin() + 2);
+	chn->parse_mode_flag(msglist[1], mode_params);
 }
 void	test_mode_cmd(server *server)
 {
