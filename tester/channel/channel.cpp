@@ -157,6 +157,12 @@ void 	channel::parse_mode_flag(std::string &modes, std::vector<std::string> mode
 			}
 			// Invite only
 			case 'i':
+			// topic settable by channel operator only flag
+      case 't':
+      // set channel to private
+      case 'p':
+      // set channel to secret
+      case 's':
       {
         if (sign == true)
         {
@@ -172,25 +178,10 @@ void 	channel::parse_mode_flag(std::string &modes, std::vector<std::string> mode
 				}
         break;
       }
-			// topic settable by channel operator only flag
-			case 't':
-			{
-				if (sign == true)
-        {
-					tmp = this->get_mode();
-          tmp.push_back(modes[i]);
-          this->set_mode(tmp);
-        }
-				else
-				{
-					size_t pos = this->get_mode().find(modes[i]);
-					tmp = this->get_mode().erase(pos);
-          this->set_mode(tmp);
-				}
-        break;
-			}
 			// set user limit
 			case 'l':
+			// set password for channel
+      case 'k':
 			{
 				if (sign == true)
 				{
@@ -209,27 +200,6 @@ void 	channel::parse_mode_flag(std::string &modes, std::vector<std::string> mode
           this->set_mode(tmp);
 				}
         break;
-			}
-			// set password for channel
-			case 'k':
-			{
-				if (sign == true)
-				{
-          if (mode_params.empty())
-            break ;
-					this->set_password(mode_params[j++]);
-					tmp = this->get_mode();
-          tmp.push_back(modes[i]);
-          this->set_mode(tmp);
-        }
-				else
-				{
-					this->set_password("");
-					size_t pos = this->get_mode().find('k');
-					tmp = this->get_mode().erase(pos);
-          this->set_mode(tmp);
-				}
-        break ;
 			}
       default :
       {

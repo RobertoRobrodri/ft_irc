@@ -76,8 +76,8 @@ void cmd::mode(server &svr, int poll_fd_pos, std::string str)
 	std::vector<std::string> mode_params = msglist;
 	mode_params.erase(mode_params.begin(), mode_params.begin() + 2);
 	chn->parse_mode_flag(msglist[1], mode_params, svr);
+ }
 }
-
 void	test_mode_cmd(server *server)
 {
 	std::cout << BLUE << "Test mode command\n";
