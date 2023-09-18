@@ -153,22 +153,16 @@ void 	channel::parse_mode_flag(std::string &modes, std::vector<std::string> mode
         		break;
 			}
 			case 'i':	// Invite only
-			{
-			}
-      		case 't':	// topic settable by channel operator only flag
-			{
-			}
-      		case 'p':	// set channel to private
-			{
-			}
-      		case 's':	// set channel to secret
-      		{
-        		if (sign == true)
-        		{
-					tmp = this->get_mode();
-          			tmp.push_back(modes[i]);
-          			this->set_mode(tmp);
-        		}
+      case 't':	// topic settable by channel operator only flag
+      case 'p':	// set channel to private
+      case 's':	// set channel to secret
+      {
+      	if (sign == true)
+      	{
+			      tmp = this->get_mode();
+      			tmp.push_back(modes[i]);
+      			this->set_mode(tmp);
+      	}
 				else
 				{
 					size_t pos = this->get_mode().find(modes[i]);
@@ -185,8 +179,8 @@ void 	channel::parse_mode_flag(std::string &modes, std::vector<std::string> mode
             			break ;
 					this->set_user_limit(atoi(mode_params[j++].c_str()));
 					tmp = this->get_mode();
-          			tmp.push_back(modes[i]);
-          			this->set_mode(tmp);
+          tmp.push_back(modes[i]);
+          this->set_mode(tmp);
 				}
 				else
 				{

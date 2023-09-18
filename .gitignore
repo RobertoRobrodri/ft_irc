@@ -1,4 +1,5 @@
 *.o
+*.swp
 objects
 .DS_STORE
 ircserv
