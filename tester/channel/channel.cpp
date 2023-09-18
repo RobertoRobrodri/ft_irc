@@ -182,9 +182,6 @@ void 	channel::parse_mode_flag(std::string &modes, std::vector<std::string> mode
       		}
 			case 'l':	// set user limit
 			{
-			}
-      		case 'k':	// set password for channel
-			{
 				if (sign == true)
 				{
           			if (mode_params.empty())
@@ -201,6 +198,10 @@ void 	channel::parse_mode_flag(std::string &modes, std::vector<std::string> mode
 					tmp = this->get_mode().erase(pos);
           			this->set_mode(tmp);
 				}
+        		break;
+			}
+      		case 'k':	// set password for channel
+			{
         		break;
 			}
       		default :
