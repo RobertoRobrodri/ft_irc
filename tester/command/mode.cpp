@@ -1,5 +1,6 @@
 #include "command.hpp"
 #include "reply.hpp"
+
 /*
  	CHANNEL MODES
    Parameters: <channel> {[+|-]|o|p|s|i|t|n|b|v} [<limit>] [<user>] [<ban mask>]
@@ -45,6 +46,7 @@
            ERR_USERSDONTMATCH              RPL_UMODEIS
            ERR_UMODEUNKNOWNFLAG
 */
+
 void cmd::mode(server &svr, int poll_fd_pos, std::string str)
 {
 	std::string command = "MODE";
