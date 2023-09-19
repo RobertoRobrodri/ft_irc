@@ -17,7 +17,7 @@ void cmd::names(server &svr, int poll_fd_pos, std::string str)
                 channel chn = it->second;
                 std::vector<user> members = chn.get_list_of_members();
                 //std::cout << "MAZO MODO: " << chn.get_mode() << std::endl;
-                if (chn.get_mode().find("s") != std::string::npos)
+                if (chn.get_mode().find("sp") != std::string::npos)
                 {
                     std::string members_lst;
                     for (std::vector<user>::iterator itt = members.begin(); itt != members.end(); itt++)
@@ -58,4 +58,5 @@ void cmd::names(server &svr, int poll_fd_pos, std::string str)
             }
         }
     }
+    svr.send_message(RPL_ENDOFNAMES(str), usr.get_fd());
 }
