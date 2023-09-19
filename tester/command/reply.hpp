@@ -24,7 +24,7 @@
 # define ERR_BADCHANNELKEY(channel) ": 475 " + channel + " :Cannot join channel (+k)\r\n"
 # define ERR_CHANOPRIVSNEEDED(channel) ": 482 " + channel + " :You're not channel operator\r\n"
 # define RPL_INVITING(channel, nick) ": 341 :" + channel + " " + nick + "\r\n"
-# define ERR_ ": 4 :\r\n"
+# define ERR_NOTREGISTERED ": 451 :You have not registered\r\n"
 # define ERR_ ": 4 :\r\n"
 # define ERR_ ": 4 :\r\n"
 # define ERR_ ": 4 :\r\n"

@@ -111,14 +111,20 @@ void  cmd::join(server &svr, int poll_fd_pos, std::string str) {
         }
         svr.create_channel(usr, it->first, it->second);
       }
+	  svr.send_message(RPL_TOPIC(chn->get_name(), chn->get_topic()), usr.get_fd());
     }
   }
+	else
+	  svr.send_message(ERR_NOTREGISTERED, usr.get_fd());
 }
+
 void	test_join_cmd(server *server)
 {
 	std::cout << BLUE << "Test join command\n";
 	std::cout << "==========================\n" << RESET;
 
+	cmd::username(*server, 1, "user1 hostname1 servername1 :thelma");
+	cmd::username(*server, 2, "user2 hostname2 servername2 :louise");
 	cmd::nick(*server, 1, "nick_1");
 	cmd::nick(*server, 2, "nick_2");
 
@@ -143,7 +149,7 @@ void	test_join_cmd(server *server)
 	cmd::join(*server, 2, "chan2,&passchan pass");
 
 	std::cout <<  CYAN << "Test 7: Join channel with topic\n" << RESET;
-	std::cout << YELLOW << "TOPIC #topic_chan test_topic\n JOIN #topic_chan\n" << RESET;
+	std::cout << YELLOW << "TOPIC #topic_chan test_topic\nJOIN #topic_chan\n" << RESET;
 	cmd::join(*server, 1, "#topic_chan");
 	cmd::topic(*server, 1, "#topic_chan test_topic");
 	cmd::join(*server, 2, "#topic_chan");
