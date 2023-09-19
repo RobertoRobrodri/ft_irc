@@ -69,17 +69,17 @@ void	test_invite_cmd(server *server)
 	
 	std::cout <<  CYAN << "Test 1: Invite to an existing channel\n" << RESET;
 	std::cout << YELLOW << "INVITE Wiz #TestChannel\n" << RESET;
-	cmd::topic(*server, 1, "Wiz #TestChannel");
+	cmd::invite(*server, 1, "Wiz #TestChannel");
 	
 	std::cout <<  CYAN << "Test 2: Invite to a non existing channel\n" << RESET;
 	std::cout << YELLOW << "INVITE Wiz #NoExist\n" << RESET;
-	cmd::topic(*server, 1, "Wiz #NoExist");
+	cmd::invite(*server, 1, "Wiz #NoExist");
 	
 	std::cout <<  CYAN << "Test 3: No channel\n" << RESET;
 	std::cout << YELLOW << "INVITE Wiz\n" << RESET;
-	cmd::topic(*server, 1, "Wiz");
+	cmd::invite(*server, 1, "Wiz");
 	
 	std::cout <<  CYAN << "Test 3: No parameters\n" << RESET;
 	std::cout << YELLOW << "INVITE\n" << RESET;
-	cmd::topic(*server, 1, "");
+	cmd::invite(*server, 1, "");
 }
