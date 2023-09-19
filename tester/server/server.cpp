@@ -67,7 +67,8 @@ void	server::init_list_of_cmds(void) // Update with new commands Tested
 	this->list_of_cmds.insert(std::pair<std::string, command_function>("PART", &cmd::part));
 	this->list_of_cmds.insert(std::pair<std::string, command_function>("NOTICE", &cmd::notice));
 	this->list_of_cmds.insert(std::pair<std::string, command_function>("NAMES", &cmd::names));
-//	this->list_of_cmds.insert(std::pair<std::string, command_function>("MODE", &cmd::mode));
+	this->list_of_cmds.insert(std::pair<std::string, command_function>("LIST", &cmd::list));
+	this->list_of_cmds.insert(std::pair<std::string, command_function>("MODE", &cmd::mode));
 }
 
 void	server::init_pollfd(void) // Tested
