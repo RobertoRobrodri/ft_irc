@@ -111,7 +111,6 @@ void  cmd::join(server &svr, int poll_fd_pos, std::string str) {
         }
         svr.create_channel(usr, it->first, it->second);
       }
-	  svr.send_message(RPL_TOPIC(chn->get_name(), chn->get_topic()), usr.get_fd());
     }
   }
 	else
