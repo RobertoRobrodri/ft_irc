@@ -138,15 +138,15 @@ void	test_join_cmd(server *server)
 	std::cout <<  CYAN << "Test 3: Join existing channel\n" << RESET;
 	std::cout << YELLOW << "JOIN #chan1\n" << RESET;
 	cmd::join(*server, 2, "#chan1");
-
+	
 	std::cout <<  CYAN << "Test 4: Create channel with pass\n" << RESET;
 	std::cout << YELLOW << "JOIN &passchan pass\n" << RESET;
 	cmd::join(*server, 1, "&passchan pass");
 
 	std::cout <<  CYAN << "Test 5: Join two channels, one with password\n" << RESET;
-	std::cout << YELLOW << "JOIN #foo,&bar fubar\n" << RESET;
-	cmd::join(*server, 2, "chan2,&passchan pass");
-
+	std::cout << YELLOW << "JOIN chan2,&passchan pass\n" << RESET;
+	cmd::join(*server, 2, "&passchan,chan2 pass");
+	
 	std::cout <<  CYAN << "Test 7: Join channel with topic\n" << RESET;
 	std::cout << YELLOW << "TOPIC #topic_chan test_topic\nJOIN #topic_chan\n" << RESET;
 	cmd::join(*server, 1, "#topic_chan");
@@ -162,4 +162,4 @@ void	test_join_cmd(server *server)
 	cmd::join(*server, 1, "#restrictive_chan");
 	cmd::mode(*server, 1, "#restrictive_chan +i");
 	cmd::join(*server, 2, "#restrictive_chan");
-}
+	}
