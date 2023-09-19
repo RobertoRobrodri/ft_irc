@@ -232,6 +232,8 @@ std::map<std::string, std::string> server::parse_message(std::string msg) // Tes
 
 void	server::execute_commands(int poll_fd_pos, std::map<std::string, std::string> commands) // No test
 {
+	poll_fd pollfd = this->get_pollfd(poll_fd_pos);
+	user &usr = this->get_user(pollfd.fd);
 	std::map<std::string, std::string>::iterator it;
 
 	for (it = commands.begin(); it != commands.end(); it++)
@@ -239,6 +241,8 @@ void	server::execute_commands(int poll_fd_pos, std::map<std::string, std::string
 		std::cout << it->first << std::endl;
 		if (this->list_of_cmds[it->first])
 			this->list_of_cmds[it->first](*this, poll_fd_pos, it->second);
+		else if (usr.get_is_registered())
+			this->send_message(ERR_UNKNOWNCOMMAND(it->first), usr.get_fd());
 	}
 }
 
