@@ -113,45 +113,53 @@ void  cmd::join(server &svr, int poll_fd_pos, std::string str) {
       }
     }
   }
+	else
+	  svr.send_message(ERR_NOTREGISTERED, usr.get_fd());
 }
+
 void	test_join_cmd(server *server)
 {
 	std::cout << BLUE << "Test join command\n";
 	std::cout << "==========================\n" << RESET;
 
+	cmd::username(*server, 1, "user1 hostname1 servername1 :thelma");
+	cmd::username(*server, 2, "user2 hostname2 servername2 :louise");
 	cmd::nick(*server, 1, "nick_1");
 	cmd::nick(*server, 2, "nick_2");
 
 	std::cout <<  CYAN << "Test 1: Join and create new channel\n" << RESET;
-	std::cout << YELLOW << "JOIN #foobar\n" << RESET;
-	cmd::join(*server, 1, "#foobar");
+	std::cout << YELLOW << "JOIN #chan1\n" << RESET;
+	cmd::join(*server, 1, "#chan1");
 
 	std::cout <<  CYAN << "Test 2: Join and create new channel without & or #\n" << RESET;
-	std::cout << YELLOW << "JOIN oofbar\n" << RESET;
-	cmd::join(*server, 1, "oofbar");
+	std::cout << YELLOW << "JOIN chan2\n" << RESET;
+	cmd::join(*server, 1, "chan2");
 
 	std::cout <<  CYAN << "Test 3: Join existing channel\n" << RESET;
-	std::cout << YELLOW << "JOIN #foobar\n" << RESET;
-	cmd::join(*server, 2, "#foobar");
-
-	std::cout <<  CYAN << "Test 4: Join channel using valid key\n" << RESET;
-	std::cout << YELLOW << "JOIN &foo fubar\n" << RESET;
-	cmd::join(*server, 1, "&foo fubar");
-
-	std::cout <<  CYAN << "Test 5: Join two channels\n" << RESET;
-	std::cout << YELLOW << "JOIN #foo,#bar\n" << RESET;
-	cmd::join(*server, 2, "&foo,#bar");
+	std::cout << YELLOW << "JOIN #chan1\n" << RESET;
+	cmd::join(*server, 2, "#chan1");
 	
-	std::cout <<  CYAN << "Test 6: Join two channels, one with password\n" << RESET;
-	std::cout << YELLOW << "JOIN #foo,&bar fubar\n" << RESET;
-	cmd::join(*server, 1, "#bar,&bar fubar");
+	std::cout <<  CYAN << "Test 4: Create channel with pass\n" << RESET;
+	std::cout << YELLOW << "JOIN &passchan pass\n" << RESET;
+	cmd::join(*server, 1, "&passchan pass");
 
+	std::cout <<  CYAN << "Test 5: Join two channels, one with password\n" << RESET;
+	std::cout << YELLOW << "JOIN chan2,&passchan pass\n" << RESET;
+	cmd::join(*server, 2, "&passchan,chan2 pass");
+	
 	std::cout <<  CYAN << "Test 7: Join channel with topic\n" << RESET;
-	std::cout << YELLOW << "JOIN #oofbar\n" << RESET;
-	cmd::topic(*server, 1, "#oofbar test_topic");
-	cmd::join(*server, 2, "#oofbar");
+	std::cout << YELLOW << "TOPIC #topic_chan test_topic\nJOIN #topic_chan\n" << RESET;
+	cmd::join(*server, 1, "#topic_chan");
+	cmd::topic(*server, 1, "#topic_chan test_topic");
+	cmd::join(*server, 2, "#topic_chan");
 
 	std::cout  <<  CYAN << "Test 8: Not enough parameters\n" << RESET;
 	std::cout << YELLOW << "JOIN\n" << RESET;
 	cmd::join(*server, 1, "");
-}
+	
+	std::cout <<  CYAN << "Test 9: Try to join invite-only channel\n" << RESET;
+	std::cout << YELLOW << "JOIN #oofbar\n" << RESET;
+	cmd::join(*server, 1, "#restrictive_chan");
+	cmd::mode(*server, 1, "#restrictive_chan +i");
+	cmd::join(*server, 2, "#restrictive_chan");
+	}
