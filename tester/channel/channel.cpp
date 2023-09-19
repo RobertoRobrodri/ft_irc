@@ -52,7 +52,7 @@ std::ostream &operator<<(std::ostream& os, const channel &tmp) {
 
 void	channel::add_member(user &usr)
 {
-  usr.set_n_channels(usr.get_n_channels() + 1);
+  	usr.set_n_channels(usr.get_n_channels() + 1);
 	this->list_of_members.push_back(usr);
   /*
 	std::cout << "Join successful! " << std::endl;
@@ -66,10 +66,12 @@ void	channel::add_member(user &usr)
   else
   	server::send_message(RPL_TOPIC(channel, topic), usr.get_fd());
   
-  std::string members;
-  for (std::vector<user>::iterator it = this->list_of_members.begin(); it != this->list_of_members.end(); it++)
-    members += (it->get_nick() + " ");
-  server::send_message(RPL_NAMREPLY(channel, members), usr.get_fd());
+  	std::string members;
+	std::vector<user>::iterator it;
+  	for (it = this->list_of_members.begin(); it != this->list_of_members.end(); it++)
+		members += (it->get_nick() + " ");
+  	for (it = this->list_of_members.begin(); it != this->list_of_members.end(); it++)
+  		server::send_message(RPL_NAMREPLY(channel, members), usr.get_fd());
 }
 
 void	channel::rmv_member(user &usr)
@@ -143,8 +145,8 @@ void 	channel::parse_mode_flag(std::string &modes, std::vector<std::string> mode
 			}
 			case 'o':
 			{
-        if (mode_params.empty())
-          break ;
+        		if (mode_params.empty())
+          			break ;
 				user *usr = _server->get_user_from_nick(mode_params[j++]);
 				if (!usr)
 					break;
@@ -153,16 +155,16 @@ void 	channel::parse_mode_flag(std::string &modes, std::vector<std::string> mode
         		break;
 			}
 			case 'i':	// Invite only
-      case 't':	// topic settable by channel operator only flag
-      case 'p':	// set channel to private
-      case 's':	// set channel to secret
-      {
-      	if (sign == true)
-      	{
-			      tmp = this->get_mode();
-      			tmp.push_back(modes[i]);
-      			this->set_mode(tmp);
-      	}
+      		case 't':	// topic settable by channel operator only flag
+      		case 'p':	// set channel to private
+      		case 's':	// set channel to secret
+      		{
+      			if (sign == true)
+      			{
+					tmp = this->get_mode();
+      				tmp.push_back(modes[i]);
+      				this->set_mode(tmp);
+				}
 				else
 				{
 					size_t pos = this->get_mode().find(modes[i]);
@@ -179,8 +181,8 @@ void 	channel::parse_mode_flag(std::string &modes, std::vector<std::string> mode
             			break ;
 					this->set_user_limit(atoi(mode_params[j++].c_str()));
 					tmp = this->get_mode();
-          tmp.push_back(modes[i]);
-          this->set_mode(tmp);
+          			tmp.push_back(modes[i]);
+          			this->set_mode(tmp);
 				}
 				else
 				{
@@ -191,32 +193,31 @@ void 	channel::parse_mode_flag(std::string &modes, std::vector<std::string> mode
 				}
         		break;
 			}
-			// set password for channel
-			case 'k':
+			case 'k':	// set password for channel
 			{
 				if (sign == true)
 				{
-          if (mode_params.empty())
-            break ;
+          			if (mode_params.empty())
+            			break ;
 					this->set_password(mode_params[j++]);
 					tmp = this->get_mode();
-          tmp.push_back(modes[i]);
-          this->set_mode(tmp);
-        }
+          			tmp.push_back(modes[i]);
+          			this->set_mode(tmp);
+        		}
 				else
 				{
 					this->set_password("");
 					size_t pos = this->get_mode().find('k');
 					tmp = this->get_mode().erase(pos);
-          this->set_mode(tmp);
+          			this->set_mode(tmp);
 				}
-        break ;
+        		break ;
 			}
-      default :
-      {
-        std::cout << "No existe el modo: " << modes[i] << std::endl;
-        break;
-      }
+      		default :
+      		{
+        		std::cout << "No existe el modo: " << modes[i] << std::endl;
+        		break;
+      		}
 		}
 	}
   std::cout << *this << std::endl;
