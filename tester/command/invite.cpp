@@ -45,8 +45,8 @@ void cmd::invite(server &svr, int poll_fd_pos, std::string str)
 	  }
 	  if (chn->is_user_in_channel(*new_user))
 	  {
-		  svr.send_message(ERR_USERONCHANNEL(msglist[0], msglist[1]), usr.get_fd());
-		  return ;
+			  svr.send_message(ERR_USERONCHANNEL(msglist[0], msglist[1]), usr.get_fd());
+			  return ;
 	  }
 	  if (chn->get_mode().find('i') != std::string::npos && usr.get_op() == false)
 	  {
@@ -54,8 +54,10 @@ void cmd::invite(server &svr, int poll_fd_pos, std::string str)
 		  return ;
 	  }
 	  chn->add_member(*new_user);
+	  svr.send_message(RPL_INVITING(msglist[0], msglist[1]), usr.get_fd());
   }
-  svr.send_message(RPL_INVITING(msglist[0], msglist[1]), usr.get_fd());
+  else
+    svr.send_message(ERR_NOSUCHNICK(msglist[1]), usr.get_fd());
 }
 
 void	test_invite_cmd(server *server)
@@ -79,7 +81,7 @@ void	test_invite_cmd(server *server)
 	std::cout << YELLOW << "INVITE Wiz\n" << RESET;
 	cmd::invite(*server, 1, "Wiz");
 	
-	std::cout <<  CYAN << "Test 3: No parameters\n" << RESET;
+	std::cout <<  CYAN << "Test 4: No parameters\n" << RESET;
 	std::cout << YELLOW << "INVITE\n" << RESET;
 	cmd::invite(*server, 1, "");
 }

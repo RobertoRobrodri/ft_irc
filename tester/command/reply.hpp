@@ -7,7 +7,7 @@
 # define RPL_TOPIC(channel, topic) ": 332 " + channel + " :" + topic + "\r\n"
 # define RPL_INVITING(channel, nick) ": 341 :" + channel + " " + nick + "\r\n"
 # define RPL_NAMREPLY(channel, members) ": 353  " + channel + " :" + members + "\r\n"
-# define ERR_NOSUCHNICK(rcv) ": 401 " + rcv + ":No such nick/channel\r\n"
+# define ERR_NOSUCHNICK(rcv) ": 401 " + rcv + " :No such nick/channel\r\n"
 # define ERR_NOSUCHCHANNEL(channel) ": 403 " + channel + " :No such channel\r\n"
 # define ERR_CANNOTSENDTOCHAN(channel) ": 404 " + channel + " :Cannot send to channel\r\n"
 # define ERR_TOOMANYCHANNELS(channel) ": 405 " + channel + " :You have joined too many channels\r\n"
