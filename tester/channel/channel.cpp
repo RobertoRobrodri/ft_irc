@@ -216,14 +216,14 @@ void 	channel::parse_mode_flag(user &usr, std::string &modes, std::vector<std::s
       		default :
       		{
 				std::string mode (&modes[i]);
-				this->_server->send_message(ERR_UNKNOWNMODE(modes), usr.get_fd());
+				this->_server->send_message(ERR_UNKNOWNMODE(mode), usr.get_fd());
         		return;
       		}
 		}
+	}
 		std::string params;
 		for (std::vector<std::string>::iterator i = mode_params.begin(); i != mode_params.end(); ++i)
     		params += *i;
   		for (std::vector<user>::iterator it = this->list_of_members.begin(); it != this->list_of_members.end(); it++)
 					this->_server->send_message(RPL_CHANNELMODEIS(this->_name, modes, params), it->get_fd());
-	}
 }

@@ -92,9 +92,9 @@ void	test_mode_cmd(server *server)
 	cmd::join(*server, 2, "#TestChannel");
     channel *channel1 = server->get_channel_from_name("#TestChannel");
 
-	std::cout << CYAN << "Test 1: Make channel moderated and invite-only\n" << RESET;
-	std::cout << YELLOW << "MODE #TestChannel +im\n" << RESET;
-	cmd::mode(*server, 1, "#TestChannel +im");
+	std::cout << CYAN << "Test 1: Make channel private and invite-only\n" << RESET;
+	std::cout << YELLOW << "MODE #TestChannel +ip\n" << RESET;
+	cmd::mode(*server, 1, "#TestChannel +ip");
 	std::cout << *channel1 << std::endl;
 
 	std::cout << CYAN << "Test 2: Give 'chanop' privileges to nick_2 on channel #TestChannel\n" << RESET;
