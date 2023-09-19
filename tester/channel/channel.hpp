@@ -55,7 +55,7 @@ class	channel {
 		bool	is_user_in_channel(const user &usr);
 		bool 	is_user_operator(const user &usr);
 		void	set_user_operator(const user &usr, const bool &flag);
-		void 	parse_mode_flag(std::string &modes, std::vector<std::string> mode_params);
+		void 	parse_mode_flag(user &usr, std::string &modes, std::vector<std::string> mode_params);
 };
 std::ostream &operator<<(std::ostream& os, const channel &tmp);
 

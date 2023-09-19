@@ -122,7 +122,7 @@ void	channel::set_user_operator(const user &usr, const bool &flag)
   }
 }
 
-void 	channel::parse_mode_flag(std::string &modes, std::vector<std::string> mode_params)
+void 	channel::parse_mode_flag(user &usr, std::string &modes, std::vector<std::string> mode_params)
 {
 	bool sign = 0;
 	size_t j = 0;
@@ -215,10 +215,15 @@ void 	channel::parse_mode_flag(std::string &modes, std::vector<std::string> mode
 			}
       		default :
       		{
-        		std::cout << "No existe el modo: " << modes[i] << std::endl;
-        		break;
+				std::string mode (&modes[i]);
+				this->_server->send_message(ERR_UNKNOWNMODE(modes), usr.get_fd());
+        		return;
       		}
 		}
+		std::string params;
+		for (std::vector<std::string>::iterator i = mode_params.begin(); i != mode_params.end(); ++i)
+    		params += *i;
+  		for (std::vector<user>::iterator it = this->list_of_members.begin(); it != this->list_of_members.end(); it++)
+					this->_server->send_message(RPL_CHANNELMODEIS(this->_name, modes, params), it->get_fd());
 	}
-  std::cout << *this << std::endl;
 }

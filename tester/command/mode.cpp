@@ -76,7 +76,7 @@ void cmd::mode(server &svr, int poll_fd_pos, std::string str)
 	}
 	std::vector<std::string> mode_params = msglist;
 	mode_params.erase(mode_params.begin(), mode_params.begin() + 2);
-	chn->parse_mode_flag(msglist[1], mode_params);
+	chn->parse_mode_flag(usr, msglist[1], mode_params);
 }
 
 void	test_mode_cmd(server *server)
@@ -86,10 +86,8 @@ void	test_mode_cmd(server *server)
 	
 	cmd::nick(*server, 1, "nick_1");
 	cmd::nick(*server, 2, "nick_2");
-	cmd::nick(*server, 3, "nick_3");
 	cmd::join(*server, 1, "#TestChannel");
 	cmd::join(*server, 2, "#TestChannel");
-	cmd::join(*server, 3, "#TestChannel");
     channel *channel1 = server->get_channel_from_name("#TestChannel");
 
 	std::cout << CYAN << "Test 1: Make channel moderated and invite-only\n" << RESET;
