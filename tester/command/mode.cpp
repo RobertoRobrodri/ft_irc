@@ -84,6 +84,8 @@ void	test_mode_cmd(server *server)
 	std::cout << BLUE << "Test mode command\n";
 	std::cout << "==========================\n" << RESET;
 	
+	cmd::username(*server, 1, "user1 hostname1 servername1 :thelma");
+	cmd::username(*server, 2, "user2 hostname2 servername2 :louise");
 	cmd::nick(*server, 1, "nick_1");
 	cmd::nick(*server, 2, "nick_2");
 	cmd::join(*server, 1, "#TestChannel");
