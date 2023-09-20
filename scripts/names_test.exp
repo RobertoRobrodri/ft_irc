@@ -31,7 +31,7 @@ sleep 2
 send -- "MODE #panchitosdramaticos +sp\r"
 send -- "NAMES\r"
 sleep 2
-send -- "LIST \r"
+send -- "LIST\r"
 
 interact
 
