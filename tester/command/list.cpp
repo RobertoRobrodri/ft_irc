@@ -26,7 +26,7 @@ void cmd::list(server &svr, int poll_fd_pos, std::string str)
                     else
                         svr.send_message(RPL_LIST(it->first, privchn, nprivchn), usr.get_fd());
                 }
-                else if ((chn.get_mode().find('s') != std::string::npos) && chn.is_user_in_channel(usr) || (chn.get_mode().find('s') == std::string::npos))
+                else if (((chn.get_mode().find('s') != std::string::npos) && chn.is_user_in_channel(usr)) || (chn.get_mode().find('s') == std::string::npos))
                 {
                     svr.send_message(RPL_LIST(it->first, nprivchn, chn.get_topic()), usr.get_fd());
                 }
@@ -49,7 +49,7 @@ void cmd::list(server &svr, int poll_fd_pos, std::string str)
                         else
                             svr.send_message(RPL_LIST(chnlist[i], privchn, nprivchn), usr.get_fd());
                     }
-                    else if ((chn->get_mode().find('s') != std::string::npos) && chn->is_user_in_channel(usr) || (chn->get_mode().find('s') == std::string::npos))
+                    else if (((chn->get_mode().find('s') != std::string::npos) && chn->is_user_in_channel(usr)) || (chn->get_mode().find('s') == std::string::npos))
                         svr.send_message(RPL_LIST(chnlist[i], nprivchn, chn->get_topic()), usr.get_fd());
                 }
             }

@@ -31,6 +31,13 @@ void cmd::names(server &svr, int poll_fd_pos, std::string str)
                 }
             }
             std::string schn = "*";
+            // esto es lo  nuevo
+            std::map<int, user> users_lst = svr.get_list_of_users();
+            std::map<int, user>::iterator user_it;
+            for (user_it = users_lst.begin(); user_it != users_lst.end(); user_it++)
+                if (user_it->second.get_n_channels() == 0 && user_it->second.get_is_registered() == true)
+                    secret_lst += (user_it->second.get_nick() + " ");
+            // hasta aqui uwu
             svr.send_message(RPL_NAMREPLY(schn, secret_lst), usr.get_fd());
             return ;
         }
