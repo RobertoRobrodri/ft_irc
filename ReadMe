@@ -87,6 +87,7 @@ O_NONBLOCK   Non-blocking I/O; if no data is available to a read call, or if a w
 [✅] serv::wait_for_connection change TIMEOUT
 [✅] autosock::server_listening revise setsockopt flags
 [✅] autosock::server_listening define max size for poll
+[ ] Mirar como entran las strings a los comandos porqe si pones un espacio se va a la caca
 =======
 
 
