@@ -16,7 +16,6 @@ void cmd::names(server &svr, int poll_fd_pos, std::string str)
             {
                 channel chn = it->second;
                 std::vector<user> members = chn.get_list_of_members();
-                //std::cout << "MAZO MODO: " << chn.get_mode() << std::endl;
                 if (chn.get_mode().find("sp") != std::string::npos)
                 {
                     std::string members_lst;

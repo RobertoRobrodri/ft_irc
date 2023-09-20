@@ -33,7 +33,20 @@ void cmd::topic(server &svr, int poll_fd_pos, std::string str)
     channel *chn = svr.get_channel_from_name(msglist[0]);
     if (chn)
     {
-      if (chn->is_user_in_channel(usr))
+      if (msglist.size() > 1)
+      {
+        if (chn->is_user_in_channel(usr))
+        {
+          //TODO else if para chequear los modos del canal
+          //TODO else if (find(chn->get_mode(), 't') != -1) && usr->get_op()) ->se cambia el topic
+          //TODO else svr.send_message(ERR_CHANOPRIVSNEEDED(msglist[0]), usr.get_fd());
+          std::string new_topic = str.substr(str.find(msglist[1]));
+          chn->set_topic(str.substr(str.find(msglist[1])));
+          return ;
+          //TODO mandar mensaje al canal de que se ha seteado el topic
+        }
+      }
+      else
       {
         std::string topic = chn->get_topic();
         if (topic.empty())
@@ -42,16 +55,6 @@ void cmd::topic(server &svr, int poll_fd_pos, std::string str)
           return ;
         }
         svr.send_message(RPL_TOPIC(msglist[0], topic), usr.get_fd());
-      }
-      else
-      {
-        //TODO else if para chequear los modos del canal
-        //TODO else if (find(chn->get_mode(), 't') != -1) && usr->get_op()) ->se cambia el topic
-        //TODO else svr.send_message(ERR_CHANOPRIVSNEEDED(msglist[0]), usr.get_fd());
-        std::string new_topic = str.substr(str.find(msglist[1]));
-        chn->set_topic(str.substr(str.find(msglist[1])));
-        return ;
-        //TODO mandar mensaje al canal de que se ha seteado el topic
       }
     }
     else
