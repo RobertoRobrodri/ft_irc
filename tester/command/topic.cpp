@@ -23,10 +23,10 @@ void cmd::topic(server &svr, int poll_fd_pos, std::string str) //TODO los modos
 
   if (usr.get_is_registered() == true)
   {
-
+	  std::string command = "TOPIC";
     if (str == "")
     {
-      svr.send_message(": 461 TOPIC: Not enough parameters \r\n", usr.get_fd());
+      svr.send_message(ERR_NEEDMOREPARAMS(command), usr.get_fd());
       return ;
     }
     std::vector<std::string> msglist = ft_split(str, ' ');
@@ -40,10 +40,10 @@ void cmd::topic(server &svr, int poll_fd_pos, std::string str) //TODO los modos
           std::string topic = chn->get_topic();
           if (topic.empty())
           {
-            svr.send_message(": 331 " + msglist[0] + ": No topic is set \r\n", usr.get_fd());
+            svr.send_message(RPL_NOTOPIC(msglist[0]), usr.get_fd());
             return ;
           }
-          svr.send_message(": 332 " + msglist[0] + ": " + topic + "\r\n", usr.get_fd());
+          svr.send_message(RPL_TOPIC(msglist[0], topic), usr.get_fd());
         }
         else
         {
@@ -55,13 +55,13 @@ void cmd::topic(server &svr, int poll_fd_pos, std::string str) //TODO los modos
       }
       else
       {
-        svr.send_message(": 442 " + msglist[0] + ": You're not on that channel \r\n", usr.get_fd());
+        svr.send_message(ERR_NOTONCHANNEL(msglist[0]), usr.get_fd());
         return ;
       }
     }
     else
     {
-      svr.send_message(": 403 " + msglist[0] + ": No such channel\r\n", usr.get_fd());
+      svr.send_message(ERR_NOSUCHCHANNEL(msglist[0]), usr.get_fd());
       return ;
     }
   }
