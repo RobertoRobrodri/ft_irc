@@ -65,6 +65,8 @@ void cmd::topic(server &svr, int poll_fd_pos, std::string str) //TODO los modos
       return ;
     }
   }
+  else
+	  svr.send_message(ERR_NOTREGISTERED, usr.get_fd());
 }
 
 void	test_topic_cmd(server *server)

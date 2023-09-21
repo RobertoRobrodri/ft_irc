@@ -29,4 +29,6 @@ void  cmd::part(server &svr, int poll_fd_pos, std::string str) {
       chn->rmv_member(usr);
     }
   }
+  else
+	  svr.send_message(ERR_NOTREGISTERED, usr.get_fd());
 }
