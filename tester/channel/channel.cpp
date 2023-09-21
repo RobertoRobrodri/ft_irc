@@ -168,7 +168,7 @@ void 	channel::parse_mode_flag(user &usr, std::string &modes, std::vector<std::s
 				else
 				{
 					size_t pos = this->get_mode().find(modes[i]);
-					tmp = this->get_mode().erase(pos);
+					tmp = this->get_mode().erase(pos, 1);
           			this->set_mode(tmp);
 				}
         		break;
