@@ -16,17 +16,17 @@
            ERR_CHANOPRIVSNEEDED
 
  */
-void cmd::topic(server &svr, int poll_fd_pos, std::string str) //TODO los modos
+void cmd::topic(server &svr, int poll_fd_pos, std::string str)
 {
   poll_fd pollfd = svr.get_pollfd(poll_fd_pos);
   user &usr = svr.get_user(pollfd.fd);
 
   if (usr.get_is_registered() == true)
   {
-
+	  std::string command = "TOPIC";
     if (str == "")
     {
-      svr.send_message(": 461 TOPIC: Not enough parameters \r\n", usr.get_fd());
+      svr.send_message(ERR_NEEDMOREPARAMS(command), usr.get_fd());
       return ;
     }
     std::vector<std::string> msglist = ft_split(str, ' ');
@@ -35,15 +35,20 @@ void cmd::topic(server &svr, int poll_fd_pos, std::string str) //TODO los modos
     {
       if (chn->is_user_in_channel(usr))
       {
+		if (chn->get_mode().find("t") != std::string::npos && !usr.get_op())
+        {
+            svr.send_message(ERR_CHANOPRIVSNEEDED(msglist[0]), usr.get_fd());
+            return ;
+        }
         if (msglist.size() == 1)
         {
           std::string topic = chn->get_topic();
           if (topic.empty())
           {
-            svr.send_message(": 331 " + msglist[0] + ": No topic is set \r\n", usr.get_fd());
+            svr.send_message(RPL_NOTOPIC(msglist[0]), usr.get_fd());
             return ;
           }
-          svr.send_message(": 332 " + msglist[0] + ": " + topic + "\r\n", usr.get_fd());
+          svr.send_message(RPL_TOPIC(msglist[0], topic), usr.get_fd());
         }
         else
         {
@@ -55,16 +60,18 @@ void cmd::topic(server &svr, int poll_fd_pos, std::string str) //TODO los modos
       }
       else
       {
-        svr.send_message(": 442 " + msglist[0] + ": You're not on that channel \r\n", usr.get_fd());
+        svr.send_message(ERR_NOTONCHANNEL(msglist[0]), usr.get_fd());
         return ;
       }
     }
     else
     {
-      svr.send_message(": 403 " + msglist[0] + ": No such channel\r\n", usr.get_fd());
+      svr.send_message(ERR_NOSUCHCHANNEL(msglist[0]), usr.get_fd());
       return ;
     }
   }
+  else
+	  svr.send_message(ERR_NOTREGISTERED, usr.get_fd());
 }
 
 void	test_topic_cmd(server *server)

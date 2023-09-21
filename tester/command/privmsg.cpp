@@ -42,23 +42,31 @@ void  cmd::privmsg(server &svr, int poll_fd_pos, std::string str) {
     }
     std::vector<std::string> rcvlist = ft_split(msglist[0], ',');
     std::string msg = str.substr(str.find(msglist[1]));
-    for (size_t i = 0; i < rcvlist.size(); i++)
+	std::sort(rcvlist.begin(), rcvlist.end());
+	for (size_t i = 0; i < rcvlist.size(); i++)
     {
-      if ((rcvlist[i][0] == '#') || (rcvlist[i][0] == '&'))
-      {
-        channel *chn = svr.get_channel_from_name(rcvlist[i]);
-        usr.send_to_channel(chn, rcvlist[i], msg);
-      }
-      else
-      {
-        user *receiver = svr.get_user_from_nick(rcvlist[i]);
-        if(receiver)
-          svr.send_message("From " + usr.get_nick() + ":\n" + msg + "\n", receiver->get_fd());
-        else
-          svr.send_message(ERR_NOSUCHNICK(rcvlist[i]), usr.get_fd());
-      }
+		if (i != 0 && rcvlist[i] == rcvlist[i - 1])
+		{
+          	svr.send_message(ERR_TOOMANYTARGETS(rcvlist[i]), usr.get_fd());
+			return;
+		}
+		if ((rcvlist[i][0] == '#') || (rcvlist[i][0] == '&'))
+		{
+        	channel *chn = svr.get_channel_from_name(rcvlist[i]);
+        	usr.send_to_channel(svr, chn, rcvlist[i], msg);
+      	}
+		else
+		{
+        	user *receiver = svr.get_user_from_nick(rcvlist[i]);
+        	if (receiver)
+          		svr.send_message("From " + usr.get_nick() + ":\n" + msg + "\n", receiver->get_fd());
+        	else
+          		svr.send_message(ERR_NOSUCHNICK(rcvlist[i]), usr.get_fd());
+      	}
     }
   }
+  else
+	  svr.send_message(ERR_NOTREGISTERED, usr.get_fd());
 }
 
 void	test_privmsg_cmd(server *server)
@@ -67,6 +75,8 @@ void	test_privmsg_cmd(server *server)
 	std::cout << BLUE << "Test privmsg command\n";
 	std::cout << "==========================\n" << RESET;
 
+	cmd::username(*server, 1, "user1 hostname1 servername1 :angel");
+	cmd::username(*server, 2, "user2 hostname2 servername2 :wiz");
 	cmd::nick(*server, 1, "Angel");
 	cmd::nick(*server, 2, "Wiz");
 

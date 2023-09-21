@@ -47,7 +47,7 @@ void  cmd::username(server &svr, int poll_fd_pos, std::string str) {
   usr.set_servername(servername);
   usr.set_realname(realname);
  
-  usr.is_registered();
+  usr.is_registered(svr);
   std::cout << usr << std::endl;
 }
 

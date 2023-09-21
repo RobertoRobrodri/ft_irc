@@ -13,7 +13,6 @@ class	channel {
 
 	private:
 
-		server					*_server;
 		std::string				_name;
 		std::string				_topic;
 		std::vector<user> 		list_of_members;
@@ -24,8 +23,8 @@ class	channel {
 		channel 			( void );
 	public:
 
-		channel 			( std::string str, server *svr );
-		channel 			( std::string c_name, std::string password, server *svr );
+		channel 			( std::string str );
+		channel 			( std::string c_name, std::string password );
 		channel 			( const channel & var );
 		~channel			( void );
 		channel &operator=	(const channel &tmp);
@@ -55,7 +54,7 @@ class	channel {
 		bool	is_user_in_channel(const user &usr);
 		bool 	is_user_operator(const user &usr);
 		void	set_user_operator(const user &usr, const bool &flag);
-		void 	parse_mode_flag(std::string &modes, std::vector<std::string> mode_params);
+		void 	parse_mode_flag(user &usr, std::string &modes, std::vector<std::string> mode_params, server &srv);
 };
 std::ostream &operator<<(std::ostream& os, const channel &tmp);
 

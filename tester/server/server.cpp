@@ -125,7 +125,7 @@ void	server::add_user(int fd, sock_in client_addr) // Tested
 	this->poll_fds[this->_active_fds].fd = fd;
 	this->poll_fds[this->_active_fds].events = POLLIN;
 	this->_active_fds++;
-	user 	new_user(fd, inet_ntop(AF_INET, &(client_addr.sin_addr), ip_address, sizeof(ip_address)), this);
+	user 	new_user(fd, inet_ntop(AF_INET, &(client_addr.sin_addr), ip_address, sizeof(ip_address)));
 	this->list_of_users.insert(std::pair<int, user>(fd, new_user));
 }
 
@@ -232,6 +232,8 @@ std::map<std::string, std::string> server::parse_message(std::string msg) // Tes
 
 void	server::execute_commands(int poll_fd_pos, std::map<std::string, std::string> commands) // No test
 {
+	poll_fd pollfd = this->get_pollfd(poll_fd_pos);
+	user &usr = this->get_user(pollfd.fd);
 	std::map<std::string, std::string>::iterator it;
 
 	for (it = commands.begin(); it != commands.end(); it++)
@@ -239,6 +241,8 @@ void	server::execute_commands(int poll_fd_pos, std::map<std::string, std::string
 		std::cout << it->first << std::endl;
 		if (this->list_of_cmds[it->first])
 			this->list_of_cmds[it->first](*this, poll_fd_pos, it->second);
+		else if (usr.get_is_registered())
+			this->send_message(ERR_UNKNOWNCOMMAND(it->first), usr.get_fd());
 	}
 }
 
@@ -249,7 +253,7 @@ void	server::create_channel(user &usr, std::string name, std::string password) /
 		std::string channel_mark("#");
 		name.insert(0, channel_mark);
 	}
-	channel cnn(name, password, this);
+	channel cnn(name, password);
 	if (!password.empty())
 		cnn.set_mode("k");
 	usr.set_op(true);
