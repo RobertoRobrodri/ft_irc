@@ -1,14 +1,14 @@
 #include "channel.hpp"
 
-channel::channel( void ) : _server(NULL), _user_limit(0) {
+channel::channel( void ) : _user_limit(0) {
   return ;
 }
 
-channel::channel( std::string str, server *svr ) :  _server(svr), _name(str), _user_limit(0) {
+channel::channel( std::string str ) :  _name(str), _user_limit(0) {
   return ;
 }
 
-channel::channel( std::string c_name, std::string password, server *svr ) :  _server(svr), _name(c_name), _password(password), _user_limit(0) {
+channel::channel( std::string c_name, std::string password ) :  _name(c_name), _password(password), _user_limit(0) {
   return ;
 }
 
@@ -122,7 +122,7 @@ void	channel::set_user_operator(const user &usr, const bool &flag)
   }
 }
 
-void 	channel::parse_mode_flag(user &usr, std::string &modes, std::vector<std::string> mode_params)
+void 	channel::parse_mode_flag(user &usr, std::string &modes, std::vector<std::string> mode_params, server &srv)
 {
 	bool sign = 0;
 	size_t j = 0;
@@ -147,7 +147,8 @@ void 	channel::parse_mode_flag(user &usr, std::string &modes, std::vector<std::s
 			{
         		if (mode_params.empty())
           			break ;
-				user *usr = _server->get_user_from_nick(mode_params[j++]);
+				std::string nick = mode_params[j++];
+				user *usr = srv.get_user_from_nick(nick);
 				if (!usr)
 					break;
 				if (this->is_user_in_channel(*usr))
@@ -216,7 +217,7 @@ void 	channel::parse_mode_flag(user &usr, std::string &modes, std::vector<std::s
       		default :
       		{
 				std::string mode (&modes[i]);
-				this->_server->send_message(ERR_UNKNOWNMODE(mode), usr.get_fd());
+				srv.send_message(ERR_UNKNOWNMODE(mode), usr.get_fd());
         		return;
       		}
 		}
@@ -225,5 +226,5 @@ void 	channel::parse_mode_flag(user &usr, std::string &modes, std::vector<std::s
 		for (std::vector<std::string>::iterator i = mode_params.begin(); i != mode_params.end(); ++i)
     		params += *i;
   		for (std::vector<user>::iterator it = this->list_of_members.begin(); it != this->list_of_members.end(); it++)
-					this->_server->send_message(RPL_CHANNELMODEIS(this->_name, modes, params), it->get_fd());
+					srv.send_message(RPL_CHANNELMODEIS(this->_name, modes, params), it->get_fd());
 }
