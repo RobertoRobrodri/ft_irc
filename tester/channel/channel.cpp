@@ -225,6 +225,6 @@ void 	channel::parse_mode_flag(user &usr, std::string &modes, std::vector<std::s
 		std::string params;
 		for (std::vector<std::string>::iterator i = mode_params.begin(); i != mode_params.end(); ++i)
     		params += *i;
-  		for (std::vector<user>::iterator it = this->list_of_members.begin(); it != this->list_of_members.end(); it++)
-					srv.send_message(RPL_CHANNELMODEIS(this->_name, modes, params), it->get_fd());
+		for (std::vector<user>::iterator it = this->list_of_members.begin(); it != this->list_of_members.end(); it++)
+			srv.send_message(RPL_CHANNELMODEIS(this->_name, modes, params), it->get_fd());
 }
