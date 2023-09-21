@@ -1,11 +1,11 @@
 #include "user.hpp"
 #include "../command/reply.hpp"
 
-user::user( void ) : _server(NULL), _fd(0), _is_registered(false), _n_channels(0), _op(false) {
+user::user( void ) : _fd(0), _is_registered(false), _n_channels(0), _op(false) {
   return ;
 }
 
-user::user( int fd, std::string hostname, server *svr ) : _server(svr), _fd(fd), _hostname(hostname), _n_channels(0), _op(false) {
+user::user( int fd, std::string hostname ) : _fd(fd), _hostname(hostname), _n_channels(0), _op(false) {
   return ;
 }
 
@@ -46,7 +46,7 @@ std::ostream &operator<<(std::ostream& os, const user &tmp) {
   return (os);
 }
 
-void  user::is_registered()
+void  user::is_registered(server &svr)
 {
   if (!this->_is_registered && !this->get_username().empty() && !this->get_nick().empty())
   {
@@ -54,11 +54,11 @@ void  user::is_registered()
 	  std::string nick = this->get_nick();
 	  std::string user = this->get_username();
 	  std::string host = this->get_hostname();
-    _server->send_message(RPL_WELCOME(nick, user, host), this->get_fd());
+	  svr.send_message(RPL_WELCOME(nick, user, host), this->get_fd());
   }
 }
 
-void		user::send_to_channel(channel *chn, std::string chn_name, std::string msg)
+void		user::send_to_channel(server &svr, channel *chn, std::string chn_name, std::string msg)
 {
   if(chn)
   {
@@ -66,10 +66,10 @@ void		user::send_to_channel(channel *chn, std::string chn_name, std::string msg)
     {
       for (size_t i = 0; i < chn->get_list_of_members().size(); i++)
         if (chn->get_list_of_members()[i].get_nick() != this->get_nick())
-          _server->send_message("From " + chn_name + ":\n" + msg + "\n", chn->get_list_of_members()[i].get_fd());
+          svr.send_message("From " + chn_name + ":\n" + msg + "\n", chn->get_list_of_members()[i].get_fd());
     }
     else
-      _server->send_message(ERR_CANNOTSENDTOCHAN(chn_name), this->get_fd());
+      svr.send_message(ERR_CANNOTSENDTOCHAN(chn_name), this->get_fd());
 	/*
 	 Sent to a user who is either (a) not on a channel
      which is mode +n or (b) not a chanop (or mode +v) on
@@ -78,6 +78,6 @@ void		user::send_to_channel(channel *chn, std::string chn_name, std::string msg)
 	*/
   }
   else
-    _server->send_message(ERR_NOSUCHNICK(chn_name), this->get_fd());
+    svr.send_message(ERR_NOSUCHNICK(chn_name), this->get_fd());
 
 }
