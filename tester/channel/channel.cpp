@@ -148,11 +148,10 @@ void 	channel::parse_mode_flag(user &usr, std::string &modes, std::vector<std::s
         		if (mode_params.empty())
           			break ;
 				std::string nick = mode_params[j++];
-				user *usr = srv.get_user_from_nick(nick);
-				if (!usr)
+				user *new_op = srv.get_user_from_nick(nick);
+				if (!new_op)
 					break;
-				if (this->is_user_in_channel(*usr))
-					this->set_user_operator(*usr, sign);
+				set_user_operator(*new_op, sign);
         		break;
 			}
 			case 'i':	// Invite only
@@ -169,7 +168,7 @@ void 	channel::parse_mode_flag(user &usr, std::string &modes, std::vector<std::s
 				else
 				{
 					size_t pos = this->get_mode().find(modes[i]);
-					tmp = this->get_mode().erase(pos);
+					tmp = this->get_mode().erase(pos, 1);
           			this->set_mode(tmp);
 				}
         		break;

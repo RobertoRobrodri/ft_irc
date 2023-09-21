@@ -124,7 +124,7 @@ void	server::add_user(int fd, sock_in client_addr) // Tested
 
 	this->poll_fds[this->_active_fds].fd = fd;
 	this->poll_fds[this->_active_fds].events = POLLIN;
-	this->_active_fds++;
+this->_active_fds++;
 	user 	new_user(fd, inet_ntop(AF_INET, &(client_addr.sin_addr), ip_address, sizeof(ip_address)));
 	this->list_of_users.insert(std::pair<int, user>(fd, new_user));
 }

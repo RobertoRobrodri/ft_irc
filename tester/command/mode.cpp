@@ -105,8 +105,6 @@ void	test_mode_cmd(server *server)
 	std::cout << CYAN << "Test 2: Give 'chanop' privileges to nick_2 on channel #TestChannel\n" << RESET;
 	std::cout << YELLOW << "MODE #TestChannel +o nick_2\n" << RESET;
 	cmd::mode(*server, 1, "#TestChannel +o nick_2");
-	std::cout << usr2 << std::endl;
-	
 	std::cout << CYAN << "Test 3: Remove invite-only flag\n" << RESET;
 	std::cout << YELLOW << "MODE #TestChannel -i\n" << RESET;
 	cmd::mode(*server, 1, "#TestChannel -i");
@@ -124,7 +122,5 @@ void	test_mode_cmd(server *server)
 
 	std::cout << CYAN << "Test 6: nick_1 deopping themselve\n" << RESET;
 	std::cout << YELLOW << "MODE -o nick_1\n" << RESET;
-	std::cout << usr1 << std::endl;
 	cmd::mode(*server, 1, "-o nick_1");
-	std::cout << usr1 << std::endl;
 }
