@@ -73,6 +73,8 @@ void	test_privmsg_cmd(server *server)
 	std::cout << BLUE << "Test privmsg command\n";
 	std::cout << "==========================\n" << RESET;
 
+	cmd::username(*server, 1, "user1 hostname1 servername1 :angel");
+	cmd::username(*server, 2, "user2 hostname2 servername2 :wiz");
 	cmd::nick(*server, 1, "Angel");
 	cmd::nick(*server, 2, "Wiz");
 
