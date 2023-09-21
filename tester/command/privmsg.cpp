@@ -65,6 +65,8 @@ void  cmd::privmsg(server &svr, int poll_fd_pos, std::string str) {
       	}
     }
   }
+  else
+	  svr.send_message(ERR_NOTREGISTERED, usr.get_fd());
 }
 
 void	test_privmsg_cmd(server *server)
