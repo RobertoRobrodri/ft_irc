@@ -3,7 +3,7 @@
 #define	sock_in		struct sockaddr_in
 #define	sock_addr	struct sockaddr
 #define	poll_fd		struct pollfd
-#define	MAX_CLIENTS	5
+#define	MAX_CLIENTS	20
 #define	TIMEOUT		-1
 #define MSG_SIZE	512
 #define SERVER_HOST	"127.0.0.1"

@@ -13,7 +13,7 @@ int main()
 {
 	char *port = "6667";
 	char *pass = "pass";
-	atexit(leaks);
+//	atexit(leaks);
 	server *serv = new server(port, pass);
 	test_connection(serv);
 

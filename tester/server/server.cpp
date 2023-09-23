@@ -107,8 +107,11 @@ bool	server::fd_ready(void)
 			continue;
 		if (this->poll_fds[i].fd == this->server_socket->fd)
 		{
-			std::cout << "Server opening new communication" << std::endl;
-			this->accept_communication();
+			if (this->_active_fds < MAX_CLIENTS)
+			{
+				std::cout << "Server opening new communication" << std::endl;
+				this->accept_communication();
+			}
 			return 0;
 		}
 		else
