@@ -20,21 +20,30 @@ void cmd::topic(server &svr, int poll_fd_pos, std::string str)
 {
   poll_fd pollfd = svr.get_pollfd(poll_fd_pos);
   user &usr = svr.get_user(pollfd.fd);
-
+  
   if (usr.get_is_registered() == true)
+<<<<<<< HEAD
   {
 	  std::string command = "TOPIC";
     if (str == "")
     {
       svr.send_message(ERR_NEEDMOREPARAMS(command), usr.get_fd());
+=======
+  { 
+    if (str == "")
+    {
+      std::string cmd = "TOPIC";
+      svr.send_message(ERR_NEEDMOREPARAMS(cmd), usr.get_fd());
+>>>>>>> d37fd4359b013eb8584d485ebfeff761e7b98c9c
       return ;
     }
     std::vector<std::string> msglist = ft_split(str, ' ');
     channel *chn = svr.get_channel_from_name(msglist[0]);
     if (chn)
     {
-      if (chn->is_user_in_channel(usr))
+      if (msglist.size() > 1)
       {
+<<<<<<< HEAD
 		if (chn->get_mode().find("t") != std::string::npos && !usr.get_op())
         {
             svr.send_message(ERR_CHANOPRIVSNEEDED(msglist[0]), usr.get_fd());
@@ -51,27 +60,54 @@ void cmd::topic(server &svr, int poll_fd_pos, std::string str)
           svr.send_message(RPL_TOPIC(msglist[0], topic), usr.get_fd());
         }
         else
+=======
+        if (chn->is_user_in_channel(usr))
+>>>>>>> d37fd4359b013eb8584d485ebfeff761e7b98c9c
         {
+          //TODO else if para chequear los modos del canal
+          //TODO else if (find(chn->get_mode(), 't') != -1) && usr->get_op()) ->se cambia el topic
+          //TODO else svr.send_message(ERR_CHANOPRIVSNEEDED(msglist[0]), usr.get_fd());
           std::string new_topic = str.substr(str.find(msglist[1]));
           chn->set_topic(str.substr(str.find(msglist[1])));
           return ;
+          //TODO mandar mensaje al canal de que se ha seteado el topic
         }
-
       }
       else
       {
+<<<<<<< HEAD
         svr.send_message(ERR_NOTONCHANNEL(msglist[0]), usr.get_fd());
         return ;
+=======
+        std::string topic = chn->get_topic();
+        if (topic.empty())
+        {
+          svr.send_message(RPL_NOTOPIC(msglist[0]), usr.get_fd());
+          return ;
+        }
+        svr.send_message(RPL_TOPIC(msglist[0], topic), usr.get_fd());
+>>>>>>> d37fd4359b013eb8584d485ebfeff761e7b98c9c
       }
     }
     else
     {
+<<<<<<< HEAD
       svr.send_message(ERR_NOSUCHCHANNEL(msglist[0]), usr.get_fd());
+=======
+      svr.send_message(ERR_NOTONCHANNEL(msglist[0]), usr.get_fd());
+>>>>>>> d37fd4359b013eb8584d485ebfeff761e7b98c9c
       return ;
     }
   }
   else
+<<<<<<< HEAD
 	  svr.send_message(ERR_NOTREGISTERED, usr.get_fd());
+=======
+  {
+    svr.send_message(ERR_NOSUCHCHANNEL, usr.get_fd());
+    return ;
+  }
+>>>>>>> d37fd4359b013eb8584d485ebfeff761e7b98c9c
 }
 
 void	test_topic_cmd(server *server)

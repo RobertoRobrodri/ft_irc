@@ -31,7 +31,12 @@ void cmd::invite(server &svr, int poll_fd_pos, std::string str) //TODO LOS MODOS
   std::vector<std::string> msglist = ft_split(str, ' ');
   if (msglist.size() < 2)
   {
+<<<<<<< HEAD
     svr.send_message(ERR_NEEDMOREPARAMS(command), usr.get_fd());
+=======
+    std::string cmd = "INVITE";
+    svr.send_message(ERR_NEEDMOREPARAMS(cmd), usr.get_fd());
+>>>>>>> d37fd4359b013eb8584d485ebfeff761e7b98c9c
     return ;
   }
   user *new_user = svr.get_user_from_nick(msglist[0]);
@@ -41,6 +46,7 @@ void cmd::invite(server &svr, int poll_fd_pos, std::string str) //TODO LOS MODOS
     svr.send_message(ERR_NOSUCHNICK(msglist[0]), usr.get_fd());
     return ;
   }
+<<<<<<< HEAD
   if (chn)
   {
 	  if (!chn->is_user_in_channel(usr))
@@ -63,6 +69,27 @@ void cmd::invite(server &svr, int poll_fd_pos, std::string str) //TODO LOS MODOS
   }
   else
     svr.send_message(ERR_NOSUCHNICK(msglist[1]), usr.get_fd());
+=======
+  if (!chn) //TODO esto no hace falta??
+  {
+    svr.send_message(ERR_NOSUCHNICK(msglist[1]), usr.get_fd());
+    return ;
+  }
+  if (!chn->is_user_in_channel(usr))
+  {
+      svr.send_message(ERR_NOTONCHANNEL(msglist[1]), usr.get_fd());
+      return ;
+  }
+  if (chn->is_user_in_channel(*new_user))
+  {
+      svr.send_message(ERR_USERONCHANNEL(msglist[0], msglist[1]), usr.get_fd());
+      return ;
+  }
+  chn->add_member(*new_user);
+  svr.send_message(RPL_INVITING(msglist[0], msglist[1]), usr.get_fd()); //TODO mirar esta wea
+  //TODO RPL_AWAY a todo el canal
+  //TODO sendtochannel(RPL_AWAY(usr.get_nick(), "INVITE" + msglist[0] + msglist[1]), chn);
+>>>>>>> d37fd4359b013eb8584d485ebfeff761e7b98c9c
 }
 
 void	test_invite_cmd(server *server)
