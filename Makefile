@@ -46,10 +46,6 @@ SUBFILE5_SRC = invite.cpp \
 			   quit.cpp \
 			   topic.cpp \
 			   user.cpp \
-<<<<<<< HEAD
-=======
-			   part.cpp \
->>>>>>> d37fd4359b013eb8584d485ebfeff761e7b98c9c
 			   notice.cpp \
 			   mode.cpp \
 			   names.cpp \

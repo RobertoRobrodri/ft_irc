@@ -54,7 +54,6 @@ void cmd::mode(server &svr, int poll_fd_pos, std::string str)
   	user &usr = svr.get_user(pollfd.fd);
 	if (usr.get_is_registered() == false)
 	{
-<<<<<<< HEAD
 
 		std::vector<std::string> msglist = ft_split(str, ' ');
 		if (msglist.size() < 2)
@@ -62,15 +61,10 @@ void cmd::mode(server &svr, int poll_fd_pos, std::string str)
   	  svr.send_message(ERR_NEEDMOREPARAMS(command), usr.get_fd());
   	  return;
   	}
-=======
-		svr.send_message(ERR_NEEDMOREPARAMS(command), usr.get_fd());
-		return;
-	}
->>>>>>> d37fd4359b013eb8584d485ebfeff761e7b98c9c
 	channel *chn = svr.get_channel_from_name(msglist[0]);
 	if (chn == NULL)
 	{
-		svr.send_message(ERR_NOSUCHCHANNEL, usr.get_fd());
+		svr.send_message(ERR_NOSUCHCHANNEL(msglist[0]), usr.get_fd());
 		return;
 	}
 	if (chn->is_user_in_channel(usr) == false)
@@ -81,7 +75,7 @@ void cmd::mode(server &svr, int poll_fd_pos, std::string str)
 	if (chn->is_user_operator(usr) == false)
 	{
 		svr.send_message(ERR_CHANOPRIVSNEEDED(msglist[0]), usr.get_fd());
-		return;
+			return;
 	}
 	std::vector<std::string> mode_params = msglist;
 	mode_params.erase(mode_params.begin(), mode_params.begin() + 2);

@@ -13,11 +13,7 @@
 # define RPL_NAMREPLY(channel, members) ": 353 " + channel + " :" + members + "\r\n"
 # define RPL_ENDOFNAMES(channel) ": 366 " + channel + " :End of /NAMES list\r\n"
 # define ERR_NOSUCHNICK(rcv) ": 401 " + rcv + " :No such nick/channel\r\n"
-<<<<<<< HEAD
 # define ERR_NOSUCHCHANNEL(channel) ": 403 " + channel + " :No such channel\r\n"
-=======
-# define ERR_NOSUCHCHANNEL ": 403 :No such channel\r\n"
->>>>>>> d37fd4359b013eb8584d485ebfeff761e7b98c9c
 # define ERR_CANNOTSENDTOCHAN(channel) ": 404 " + channel + " :Cannot send to channel\r\n"
 # define ERR_TOOMANYCHANNELS(channel) ": 405 " + channel + " :You have joined too many channels\r\n"
 # define ERR_TOOMANYTARGETS(target) ": 407 " + target + ":Duplicate recipients. No message delivered\r\n"
@@ -28,12 +24,8 @@
 # define ERR_ERRONEUSNICKNAME(nick) ": 432 " + nick + " :Erroneus nickname\r\n"
 # define ERR_NICKNAMEINUSE(nick) ": 433 " + nick + " :Nickname is already in use\r\n"
 # define ERR_NOTONCHANNEL(channel) ": 442 " + channel + " :You're not on that channel\r\n"
-<<<<<<< HEAD
 # define ERR_USERONCHANNEL(user, channel) ": 443 " + user + " " + channel + ":is already on channel\r\n"
 # define ERR_NOTREGISTERED ": 451 :You have not registered\r\n"
-=======
-# define ERR_USERONCHANNEL(user, channel) ": 443 " + user + " " + channel + " :is already on channel\r\n"
->>>>>>> d37fd4359b013eb8584d485ebfeff761e7b98c9c
 # define ERR_NEEDMOREPARAMS(command) ": 461 " + command + " :Not enough parameters\r\n"
 # define ERR_ALREADYREGISTERED ": 462 :You may not reregister\r\n"
 # define ERR_CHANNELISFULL(channel) ": 471 " + channel + " :Cannot join channel (+l)\r\n"
@@ -41,30 +33,5 @@
 # define ERR_INVITEONLYCHAN(channel) ": 473 " + channel + " :Cannot join channel (+i)\r\n"
 # define ERR_BADCHANNELKEY(channel) ": 475 " + channel + " :Cannot join channel (+k)\r\n"
 # define ERR_CHANOPRIVSNEEDED(channel) ": 482 " + channel + " :You're not channel operator\r\n"
-<<<<<<< HEAD
-=======
-# define ERR_ ": 4 :\r\n"
-# define ERR_ ": 4 :\r\n"
-# define ERR_ ": 4 :\r\n"
-# define ERR_ ": 4 :\r\n"
-# define ERR_ ": 4 :\r\n"
-# define ERR_ ": 4 :\r\n"
-# define ERR_ ": 4 :\r\n"
-# define ERR_ ": 4 :\r\n"
-# define ERR_ ": 4 :\r\n"
-# define ERR_ ": 4 :\r\n"
-# define ERR_ ": 4 :\r\n"
-# define ERR_ ": 4 :\r\n"
-# define ERR_ ": 4 :\r\n"
-# define ERR_ ": 4 :\r\n"
-# define ERR_ ": 4 :\r\n"
-# define ERR_ ": 4 :\r\n"
-# define ERR_ ": 4 :\r\n"
-# define ERR_ ": 4 :\r\n"
-# define ERR_ ": 4 :\r\n"
-# define ERR_ ": 4 :\r\n"
-# define ERR_ ": 4 :\r\n"
-# define ERR_ ": 4 :\r\n"
->>>>>>> d37fd4359b013eb8584d485ebfeff761e7b98c9c
 
 #endif
