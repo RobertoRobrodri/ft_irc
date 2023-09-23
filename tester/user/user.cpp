@@ -5,7 +5,7 @@ user::user( void ) : _fd(0), _is_registered(false), _n_channels(0), _op(false) {
   return ;
 }
 
-user::user( int fd, std::string hostname ) : _fd(fd), _hostname(hostname), _n_channels(0), _op(false) {
+user::user( int fd, std::string hostname ) : _fd(fd), _hostname(hostname), _is_registered(false), _n_channels(0), _op(false) {
   return ;
 }
 
@@ -48,6 +48,7 @@ std::ostream &operator<<(std::ostream& os, const user &tmp) {
 
 void  user::is_registered(server &svr)
 {
+  std::cout << *this << std::endl;
   if (!this->_is_registered && !this->get_username().empty() && !this->get_nick().empty())
   {
     this->_is_registered = true;

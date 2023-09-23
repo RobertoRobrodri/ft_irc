@@ -126,7 +126,7 @@ void	server::add_user(int fd, sock_in client_addr) // Tested
 
 	this->poll_fds[this->_active_fds].fd = fd;
 	this->poll_fds[this->_active_fds].events = POLLIN;
-this->_active_fds++;
+	this->_active_fds++;
 	user 	new_user(fd, inet_ntop(AF_INET, &(client_addr.sin_addr), ip_address, sizeof(ip_address)));
 	this->list_of_users.insert(std::pair<int, user>(fd, new_user));
 }
@@ -243,7 +243,6 @@ void	server::execute_commands(int poll_fd_pos, std::map<std::string, std::string
 		std::cout << it->first << std::endl;
 		if (this->list_of_cmds[it->first])
 		{
-			std::cout << "PUTO COMANDO: " << this->list_of_cmds[it->second] << std::endl;
 			this->list_of_cmds[it->first](*this, poll_fd_pos, it->second);
 		}
 		else if (usr.get_is_registered())
