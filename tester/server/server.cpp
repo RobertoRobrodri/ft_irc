@@ -107,11 +107,7 @@ bool	server::fd_ready(void)
 			continue;
 		if (this->poll_fds[i].fd == this->server_socket->fd)
 		{
-			if (this->_active_fds < MAX_CLIENTS)
-			{
-				std::cout << "Server opening new communication" << std::endl;
-				this->accept_communication();
-			}
+			this->accept_communication();
 			return 0;
 		}
 		else
@@ -152,8 +148,14 @@ bool	server::accept_communication(void) // No test
 		perror(" FCNTL failed");
 		return 1;
 	}
-	std::cout << YELLOW << "Accepted communication from: " << fd << RESET << std::endl;
-	this->add_user(fd, client_addr);
+	std::cout << this->_active_fds << std::endl;
+	if (this->_active_fds <= MAX_CLIENTS)
+	{
+		this->add_user(fd, client_addr);
+		std::cout << YELLOW << "Accepted communication from: " << fd << RESET << std::endl;
+	}
+	else
+		close(fd);
 	return 0;
 }
 

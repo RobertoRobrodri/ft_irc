@@ -3,7 +3,7 @@
 #define	sock_in		struct sockaddr_in
 #define	sock_addr	struct sockaddr
 #define	poll_fd		struct pollfd
-#define	MAX_CLIENTS	20
+#define	MAX_CLIENTS	100
 #define	TIMEOUT		-1
 #define MSG_SIZE	512
 #define SERVER_HOST	"127.0.0.1"
@@ -56,7 +56,7 @@ class	server {
 	public:
 		int 							_active_fds;
 		autosocket						*server_socket;
-		poll_fd							poll_fds[MAX_CLIENTS];
+		poll_fd							poll_fds[MAX_CLIENTS + 1]; // La primera posición es nuestro server
 		data_server						data;
 		cmd_map 						list_of_cmds;
 		std::map<int, user> 			list_of_users;

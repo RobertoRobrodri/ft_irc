@@ -1,6 +1,6 @@
 #!/bin/bash
 
-for i in {1..17}
+for i in {1..99}
 do
-	sleep $i && ./../expect_scripts/create_user_test.exp nick_$i user_$i &
+	./../expect_scripts/create_user_test.exp nick_$i user_$i &
 done
