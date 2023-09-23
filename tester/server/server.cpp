@@ -245,6 +245,7 @@ void	server::execute_commands(int poll_fd_pos, std::map<std::string, std::string
 		{
 			std::cout << "PUTO COMANDO: " << this->list_of_cmds[it->second] << std::endl;
 			this->list_of_cmds[it->first](*this, poll_fd_pos, it->second);
+		}
 		else if (usr.get_is_registered())
 			this->send_message(ERR_UNKNOWNCOMMAND(it->first), usr.get_fd());
 	}

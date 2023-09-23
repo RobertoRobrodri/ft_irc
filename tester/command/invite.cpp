@@ -31,7 +31,8 @@ void cmd::invite(server &svr, int poll_fd_pos, std::string str) //TODO LOS MODOS
   std::vector<std::string> msglist = ft_split(str, ' ');
   if (msglist.size() < 2)
   {
-    svr.send_message(ERR_NEEDMOREPARAMS(command), usr.get_fd());
+    std::string cmd = "INVITE";
+    svr.send_message(ERR_NEEDMOREPARAMS(cmd), usr.get_fd());
     return ;
   }
   user *new_user = svr.get_user_from_nick(msglist[0]);

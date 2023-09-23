@@ -7,6 +7,7 @@
 # define RPL_LISTSTART ": 321 Channel :Users Name\r\n"
 # define RPL_LIST(channel, private, topic) ": 322 " + channel + " " + private + ": " + topic + "\r\n"
 # define RPL_LISTEND ": 323 :End of /LIST\r\n"
+# define RPL_CHANNELMODEIS(channel, mode, params) ": 324 : " + channel + " " + mode + " " + params + "\r\n"
 # define RPL_NOTOPIC(channel) ": 331 " + channel + " :No topic is set\r\n"
 # define RPL_TOPIC(channel, topic) ": 332 " + channel + " :" + topic + "\r\n"
 # define RPL_INVITING(channel, nick) ": 341 " + channel + " " + nick + "\r\n"
