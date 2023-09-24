@@ -20,8 +20,6 @@ int main()
 	char *port = "6776";
 	char *pass = "pass";
 	server *serv;
-	serv = new server("6667", "pass");
-	serv->wait_for_connection();
 	while (true)
 	{
 		std::cout << BLUE << "Which test would you like to run?\n" << RESET <<
@@ -89,6 +87,7 @@ int main()
 				break;
 			case 5:
 				test_parse_message(serv, "USER paco");
+				test_parse_message(serv, "JOIN #elpacochannel_0\nJOIN #elpacochannel_1\nJOIN #elpacochannel_2\nJOIN #elpacochannel_3\nJOIN #elpacochannel_4");
 				break;
 			case 6:
 				serv->add_user(4, build_address("63.161.169.138", 3490));

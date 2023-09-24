@@ -63,12 +63,12 @@ class	server {
 		std::map<std::string, channel> 	list_of_channels;
 
 		server	( void );
-		bool								fd_ready(void);
-		bool								accept_communication(void);
-		bool								receive_communication(int i);
-		std::map<std::string, std::string>	parse_message(std::string msg);
-		void								init_list_of_cmds(void);
-		void								init_pollfd(void);
+		bool									fd_ready(void);
+		bool									accept_communication(void);
+		bool									receive_communication(int i);
+		std::multimap<std::string, std::string>	parse_message(std::string msg);
+		void									init_list_of_cmds(void);
+		void									init_pollfd(void);
 
 		server				( std::string port , std::string pass );
 		server 				( const server & var );
@@ -92,7 +92,7 @@ class	server {
 		bool	wait_for_connection(void);
 		void	add_user(int fd, sock_in client_addr);
 		void	delete_user(int i);
-		void	execute_commands(int poll_fd_pos, std::map<std::string, std::string> commands);
+		void	execute_commands(int poll_fd_pos, std::multimap<std::string, std::string> commands);
 		static bool	send_message(std::string msg, int fd);
 		user	*get_user_from_nick(std::string nick);
 		channel *get_channel_from_name(std::string name);

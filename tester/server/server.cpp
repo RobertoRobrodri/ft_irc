@@ -184,7 +184,7 @@ bool	server::receive_communication(int poll_fd_pos) // No test
 	buffer[len-1] = 0; //El intro lo ponemos a cero
 	if (buffer[0] != 0)
 	{
-		std::map<std::string, std::string> commands = this->parse_message(buffer);
+		std::multimap<std::string, std::string> commands = this->parse_message(buffer);
 		this->execute_commands(poll_fd_pos, commands);
 	}
 	return 0;
@@ -219,14 +219,13 @@ void	server::delete_user(int poll_fd_pos) // Tested
 }
 
 // Separa la cadena en COMANDO + MSG, donde mensaje es todo lo demás que es parseado de forma distinta por cada comando
-std::map<std::string, std::string> server::parse_message(std::string msg) // Tested
+std::multimap<std::string, std::string> server::parse_message(std::string msg) // Tested
 {
 	// Este split es por culpa de irssi, que lanza todos los comandos NICK y USER en una sola linea
 	// No deberia afectar a los usuarios que lanzan comandos de uno en uno
 	std::vector<std::string> seglist = ft_split(msg, '\n');
 	std::vector<std::string>::iterator v_it;
-	std::map<std::string, std::string> commands;
-
+	std::multimap<std::string, std::string> commands;
 	for (v_it = seglist.begin(); v_it != seglist.end(); v_it++)
 	{
 		int ind = v_it->find(" ");
@@ -237,15 +236,14 @@ std::map<std::string, std::string> server::parse_message(std::string msg) // Tes
 	return commands;
 }
 
-void	server::execute_commands(int poll_fd_pos, std::map<std::string, std::string> commands) // No test
+void	server::execute_commands(int poll_fd_pos, std::multimap<std::string, std::string> commands) // No test
 {
 	poll_fd pollfd = this->get_pollfd(poll_fd_pos);
 	user &usr = this->get_user(pollfd.fd);
-	std::map<std::string, std::string>::iterator it;
+	std::multimap<std::string, std::string>::iterator it;
 
 	for (it = commands.begin(); it != commands.end(); it++)
 	{
-		std::cout << it->first << std::endl;
 		if (this->list_of_cmds[it->first])
 		{
 			this->list_of_cmds[it->first](*this, poll_fd_pos, it->second);
@@ -499,12 +497,12 @@ void	test_parse_message(server *serv, std::string msg)
 	std::cout << "==================================================\n" << RESET;
 	
 	std::cout << "Raw message: |" << msg << "|\n";
-	std::map<std::string, std::string> commands;
+	std::multimap<std::string, std::string> commands;
 	
 	commands = serv->parse_message(msg);
 
 	std::cout << "Parsed message:\n";
-	std::map<std::string, std::string>::iterator it;
+	std::multimap<std::string, std::string>::iterator it;
 	for (it = commands.begin(); it != commands.end(); it++)
 		std::cout << "Command: |" << it->first << "| " << "Arguments: |" << it->second << "|\n";
 	std::cout << std::endl;
