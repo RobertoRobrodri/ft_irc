@@ -6,9 +6,7 @@ set username [lindex $argv 1]
 
 spawn nc -v 127.0.0.1 6667
 
-sleep 1
 send -- "NICK $nickname\r"
-sleep 1
 send -- "USER $username 2 3 :4\r"
 expect ": 001 :Welcome to the Internet Relay Network $nickname!\r"
 while (1) {
