@@ -128,7 +128,6 @@ void 	channel::parse_mode_flag(user &usr, std::string &modes, std::vector<std::s
 	size_t j = 0;
   	std::string tmp;
 
-  	//std::cout << modes << std::endl;
 	for (size_t i = 0; i < modes.size(); i++)
 	{
 		switch(modes[i])
@@ -161,6 +160,8 @@ void 	channel::parse_mode_flag(user &usr, std::string &modes, std::vector<std::s
       		{
       			if (sign == true)
       			{
+					if (this->get_mode().find_first_of("itps") != std::string::npos)
+						break ;
 					tmp = this->get_mode();
       				tmp.push_back(modes[i]);
       				this->set_mode(tmp);
@@ -168,8 +169,11 @@ void 	channel::parse_mode_flag(user &usr, std::string &modes, std::vector<std::s
 				else
 				{
 					size_t pos = this->get_mode().find(modes[i]);
-					tmp = this->get_mode().erase(pos, 1);
-          			this->set_mode(tmp);
+					if (pos != std::string::npos)
+					{
+						tmp = this->get_mode().erase(pos, 1);
+						this->set_mode(tmp);
+					}
 				}
         		break;
       		}
@@ -181,6 +185,8 @@ void 	channel::parse_mode_flag(user &usr, std::string &modes, std::vector<std::s
             			break ;
 					this->set_user_limit(atoi(mode_params[j++].c_str()));
 					tmp = this->get_mode();
+					if (tmp.find('l') != std::string::npos)
+						break ;
           			tmp.push_back(modes[i]);
           			this->set_mode(tmp);
 				}
@@ -188,8 +194,11 @@ void 	channel::parse_mode_flag(user &usr, std::string &modes, std::vector<std::s
 				{
 					this->set_user_limit(0);
 					size_t pos = this->get_mode().find('l');
-					tmp = this->get_mode().erase(pos);
-          			this->set_mode(tmp);
+					if (pos != std::string::npos)
+					{
+						tmp = this->get_mode().erase(pos);
+						this->set_mode(tmp);
+					}
 				}
         		break;
 			}
@@ -201,6 +210,8 @@ void 	channel::parse_mode_flag(user &usr, std::string &modes, std::vector<std::s
             			break ;
 					this->set_password(mode_params[j++]);
 					tmp = this->get_mode();
+					if (tmp.find('k') != std::string::npos)
+						break ;
           			tmp.push_back(modes[i]);
           			this->set_mode(tmp);
         		}
@@ -208,8 +219,11 @@ void 	channel::parse_mode_flag(user &usr, std::string &modes, std::vector<std::s
 				{
 					this->set_password("");
 					size_t pos = this->get_mode().find('k');
-					tmp = this->get_mode().erase(pos);
-          			this->set_mode(tmp);
+					if (pos != std::string::npos)
+					{
+						tmp = this->get_mode().erase(pos);
+						this->set_mode(tmp);
+					}
 				}
         		break ;
 			}
