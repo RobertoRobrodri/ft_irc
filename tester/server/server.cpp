@@ -167,7 +167,6 @@ bool	server::receive_communication(int poll_fd_pos) // No test
 	std::cout << "Message received" << std::endl;
 	memset(buffer, 0, MSG_SIZE); //Iniciar buffer con ceros porque mete mierda
 	len = recv(this->poll_fds[poll_fd_pos].fd, buffer, sizeof(buffer), 0);
-	std::cout << GREEN << buffer << RESET <<std::endl;
 	if (len < 0)
     {
 		if (errno != EWOULDBLOCK)
