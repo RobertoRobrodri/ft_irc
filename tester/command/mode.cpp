@@ -58,6 +58,7 @@ void cmd::mode(server &svr, int poll_fd_pos, std::string str)
 		return ;
 	}
 	std::vector<std::string> msglist = ft_split(str, ' ');
+	// Parse msglist[1] and check if it follows the format
 	if (msglist.size() < 2)
 	{
   	  	svr.send_message(ERR_NEEDMOREPARAMS(command), usr.get_fd());
