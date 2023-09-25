@@ -250,7 +250,6 @@ void	server::execute_commands(int poll_fd_pos, std::multimap<std::string, std::s
 	{
 		if (this->list_of_cmds[it->first])
 		{
-			std::cout << it->first << " -- " << it->second << std::endl;
 			this->list_of_cmds[it->first](*this, poll_fd_pos, it->second);
 		}
 		else if (usr.get_is_registered())

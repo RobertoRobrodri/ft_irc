@@ -11,7 +11,7 @@ void cmd::list(server &svr, int poll_fd_pos, std::string str)
     svr.send_message(RPL_LISTSTART, usr.get_fd());
     if (usr.get_is_registered() == true)
     {
-        if (str == "LIST")
+        if (str == "")
         {
             std::map<std::string, channel> chnlist = svr.get_list_of_channels();
             for (std::map<std::string, channel>::iterator it = chnlist.begin(); it != chnlist.end(); it++)

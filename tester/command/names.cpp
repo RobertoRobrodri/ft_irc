@@ -5,10 +5,9 @@ void cmd::names(server &svr, int poll_fd_pos, std::string str)
 {
     poll_fd pollfd = svr.get_pollfd(poll_fd_pos);
     user &usr = svr.get_user(pollfd.fd);
-
     if (usr.get_is_registered() == true)
     {
-        if (str == "NAMES")
+        if (str == "")
         {
             std::map<std::string, channel> chnlist = svr.get_list_of_channels();
             std::string secret_lst;
