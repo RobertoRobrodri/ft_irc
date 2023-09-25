@@ -64,6 +64,11 @@ void cmd::mode(server &svr, int poll_fd_pos, std::string str)
   	  	svr.send_message(ERR_NEEDMOREPARAMS(command), usr.get_fd());
   	  	return;
   	}
+	if (msglist[1].find_first_of("+-") != 0)
+	{
+		svr.send_message(ERR_NEEDMOREPARAMS(command), usr.get_fd());
+  	  	return;
+	}
 	channel *chn = svr.get_channel_from_name(msglist[0]);
 	if (chn == NULL)
 	{

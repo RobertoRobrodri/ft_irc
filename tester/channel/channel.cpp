@@ -134,12 +134,14 @@ void 	channel::parse_mode_flag(user &usr, std::string &modes, std::vector<std::s
 		{
 			case '+':
 			{
-				sign = true;
+				if (i == 0)
+					sign = true;
         		break;
 			}
 			case '-':
 			{
-				sign = false;
+				if (i == 0)
+					sign = false;
         		break;
 			}
 			case 'o':
