@@ -225,11 +225,16 @@ std::multimap<std::string, std::string> server::parse_message(std::string msg) /
 	std::vector<std::string> seglist = ft_split(msg, '\n');
 	std::vector<std::string>::iterator v_it;
 	std::multimap<std::string, std::string> commands;
+	std::string cmd;
+	std::string args;
+	size_t ind;
+
 	for (v_it = seglist.begin(); v_it != seglist.end(); v_it++)
 	{
-		int ind = v_it->find(" ");
-		std::string cmd = v_it->substr(0, ind);
-		std::string args= v_it->substr(ind + 1);
+		ind = v_it->find(" ");
+		cmd = v_it->substr(0, ind);
+		if (ind != std::string::npos)
+			args= v_it->substr(ind + 1);
 		commands.insert(std::pair<std::string, std::string>(cmd, args));
 	}
 	return commands;
@@ -245,6 +250,7 @@ void	server::execute_commands(int poll_fd_pos, std::multimap<std::string, std::s
 	{
 		if (this->list_of_cmds[it->first])
 		{
+			std::cout << it->first << " -- " << it->second << std::endl;
 			this->list_of_cmds[it->first](*this, poll_fd_pos, it->second);
 		}
 		else if (usr.get_is_registered())
