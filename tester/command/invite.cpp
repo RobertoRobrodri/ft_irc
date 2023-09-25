@@ -72,7 +72,7 @@ void	test_invite_cmd(server *server)
 	std::cout << "==========================\n" << RESET;
 
 	cmd::join(*server, 1, "#TestChannel");
-    channel *channel1 = server->get_channel_from_name("#TestChannel");
+//    channel *channel1 = server->get_channel_from_name("#TestChannel");
 	cmd::nick(*server, 2, "Wiz");
 	
 	std::cout <<  CYAN << "Test 1: Invite to an existing channel\n" << RESET;

@@ -57,7 +57,6 @@ void	server::init_list_of_cmds(void) // Update with new commands Tested
 {
 	this->list_of_cmds.insert(std::pair<std::string, command_function>("NICK", &cmd::nick));
 	this->list_of_cmds.insert(std::pair<std::string, command_function>("USER", &cmd::username));
-	this->list_of_cmds.insert(std::pair<std::string, command_function>("PONG", &cmd::pong));
 	this->list_of_cmds.insert(std::pair<std::string, command_function>("QUIT", &cmd::quit));
 	this->list_of_cmds.insert(std::pair<std::string, command_function>("PRIVMSG", &cmd::privmsg));
 	this->list_of_cmds.insert(std::pair<std::string, command_function>("JOIN", &cmd::join));
@@ -69,6 +68,7 @@ void	server::init_list_of_cmds(void) // Update with new commands Tested
 	this->list_of_cmds.insert(std::pair<std::string, command_function>("NAMES", &cmd::names));
 	this->list_of_cmds.insert(std::pair<std::string, command_function>("LIST", &cmd::list));
 	this->list_of_cmds.insert(std::pair<std::string, command_function>("MODE", &cmd::mode));
+//	this->list_of_cmds.insert(std::pair<std::string, command_function>("PONG", &cmd::pong));
 }
 
 void	server::init_pollfd(void) // Tested
