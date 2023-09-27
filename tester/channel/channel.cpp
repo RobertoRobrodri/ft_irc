@@ -122,6 +122,18 @@ void	channel::set_user_operator(const user &usr, const bool &flag)
   }
 }
 
+user   *channel::get_user_from_nick(std::string name)
+{
+  	std::vector<user>::iterator it;
+
+	for (it = this->list_of_members.begin(); it != this->list_of_members.end(); it++)
+	{
+		if (it->get_nick().compare(name) == 0)
+			return &*it;
+	}
+	return NULL;
+}
+
 void 	channel::parse_mode_flag(user &usr, std::string &modes, std::vector<std::string> mode_params, server &srv)
 {
 	bool sign = 0;
