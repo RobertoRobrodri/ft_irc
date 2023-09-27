@@ -5,7 +5,7 @@ user::user( void ) : _fd(0), _is_registered(false), _n_channels(0), _op(false) {
   return ;
 }
 
-user::user( int fd, std::string hostname ) : _fd(fd), _hostname(hostname), _n_channels(0), _op(false) {
+user::user( int fd, std::string hostname ) : _fd(fd), _hostname(hostname), _is_registered(false), _n_channels(0), _op(false) {
   return ;
 }
 
@@ -34,20 +34,21 @@ user & user::operator=(const user &tmp) {
 }
 
 std::ostream &operator<<(std::ostream& os, const user &tmp) {
-  os << "Username       |     " << tmp.get_username() << std::endl;
-	os << "Nickname       |     " << tmp.get_nick() << std::endl;
-	os << "Hostname       |     " << tmp.get_hostname() << std::endl;
-  os << "Servername     |     " << tmp.get_servername() << std::endl;
-	os << "Realname       |     " << tmp.get_realname() << std::endl;
-  os << "FD             |     " << tmp.get_fd() << std::endl;
-  os << "User registered|     " << tmp.get_is_registered() << std::endl;
-  os << "Member of this many channels |  " << tmp.get_n_channels() << std::endl;
-	os << "Is operator    |     " << tmp.get_op() << std::endl; 
+  os << "Username         |     " << tmp.get_username() << std::endl;
+	os << "Nickname         |     " << tmp.get_nick() << std::endl;
+	os << "Hostname         |     " << tmp.get_hostname() << std::endl;
+  os << "Servername       |     " << tmp.get_servername() << std::endl;
+	os << "Realname         |     " << tmp.get_realname() << std::endl;
+  os << "FD               |     " << tmp.get_fd() << std::endl;
+  os << "User registered  |     " << tmp.get_is_registered() << std::endl;
+  os << "Member of Nº chn |     " << tmp.get_n_channels() << std::endl;
+	os << "Is operator      |     " << tmp.get_op() << std::endl; 
   return (os);
 }
 
 void  user::is_registered(server &svr)
 {
+  std::cout << *this << std::endl;
   if (!this->_is_registered && !this->get_username().empty() && !this->get_nick().empty())
   {
     this->_is_registered = true;

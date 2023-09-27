@@ -3,7 +3,7 @@
 #define	sock_in		struct sockaddr_in
 #define	sock_addr	struct sockaddr
 #define	poll_fd		struct pollfd
-#define	MAX_CLIENTS	5
+#define	MAX_CLIENTS	100
 #define	TIMEOUT		-1
 #define MSG_SIZE	512
 #define SERVER_HOST	"127.0.0.1"
@@ -56,19 +56,19 @@ class	server {
 	public:
 		int 							_active_fds;
 		autosocket						*server_socket;
-		poll_fd							poll_fds[MAX_CLIENTS];
+		poll_fd							poll_fds[MAX_CLIENTS + 1]; // La primera posición es nuestro server
 		data_server						data;
 		cmd_map 						list_of_cmds;
 		std::map<int, user> 			list_of_users;
 		std::map<std::string, channel> 	list_of_channels;
 
 		server	( void );
-		bool								fd_ready(void);
-		bool								accept_communication(void);
-		bool								receive_communication(int i);
-		std::map<std::string, std::string>	parse_message(std::string msg);
-		void								init_list_of_cmds(void);
-		void								init_pollfd(void);
+		bool									fd_ready(void);
+		bool									accept_communication(void);
+		bool									receive_communication(int i);
+		std::multimap<std::string, std::string>	parse_message(std::string msg);
+		void									init_list_of_cmds(void);
+		void									init_pollfd(void);
 
 		server				( std::string port , std::string pass );
 		server 				( const server & var );
@@ -92,7 +92,7 @@ class	server {
 		bool	wait_for_connection(void);
 		void	add_user(int fd, sock_in client_addr);
 		void	delete_user(int i);
-		void	execute_commands(int poll_fd_pos, std::map<std::string, std::string> commands);
+		void	execute_commands(int poll_fd_pos, std::multimap<std::string, std::string> commands);
 		static bool	send_message(std::string msg, int fd);
 		user	*get_user_from_nick(std::string nick);
 		channel *get_channel_from_name(std::string name);

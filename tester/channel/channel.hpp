@@ -37,6 +37,7 @@ class	channel {
 		std::string get_password(void) const {return (this->_password);};
 		std::string get_mode(void) const {return (this->_mode);};
 		size_t get_user_limit(void) const {return (this->_user_limit);};
+		user   *get_user_from_nick(std::string name);
 
 		/*###########################################
 		#				SETTERS						#

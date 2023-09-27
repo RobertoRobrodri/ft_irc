@@ -57,16 +57,18 @@ void	server::init_list_of_cmds(void) // Update with new commands Tested
 {
 	this->list_of_cmds.insert(std::pair<std::string, command_function>("NICK", &cmd::nick));
 	this->list_of_cmds.insert(std::pair<std::string, command_function>("USER", &cmd::username));
-	this->list_of_cmds.insert(std::pair<std::string, command_function>("PONG", &cmd::pong));
 	this->list_of_cmds.insert(std::pair<std::string, command_function>("QUIT", &cmd::quit));
 	this->list_of_cmds.insert(std::pair<std::string, command_function>("PRIVMSG", &cmd::privmsg));
 	this->list_of_cmds.insert(std::pair<std::string, command_function>("JOIN", &cmd::join));
 	this->list_of_cmds.insert(std::pair<std::string, command_function>("TOPIC", &cmd::topic));
 	this->list_of_cmds.insert(std::pair<std::string, command_function>("INVITE", &cmd::invite));
 	this->list_of_cmds.insert(std::pair<std::string, command_function>("KICK", &cmd::kick));
-//	this->list_of_cmds.insert(std::pair<std::string, command_function>("NOTICE", &cmd::notice));
-//	this->list_of_cmds.insert(std::pair<std::string, command_function>("PART", &cmd::part));
+	this->list_of_cmds.insert(std::pair<std::string, command_function>("PART", &cmd::part));
+	this->list_of_cmds.insert(std::pair<std::string, command_function>("NOTICE", &cmd::notice));
+	this->list_of_cmds.insert(std::pair<std::string, command_function>("NAMES", &cmd::names));
+	this->list_of_cmds.insert(std::pair<std::string, command_function>("LIST", &cmd::list));
 	this->list_of_cmds.insert(std::pair<std::string, command_function>("MODE", &cmd::mode));
+//	this->list_of_cmds.insert(std::pair<std::string, command_function>("PONG", &cmd::pong));
 }
 
 void	server::init_pollfd(void) // Tested
@@ -105,7 +107,6 @@ bool	server::fd_ready(void)
 			continue;
 		if (this->poll_fds[i].fd == this->server_socket->fd)
 		{
-			std::cout << "Server opening new communication" << std::endl;
 			this->accept_communication();
 			return 0;
 		}
@@ -124,7 +125,7 @@ void	server::add_user(int fd, sock_in client_addr) // Tested
 
 	this->poll_fds[this->_active_fds].fd = fd;
 	this->poll_fds[this->_active_fds].events = POLLIN;
-this->_active_fds++;
+	this->_active_fds++;
 	user 	new_user(fd, inet_ntop(AF_INET, &(client_addr.sin_addr), ip_address, sizeof(ip_address)));
 	this->list_of_users.insert(std::pair<int, user>(fd, new_user));
 }
@@ -147,8 +148,14 @@ bool	server::accept_communication(void) // No test
 		perror(" FCNTL failed");
 		return 1;
 	}
-	std::cout << YELLOW << "Accepted communication from: " << fd << RESET << std::endl;
-	this->add_user(fd, client_addr);
+	std::cout << this->_active_fds << std::endl;
+	if (this->_active_fds <= MAX_CLIENTS)
+	{
+		this->add_user(fd, client_addr);
+		std::cout << YELLOW << "Accepted communication from: " << fd << RESET << std::endl;
+	}
+	else
+		close(fd);
 	return 0;
 }
 
@@ -160,7 +167,6 @@ bool	server::receive_communication(int poll_fd_pos) // No test
 	std::cout << "Message received" << std::endl;
 	memset(buffer, 0, MSG_SIZE); //Iniciar buffer con ceros porque mete mierda
 	len = recv(this->poll_fds[poll_fd_pos].fd, buffer, sizeof(buffer), 0);
-	std::cout << GREEN << buffer << RESET <<std::endl;
 	if (len < 0)
     {
 		if (errno != EWOULDBLOCK)
@@ -177,7 +183,7 @@ bool	server::receive_communication(int poll_fd_pos) // No test
 	buffer[len-1] = 0; //El intro lo ponemos a cero
 	if (buffer[0] != 0)
 	{
-		std::map<std::string, std::string> commands = this->parse_message(buffer);
+		std::multimap<std::string, std::string> commands = this->parse_message(buffer);
 		this->execute_commands(poll_fd_pos, commands);
 	}
 	return 0;
@@ -212,35 +218,40 @@ void	server::delete_user(int poll_fd_pos) // Tested
 }
 
 // Separa la cadena en COMANDO + MSG, donde mensaje es todo lo demás que es parseado de forma distinta por cada comando
-std::map<std::string, std::string> server::parse_message(std::string msg) // Tested
+std::multimap<std::string, std::string> server::parse_message(std::string msg) // Tested
 {
 	// Este split es por culpa de irssi, que lanza todos los comandos NICK y USER en una sola linea
 	// No deberia afectar a los usuarios que lanzan comandos de uno en uno
 	std::vector<std::string> seglist = ft_split(msg, '\n');
 	std::vector<std::string>::iterator v_it;
-	std::map<std::string, std::string> commands;
+	std::multimap<std::string, std::string> commands;
+	std::string cmd;
+	std::string args;
+	size_t ind;
 
 	for (v_it = seglist.begin(); v_it != seglist.end(); v_it++)
 	{
-		int ind = v_it->find(" ");
-		std::string cmd = v_it->substr(0, ind);
-		std::string args= v_it->substr(ind + 1);
+		ind = v_it->find(" ");
+		cmd = v_it->substr(0, ind);
+		if (ind != std::string::npos)
+			args= v_it->substr(ind + 1);
 		commands.insert(std::pair<std::string, std::string>(cmd, args));
 	}
 	return commands;
 }
 
-void	server::execute_commands(int poll_fd_pos, std::map<std::string, std::string> commands) // No test
+void	server::execute_commands(int poll_fd_pos, std::multimap<std::string, std::string> commands) // No test
 {
 	poll_fd pollfd = this->get_pollfd(poll_fd_pos);
 	user &usr = this->get_user(pollfd.fd);
-	std::map<std::string, std::string>::iterator it;
+	std::multimap<std::string, std::string>::iterator it;
 
 	for (it = commands.begin(); it != commands.end(); it++)
 	{
-		std::cout << it->first << std::endl;
 		if (this->list_of_cmds[it->first])
+		{
 			this->list_of_cmds[it->first](*this, poll_fd_pos, it->second);
+		}
 		else if (usr.get_is_registered())
 			this->send_message(ERR_UNKNOWNCOMMAND(it->first), usr.get_fd());
 	}
@@ -248,11 +259,11 @@ void	server::execute_commands(int poll_fd_pos, std::map<std::string, std::string
 
 void	server::create_channel(user &usr, std::string name, std::string password) // No test
 {
-	if (name[0] != '#' && name[0] != '&')
-	{
-		std::string channel_mark("#");
-		name.insert(0, channel_mark);
-	}
+	// if (name[0] != '#' && name[0] != '&')
+	// {
+	// 	std::string channel_mark("#");
+	// 	name.insert(0, channel_mark);
+	// }
 	channel cnn(name, password);
 	if (!password.empty())
 		cnn.set_mode("k");
@@ -490,12 +501,12 @@ void	test_parse_message(server *serv, std::string msg)
 	std::cout << "==================================================\n" << RESET;
 	
 	std::cout << "Raw message: |" << msg << "|\n";
-	std::map<std::string, std::string> commands;
+	std::multimap<std::string, std::string> commands;
 	
 	commands = serv->parse_message(msg);
 
 	std::cout << "Parsed message:\n";
-	std::map<std::string, std::string>::iterator it;
+	std::multimap<std::string, std::string>::iterator it;
 	for (it = commands.begin(); it != commands.end(); it++)
 		std::cout << "Command: |" << it->first << "| " << "Arguments: |" << it->second << "|\n";
 	std::cout << std::endl;

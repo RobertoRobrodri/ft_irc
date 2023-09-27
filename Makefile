@@ -11,7 +11,7 @@ RESET 	= "\033[1;0m"
 NAME 		= ircserv
 CC 			= c++
 INCLUDE 	= -std=c++98
-CXXFLAGS 	= -Wall -Wextra -g -fsanitize=address -Wno-c++11-compat-deprecated-writable-strings #-Werror
+CXXFLAGS 	= -Wall -Wextra -g -Wno-c++11-compat-deprecated-writable-strings -fsanitize=address #-Werror
 TEST		= ircTester
 MOCK		= mock
 
@@ -41,15 +41,16 @@ SUBFILE5_SRC = invite.cpp \
 			   join.cpp \
 			   kick.cpp \
 			   nick.cpp \
-			   pong.cpp \
 			   privmsg.cpp \
 			   quit.cpp \
 			   topic.cpp \
 			   user.cpp \
 			   notice.cpp \
-			   part.cpp \
-			   mode.cpp 
-
+			   mode.cpp \
+			   names.cpp \
+			   list.cpp \
+			   part.cpp
+#			   pong.cpp #
 SUBFILE6_SRC = channel.cpp
 
 SRC =	$(addprefix $(SUBFILE1_PATH)/, $(SUBFILE1_SRC)) \
