@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   user.hpp                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: crisfern <crisfern@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/09/28 11:26:16 by crisfern          #+#    #+#             */
+/*   Updated: 2023/09/28 11:26:17 by crisfern         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef USER_HPP
 #define USER_HPP
 #include <string>
@@ -7,7 +19,8 @@
 
 class 	server;
 class 	channel;
-class	user {
+class	user
+{
 
 	private:
 
@@ -19,11 +32,12 @@ class	user {
 		std::string		_servername;
 		bool			_is_registered;
 		int 			_n_channels;
+		bool 			_op;
 
 	public:
 
 		user 			( void );
-		user 			( int fd, std::string hostname );
+		user 			( int fd, std::string hostname);
 		user 			( const user & var );
 		~user			( void );
 		user &operator=	(const user &tmp);
@@ -39,7 +53,8 @@ class	user {
 		int 		get_fd(void) const 			{return(this->_fd);};
 		bool 		get_is_registered(void) const 			{return(this->_is_registered);};
 		int 		get_n_channels(void) const 	{return(this->_n_channels);};
-		
+		bool 		get_op(void) const {return (this->_op);};
+
 		/*###########################################
 		#				SETTERS						#
 		############################################*/
@@ -51,11 +66,12 @@ class	user {
 		void		set_fd(int fd) {this->_fd = fd;};
 		void		set_is_registered(bool is_registered) {this->_is_registered = is_registered;};
 		void 		set_n_channels(int i) {this->_n_channels = i;};
+		void		set_op(bool i) {this->_op = i;};
 		/*###########################################
 		#				FUNCTIONS					#
 		############################################*/
 		void		is_registered(server &svr);
-		void		send_to_channel(channel *chn, server &svr, std::string chn_name, std::string msg);
+		void		send_to_channel(server &svr, channel *chn, std::string chn_name, std::string msg);
 };
 std::ostream &operator<<(std::ostream& os, const user &tmp);
 

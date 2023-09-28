@@ -1,11 +1,24 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   server.hpp                                         :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: crisfern <crisfern@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/09/28 11:25:34 by crisfern          #+#    #+#             */
+/*   Updated: 2023/09/28 12:52:59 by crisfern         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef SERVER_HPP
 #define SERVER_HPP
 #define	sock_in		struct sockaddr_in
 #define	sock_addr	struct sockaddr
 #define	poll_fd		struct pollfd
-#define	MAX_CLIENTS	5
+#define	MAX_CLIENTS	100
 #define	TIMEOUT		-1
 #define MSG_SIZE	512
+#define SERVER_HOST	"127.0.0.1"
 
 // COLORS
 #define RESET "\033[1;0m"
@@ -46,34 +59,30 @@ typedef std::map<std::string, command_function> cmd_map;
 
 typedef struct t_Data_Server {             //Struct para almacenar los datos del servidor
 	std::string host;
-	std::string network_pass;
-	std::string network_port;
 	std::string port;
 	std::string pass;   
 } data_server;
 
 class	server {
 
-	private:
+	public:
 		int 							_active_fds;
 		autosocket						*server_socket;
-		poll_fd							poll_fds[MAX_CLIENTS];
+		poll_fd							poll_fds[MAX_CLIENTS + 1]; // La primera posición es nuestro server
 		data_server						data;
 		cmd_map 						list_of_cmds;
 		std::map<int, user> 			list_of_users;
 		std::map<std::string, channel> 	list_of_channels;
 
 		server	( void );
-		int		fd_ready(void);
-		bool	accept_communication(void);
-		bool	receive_communication(int i);
-		void	parse_message(int poll_fd_pos, std::string msg);
-		void	init_list_of_cmds(void);
-		void	init_pollfd(void);
-	
-	public:
+		bool									fd_ready(void);
+		bool									accept_communication(void);
+		bool									receive_communication(int i);
+		std::multimap<std::string, std::string>	parse_message(std::string msg);
+		void									init_list_of_cmds(void);
+		void									init_pollfd(void);
 
-		server				( std::string network , std::string port , std::string pass );
+		server				( std::string port , std::string pass );
 		server 				( const server & var );
 		~server 			( void );
 		server &operator=	(const server &tmp);
@@ -82,8 +91,6 @@ class	server {
 		#				GETTERS						#
 		############################################*/
 		std::string get_host(void) const 			{return(this->data.host);};
-		std::string get_network_pass(void) const 	{return(this->data.network_pass);};
-		std::string get_network_port(void) const 	{return(this->data.network_port);};
 		std::string get_port(void) const 			{return(this->data.port);};
 		std::string get_password(void) const 		{return(this->data.pass);};
 		user& 	get_user(int i);
@@ -97,13 +104,15 @@ class	server {
 		bool	wait_for_connection(void);
 		void	add_user(int fd, sock_in client_addr);
 		void	delete_user(int i);
+		void	execute_commands(int poll_fd_pos, std::multimap<std::string, std::string> commands);
 		static bool	send_message(std::string msg, int fd);
 		user	*get_user_from_nick(std::string nick);
 		channel *get_channel_from_name(std::string name);
-		void	create_channel(user &usr, std::string name);
+		void	create_channel(user &usr, std::string name, std::string password);
+
 };
 
+void	test_connection(server *serv);
 std::ostream &operator<<(std::ostream& os, const server &tmp);
 
 #endif
-

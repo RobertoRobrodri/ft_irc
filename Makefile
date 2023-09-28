@@ -9,16 +9,15 @@ RESET 	= "\033[1;0m"
 # VARIABLES #
 #
 NAME 		= ircserv
+MOCK		= mock
 CC 			= c++
 INCLUDE 	= -std=c++98
 CXXFLAGS 	= -Wall -Wextra -g -Wno-c++11-compat-deprecated-writable-strings -fsanitize=address #-Werror
-TEST		= ircTester
-MOCK		= mock
-
 
 # PATHS #
 #
 SRC_PATH    	= srcs
+OBJ_PATH    	= objects
 
 SUBFILE1_PATH   = server
 SUBFILE2_PATH   = autosocket
@@ -26,10 +25,6 @@ SUBFILE3_PATH   = parser
 SUBFILE4_PATH   = user
 SUBFILE5_PATH   = command
 SUBFILE6_PATH   = channel
-
-OBJ_PATH    	= objects
-TEST_PATH		= tester
-
 
 # SOURCES #
 #
@@ -61,24 +56,16 @@ SRC =	$(addprefix $(SUBFILE1_PATH)/, $(SUBFILE1_SRC)) \
 		$(addprefix $(SUBFILE6_PATH)/, $(SUBFILE6_SRC)) \
 
 SERVER_MAIN = objects/main.o
-TESTER_MAIN = tester/main.o
-MOCK_MAIN = tester/mock_main.o
+MOCK_MAIN = srcs/mock_main.o
 
 # RULES #
 #
 all: $(NAME)
 
-test: $(TEST)
-
 mock: $(MOCK)
 
 SRCS = $(addprefix $(SRC_PATH)/, $(SRC))
-
 OBJS =  $(addprefix $(OBJ_PATH)/, $(SRC:%.cpp=%.o))
-
-SRCS_TEST = $(addprefix $(TEST_PATH)/, $(SRC))
-
-OBJS_TEST =  $(addprefix $(TEST_PATH)/, $(SRC:%.cpp=%.o))
 
 $(OBJ_PATH):
 	mkdir -p $(OBJ_PATH)
@@ -97,15 +84,10 @@ $(NAME): $(OBJS) $(SERVER_MAIN)
 #	clear
 	$(GREEN) Program asembled $(RESET)
 
-$(TEST_PATH)/%.o: $(TEST_PATH)/%.cpp
-	$(CC) $(CXXFLAGS) $(INCLUDE) -c $< -o $@
-
-$(MOCK): $(OBJS_TEST) $(MOCK_MAIN)
-	$(CC) $(CXXFLAGS) $(INCLUDE) $(OBJS_TEST) $(MOCK_MAIN) -o mock
+$(MOCK): $(OBJS) $(MOCK_MAIN)
+	$(CC) $(CXXFLAGS) $(INCLUDE) $(OBJS) $(MOCK_MAIN) -o mock
 	$(GREEN) Mock program created $(RESET)
-
-$(TEST): $(OBJS_TEST) $(TESTER_MAIN)
-	$(CC) $(CXXFLAGS) $(INCLUDE) $(OBJS_TEST) $(TESTER_MAIN) -o $(TEST)
+	
 #	clear
 	$(GREEN) Program asembled $(RESET)
 	@echo "⠀⠀⠀	    ⣠⣴⣶⣿⣿⣷⣶⣄⣀⣀\n\
@@ -130,17 +112,15 @@ $(MAKE): make
 clean:
 	$(PURPLE) CLEANING OBJECTS $(RESET)
 	rm -rf $(OBJ_PATH)
-	rm -f $(TEST_PATH)/main.o
-	rm -f $(TEST_PATH)/mock_main.o
-	rm -f $(TEST_PATH)/*/*.o
+	rm -f $(SRC_PATH)/main.o
+	rm -f $(SRC_PATH)/mock_main.o
+	rm -f $(SRC_PATH)/*/*.o
 
 fclean: clean
 	$(PURPLE) CLEANING OBJECTS AND EXEC $(RESET)
 	rm -rf $(NAME)
-	rm -rf $(TEST)
 	rm -rf $(MOCK)
 
 re: fclean all
-
 
 PHONY.: all clean fclean re

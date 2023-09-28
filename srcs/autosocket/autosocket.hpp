@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   autosocket.hpp                                     :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: crisfern <crisfern@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/09/28 11:22:56 by crisfern          #+#    #+#             */
+/*   Updated: 2023/09/28 11:23:10 by crisfern         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef AUTOSOCKET_HPP
 #define AUTOSOCKET_HPP
 #include <string>
@@ -6,10 +18,9 @@
 
 class	autosocket {
 
-	private:
+	public:
 		sock_in				addr;
 		autosocket 			( void );
-	public:
 		int 				fd;
 
 		autosocket 			( std::string port, std::string host );

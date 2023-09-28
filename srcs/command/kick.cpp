@@ -1,38 +1,75 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   kick.cpp                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: crisfern <crisfern@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/09/28 11:15:14 by crisfern          #+#    #+#             */
+/*   Updated: 2023/09/28 11:15:24 by crisfern         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "command.hpp"
 #include "reply.hpp"
+
+/*
+  Parameters: <channel> <user> [<comment>]
+
+    forcibly  remove  a  user  from  a channel
+    Only a channel operator may kick another user out of a  channel.
+ 	It is possible to extend the KICK command parameters to:
+	<channel>{,<channel>} <user>{,<user>} [<comment>]
+   Numeric Replies:
+
+           ERR_NEEDMOREPARAMS              ERR_NOSUCHCHANNEL
+           ERR_BADCHANMASK                 ERR_CHANOPRIVSNEEDED
+           ERR_NOTONCHANNEL
+ */
 
 void cmd::kick(server &svr, int poll_fd_pos, std::string str)
 {
   poll_fd pollfd = svr.get_pollfd(poll_fd_pos);
   user &usr = svr.get_user(pollfd.fd);
-  std::vector<std::string> msglist = ft_split(str, ' ');
-  if (msglist.size() < 2)
+  if (usr.get_is_registered() == true)
   {
-    svr.send_message(": 461 KICK: Not enough parameters \r\n", usr.get_fd());
-    return ;
-  }
-  std::vector<std::string> chnlist = ft_split(msglist[0], ',');
-  std::vector<std::string> usrlist = ft_split(msglist[1], ',');
-  if (msglist.size() > 2)
-	  std::string msg = str.substr(str.find(msglist[2]));
-  for (int i = 0; i < chnlist.size(); i++)
-  {
-    channel *chn = svr.get_channel_from_name(chnlist[i]);
-    if (!chn)
-      svr.send_message(": 401 " + chnlist[i] + ": No such nick/channel \r\n", usr.get_fd());
-    else
-    {
-      if (!chn->is_user_in_channel(usr))
+      std::string command = "KICK";
+      std::vector<std::string> msglist = ft_split(str, ' ');
+      if (msglist.size() < 2)
       {
-        svr.send_message(": 442 " + chnlist[i] + ": You're not on that channel \r\n", usr.get_fd());
-        continue ;
+        svr.send_message(ERR_NEEDMOREPARAMS(command), usr.get_fd());
+        return ;
       }
-      for (int j = 0; j < usrlist.size(); j++)
+      std::vector<std::string> chnlist = ft_split(msglist[0], ',');
+      std::vector<std::string> usrlist = ft_split(msglist[1], ',');
+      if (msglist.size() > 2)
+        std::string msg = str.substr(str.find(msglist[2]));
+      for (size_t i = 0; i < chnlist.size(); i++)
       {
-        user *rcv = svr.get_user_from_nick(usrlist[j]);
-        if (rcv)
-          chn->rmv_member(*rcv);
+        channel *chn = svr.get_channel_from_name(chnlist[i]);
+        if (!chn)
+          svr.send_message(ERR_NOSUCHNICK(chnlist[i]), usr.get_fd());
+        else
+        {
+          if (!chn->is_user_in_channel(usr))
+          {
+            svr.send_message(ERR_NOTONCHANNEL(chnlist[i]), usr.get_fd());
+            continue ;
+          }
+          if (chn->get_user_from_nick(usr.get_nick())->get_op() == false)
+          {
+            svr.send_message(ERR_CHANOPRIVSNEEDED(chnlist[i]), usr.get_fd());
+            continue ;
+          }
+          for (size_t j = 0; j < usrlist.size(); j++)
+          {
+            user *rcv = svr.get_user_from_nick(usrlist[j]);
+            if (rcv)
+              chn->rmv_member(*rcv);
+          }
+        }
       }
     }
+	else
+	  svr.send_message(ERR_NOTREGISTERED, usr.get_fd());
   }
-}

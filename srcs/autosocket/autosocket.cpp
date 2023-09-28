@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   autosocket.cpp                                     :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: crisfern <crisfern@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/09/28 11:23:23 by crisfern          #+#    #+#             */
+/*   Updated: 2023/09/28 11:23:28 by crisfern         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "autosocket.hpp"
 
 autosocket::autosocket( void ) {
@@ -30,7 +42,7 @@ autosocket::autosocket( const autosocket & var ) {
 autosocket::~autosocket( void ) {
   
   std::cout << "Autosocket Destructor called" << std::endl;
-  delete this;
+  close(this->fd);
   return ;
 }
 
