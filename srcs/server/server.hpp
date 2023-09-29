@@ -60,7 +60,9 @@ typedef std::map<std::string, command_function> cmd_map;
 typedef struct t_Data_Server {             //Struct para almacenar los datos del servidor
 	std::string host;
 	std::string port;
-	std::string pass;   
+	std::string pass;
+	std::string network_port;
+	std::string network_pass;
 } data_server;
 
 class	server {
@@ -83,6 +85,7 @@ class	server {
 		void									init_pollfd(void);
 
 		server				( std::string port , std::string pass );
+		server				( std::string network , std::string port , std::string pass );
 		server 				( const server & var );
 		~server 			( void );
 		server &operator=	(const server &tmp);

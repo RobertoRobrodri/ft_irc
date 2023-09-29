@@ -32,6 +32,19 @@ server::server( std::string port , std::string pass ) : _active_fds(1) // Tested
 	this->server_socket = new autosocket(this->data.port, this->data.host);
 }
 
+server::server( std::string network , std::string port , std::string pass ) : _active_fds(1)
+{	
+	std::cout << "Server Parameter constructor called" << std::endl;
+	std::vector <std::string>seglist = ft_split(network, ':');
+	this->data.host 		= seglist[0];
+	this->data.network_port = seglist[1];
+	this->data.network_pass = seglist[2];
+	this->data.port 		= port;
+	this->data.pass 		= pass;
+	this->init_list_of_cmds();
+	this->server_socket = new autosocket(this->data.port, this->data.host);
+}
+
 server::server( const server & var ) {	// No test
 	(void)var;
 	std::cout << "Server Copy constructor called" << std::endl;
