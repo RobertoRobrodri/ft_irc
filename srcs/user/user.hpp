@@ -6,7 +6,7 @@
 /*   By: crisfern <crisfern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/28 11:26:16 by crisfern          #+#    #+#             */
-/*   Updated: 2023/09/28 11:26:17 by crisfern         ###   ########.fr       */
+/*   Updated: 2023/09/29 13:50:18 by crisfern         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,28 +45,29 @@ class	user
 		/*###########################################
 		#				GETTERS						#
 		############################################*/
-		std::string get_username(void) const	{return(this->_username);};
-		std::string get_nick(void) const 		{return(this->_nick);};
-		std::string get_hostname(void) const 	{return(this->_hostname);};
-		std::string get_servername(void) const 	{return(this->_servername);};
-		std::string get_realname(void) const 	{return(this->_realname);};
-		int 		get_fd(void) const 			{return(this->_fd);};
-		bool 		get_is_registered(void) const 			{return(this->_is_registered);};
-		int 		get_n_channels(void) const 	{return(this->_n_channels);};
-		bool 		get_op(void) const {return (this->_op);};
+		std::string get_username(void) const;
+		std::string get_nick(void) const;
+		std::string get_hostname(void) const;
+		std::string get_servername(void) const;
+		std::string get_realname(void) const;
+		int 		get_fd(void) const;
+		bool 		get_is_registered(void) const;
+		int 		get_n_channels(void) const;
+		bool 		get_op(void) const;
 
 		/*###########################################
 		#				SETTERS						#
 		############################################*/
-		void		set_username(std::string username) {this->_username = username;};
-		void		set_nick(std::string nick) {this->_nick = nick;};
-		void		set_hostname(std::string host) {this->_hostname = host;};
-		void		set_servername(std::string srv) {this->_servername = srv;};
-		void		set_realname(std::string realname) {this->_realname = realname;};
-		void		set_fd(int fd) {this->_fd = fd;};
-		void		set_is_registered(bool is_registered) {this->_is_registered = is_registered;};
-		void 		set_n_channels(int i) {this->_n_channels = i;};
-		void		set_op(bool i) {this->_op = i;};
+		void		set_username(std::string username);
+		void		set_nick(std::string nick);
+		void		set_hostname(std::string host);
+		void		set_servername(std::string srv);
+		void		set_realname(std::string realname);
+		void		set_fd(int fd);
+		void		set_is_registered(bool is_registered);
+		void 		set_n_channels(int i);
+		void		set_op(bool i);
+		
 		/*###########################################
 		#				FUNCTIONS					#
 		############################################*/

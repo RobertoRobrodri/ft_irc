@@ -6,7 +6,7 @@
 /*   By: crisfern <crisfern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/28 11:25:34 by crisfern          #+#    #+#             */
-/*   Updated: 2023/09/28 12:52:59 by crisfern         ###   ########.fr       */
+/*   Updated: 2023/09/29 13:44:50 by crisfern         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,13 +90,13 @@ class	server {
 		/*###########################################
 		#				GETTERS						#
 		############################################*/
-		std::string get_host(void) const 			{return(this->data.host);};
-		std::string get_port(void) const 			{return(this->data.port);};
-		std::string get_password(void) const 		{return(this->data.pass);};
+		std::string get_host(void) const;
+		std::string get_port(void) const;
+		std::string get_password(void) const;
 		user& 	get_user(int i);
 		pollfd&	get_pollfd(int i);
-		std::map<int, user> get_list_of_users(void) const {return(this->list_of_users);};
-		std::map<std::string, channel> get_list_of_channels(void) const {return(this->list_of_channels);};
+		std::map<int, user> get_list_of_users(void) const;
+		std::map<std::string, channel> get_list_of_channels(void) const;
 
 		/*###########################################
 		#				FUNCTIONS					#

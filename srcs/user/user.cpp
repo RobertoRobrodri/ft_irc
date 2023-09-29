@@ -6,7 +6,7 @@
 /*   By: crisfern <crisfern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/28 11:26:28 by crisfern          #+#    #+#             */
-/*   Updated: 2023/09/28 11:26:39 by crisfern         ###   ########.fr       */
+/*   Updated: 2023/09/29 13:51:16 by crisfern         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,4 +87,101 @@ void		user::send_to_channel(server &svr, channel *chn, std::string chn_name, std
   else
     svr.send_message(ERR_NOSUCHNICK(chn_name), this->get_fd());
 
+}
+
+/*###########################################
+#				           GETTERS						      #
+############################################*/
+
+std::string user::get_username(void) const
+{
+  return(this->_username);
+}
+
+std::string user::get_nick(void) const
+{
+  return(this->_nick);
+}
+
+std::string user::get_hostname(void) const
+{
+  return(this->_hostname);
+}
+
+std::string user::get_servername(void) const
+{
+  return(this->_servername);
+}
+
+std::string user::get_realname(void) const
+{
+  return(this->_realname);
+}
+
+int 		user::get_fd(void) const
+{
+  return(this->_fd);
+}
+
+bool 		user::get_is_registered(void) const
+{
+  return(this->_is_registered);
+}
+
+int 		user::get_n_channels(void) const
+{
+  return(this->_n_channels);
+}
+
+bool 		user::get_op(void) const
+{
+  return (this->_op);
+}
+
+/*###########################################
+#				           SETTERS						      #
+############################################*/
+
+void		user::set_username(std::string username)
+{
+  this->_username = username;
+}
+
+void		user::set_nick(std::string nick)
+{
+  this->_nick = nick;
+}
+
+void		user::set_hostname(std::string host)
+{
+  this->_hostname = host;
+}
+
+void		user::set_servername(std::string srv)
+{this->_servername = srv;
+}
+
+void		user::set_realname(std::string realname)
+{
+  this->_realname = realname;
+}
+
+void		user::set_fd(int fd)
+{
+  this->_fd = fd;
+}
+
+void		user::set_is_registered(bool is_registered)
+{
+  this->_is_registered = is_registered;
+}
+
+void 		user::set_n_channels(int i)
+{
+  this->_n_channels = i;
+}
+
+void		user::set_op(bool i)
+{
+  this->_op = i;
 }

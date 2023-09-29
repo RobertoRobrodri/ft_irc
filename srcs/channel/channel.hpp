@@ -6,7 +6,7 @@
 /*   By: crisfern <crisfern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/28 11:22:31 by crisfern          #+#    #+#             */
-/*   Updated: 2023/09/28 11:22:33 by crisfern         ###   ########.fr       */
+/*   Updated: 2023/09/29 13:38:26 by crisfern         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,7 @@ class	channel {
 		size_t 					_user_limit;
 
 		channel 			( void );
+
 	public:
 
 		channel 			( std::string str );
@@ -40,28 +41,32 @@ class	channel {
 		channel 			( const channel & var );
 		~channel			( void );
 		channel &operator=	(const channel &tmp);
+
 		/*###########################################
 		#				GETTERS						#
 		############################################*/
-		std::string get_name(void) const 			{return(this->_name);};
-		std::string get_topic(void) const 			{return(this->_topic);};
-		std::vector<user> get_list_of_members(void) const {return(this->list_of_members);};
-		std::string get_password(void) const {return (this->_password);};
-		std::string get_mode(void) const {return (this->_mode);};
-		size_t get_user_limit(void) const {return (this->_user_limit);};
+
+		std::string get_name(void) const;
+		std::string get_topic(void) const;
+		std::vector<user> get_list_of_members(void) const;
+		std::string get_password(void) const;
+		std::string get_mode(void) const;
+		size_t get_user_limit(void) const;
 		user   *get_user_from_nick(std::string name);
 
 		/*###########################################
 		#				SETTERS						#
 		############################################*/
-		void set_topic(std::string topic) {this->_topic = topic;};
-		void set_password(std::string pass) {this->_password = pass;};
-		void set_mode(std::string mode) {this->_mode = mode;};
-		void set_user_limit(size_t i) {this->_user_limit = i;};
+
+		void set_topic(std::string topic);
+		void set_password(std::string pass);
+		void set_mode(std::string mode);
+		void set_user_limit(size_t i);
 
 		/*###########################################
 		#				FUNCTIONS					#
 		############################################*/
+
 		void	add_member(user &usr);
 		void	rmv_member(user &usr);
 		bool	is_user_in_channel(const user &usr);

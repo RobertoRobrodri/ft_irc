@@ -6,7 +6,7 @@
 /*   By: crisfern <crisfern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/28 11:23:51 by crisfern          #+#    #+#             */
-/*   Updated: 2023/09/28 18:06:07 by crisfern         ###   ########.fr       */
+/*   Updated: 2023/09/29 13:51:56 by crisfern         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -284,16 +284,6 @@ void	server::create_channel(user &usr, std::string name, std::string password) /
 	std::cout << cnn << std::endl;
 }
 
-user& 	server::get_user(int i)
-{
-	return(this->list_of_users.find(i)->second);
-}
-
-pollfd&	server::get_pollfd(int i)
-{
-	return (this->poll_fds[i]);
-}
-
 // Maybe make a template????
 user *server::get_user_from_nick(std::string nick) // No test
 {
@@ -359,4 +349,43 @@ void	test_connection(server *serv)
 {
 	std::cout << YELLOW << "CONNECT\n" << "Open a new terminal and type nc -v 127.0.0.1 6776 to test new connection.\n"
 		<< RESET << serv->wait_for_connection() << std::endl;
+}
+
+/*###########################################
+#				   GETTERS					#
+############################################*/
+
+std::string server::get_host(void) const
+{
+	return(this->data.host);
+}
+
+std::string server::get_port(void) const
+{
+	return(this->data.port);
+}
+
+std::string server::get_password(void) const
+{
+	return(this->data.pass);
+}
+
+user& 	server::get_user(int i)
+{
+	return(this->list_of_users.find(i)->second);
+}
+
+pollfd&	server::get_pollfd(int i)
+{
+	return (this->poll_fds[i]);
+}
+
+std::map<int, user> server::get_list_of_users(void) const
+{
+	return(this->list_of_users);
+}
+
+std::map<std::string, channel> server::get_list_of_channels(void) const
+{
+	return(this->list_of_channels);
 }

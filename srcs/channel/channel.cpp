@@ -6,7 +6,7 @@
 /*   By: crisfern <crisfern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/28 11:22:42 by crisfern          #+#    #+#             */
-/*   Updated: 2023/09/28 11:22:43 by crisfern         ###   ########.fr       */
+/*   Updated: 2023/09/29 13:52:33 by crisfern         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -134,18 +134,6 @@ void	channel::set_user_operator(const user &usr, const bool &flag)
   }
 }
 
-user   *channel::get_user_from_nick(std::string name)
-{
-  	std::vector<user>::iterator it;
-
-	for (it = this->list_of_members.begin(); it != this->list_of_members.end(); it++)
-	{
-		if (it->get_nick().compare(name) == 0)
-			return &*it;
-	}
-	return NULL;
-}
-
 void 	channel::parse_mode_flag(user &usr, std::string &modes, std::vector<std::string> mode_params, server &srv)
 {
 	bool sign = 0;
@@ -266,4 +254,74 @@ void 	channel::parse_mode_flag(user &usr, std::string &modes, std::vector<std::s
     		params += *i;
 		for (std::vector<user>::iterator it = this->list_of_members.begin(); it != this->list_of_members.end(); it++)
 			srv.send_message(RPL_CHANNELMODEIS(this->_name, modes, params), it->get_fd());
+}
+
+/*###########################################
+#				   GETTERS					#
+############################################*/
+
+std::string channel::get_name(void) const
+{
+	return(this->_name);
+}
+
+std::string channel::get_topic(void) const
+{
+	return(this->_topic);
+}
+
+std::vector<user> channel::get_list_of_members(void) const
+{
+	return(this->list_of_members);
+}
+
+std::string channel::get_password(void) const
+{
+	return (this->_password);
+}
+
+std::string channel::get_mode(void) const
+{
+	return (this->_mode);
+}
+
+size_t channel::get_user_limit(void) const
+{
+	return (this->_user_limit);
+}
+
+user   *channel::get_user_from_nick(std::string name)
+{
+  	std::vector<user>::iterator it;
+
+	for (it = this->list_of_members.begin(); it != this->list_of_members.end(); it++)
+	{
+		if (it->get_nick().compare(name) == 0)
+			return &*it;
+	}
+	return NULL;
+}
+
+/*###########################################
+#				   SETTERS					#
+############################################*/
+
+void channel::set_topic(std::string topic)
+{
+	this->_topic = topic;
+}
+
+void channel::set_password(std::string pass)
+{
+	this->_password = pass;
+}
+
+void channel::set_mode(std::string mode)
+{
+	this->_mode = mode;
+}
+
+void channel::set_user_limit(size_t i)
+{
+	this->_user_limit = i;
 }
