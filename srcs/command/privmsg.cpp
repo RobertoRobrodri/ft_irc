@@ -6,7 +6,7 @@
 /*   By: crisfern <crisfern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/28 11:18:53 by crisfern          #+#    #+#             */
-/*   Updated: 2023/09/28 11:19:04 by crisfern         ###   ########.fr       */
+/*   Updated: 2023/10/02 12:25:01 by crisfern         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,29 +54,29 @@ void  cmd::privmsg(server &svr, int poll_fd_pos, std::string str) {
     }
     std::vector<std::string> rcvlist = ft_split(msglist[0], ',');
     std::string msg = str.substr(str.find(msglist[1]));
-	std::sort(rcvlist.begin(), rcvlist.end());
-	for (size_t i = 0; i < rcvlist.size(); i++)
+    std::sort(rcvlist.begin(), rcvlist.end());
+    for (size_t i = 0; i < rcvlist.size(); i++)
     {
-		if (i != 0 && rcvlist[i] == rcvlist[i - 1])
-		{
-          	svr.send_message(ERR_TOOMANYTARGETS(rcvlist[i]), usr.get_fd());
-			return;
-		}
-		if ((rcvlist[i][0] == '#') || (rcvlist[i][0] == '&'))
-		{
-        	channel *chn = svr.get_channel_from_name(rcvlist[i]);
-        	usr.send_to_channel(svr, chn, rcvlist[i], msg);
-      	}
-		else
-		{
-        	user *receiver = svr.get_user_from_nick(rcvlist[i]);
-        	if (receiver)
-          		svr.send_message("From " + usr.get_nick() + ":\n" + msg + "\n", receiver->get_fd());
-        	else
-          		svr.send_message(ERR_NOSUCHNICK(rcvlist[i]), usr.get_fd());
-      	}
+      if (i != 0 && rcvlist[i] == rcvlist[i - 1])
+      {
+        svr.send_message(ERR_TOOMANYTARGETS(rcvlist[i]), usr.get_fd());
+        return;
+      }
+      if ((rcvlist[i][0] == '#') || (rcvlist[i][0] == '&'))
+      {
+        channel *chn = svr.get_channel_from_name(rcvlist[i]);
+        usr.send_to_channel(svr, chn, rcvlist[i], msg);
+      }
+      else
+      {
+        user *receiver = svr.get_user_from_nick(rcvlist[i]);
+        if (receiver)
+          svr.send_message("From " + usr.get_nick() + ":\n" + msg + "\n", receiver->get_fd());
+        else
+          svr.send_message(ERR_NOSUCHNICK(rcvlist[i]), usr.get_fd());
+      }
     }
   }
   else
-	  svr.send_message(ERR_NOTREGISTERED, usr.get_fd());
+    svr.send_message(ERR_NOTREGISTERED, usr.get_fd());
 }

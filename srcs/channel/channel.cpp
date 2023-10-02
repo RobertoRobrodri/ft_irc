@@ -6,7 +6,7 @@
 /*   By: crisfern <crisfern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/28 11:22:42 by crisfern          #+#    #+#             */
-/*   Updated: 2023/09/29 13:52:33 by crisfern         ###   ########.fr       */
+/*   Updated: 2023/10/02 12:14:29 by crisfern         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,16 +47,17 @@ channel & channel::operator=(const channel &tmp) {
   return (*this);
 }
 
-std::ostream &operator<<(std::ostream& os, const channel &tmp) {
-  std::vector<user>::iterator it;
+std::ostream &operator<<(std::ostream& os, const channel &tmp) 
+{
+	std::vector<user>::iterator it;
 	std::vector<user> lst = tmp.get_list_of_members();
 
 	os << "Channel name: " << tmp.get_name() << std::endl;
 	os << "Channel topic: " << tmp.get_topic() << std::endl;
-  os << "Channel password: "<< tmp.get_password() << std::endl;
-  os << "Channel mode: " << tmp.get_mode() << std::endl;
-  os << "User limit if set: " << tmp.get_user_limit() << std::endl;
-  os << "List of members: " << std::endl;
+	os << "Channel password: "<< tmp.get_password() << std::endl;
+	os << "Channel mode: " << tmp.get_mode() << std::endl;
+	os << "User limit if set: " << tmp.get_user_limit() << std::endl;
+	os << "List of members: " << std::endl;
 	for (it = lst.begin(); it != lst.end(); it++)
     	os << it->get_nick() << std::endl;
 	return (os);
@@ -64,26 +65,21 @@ std::ostream &operator<<(std::ostream& os, const channel &tmp) {
 
 void	channel::add_member(user &usr)
 {
-  	usr.set_n_channels(usr.get_n_channels() + 1);
+	usr.set_n_channels(usr.get_n_channels() + 1);
 	this->list_of_members.push_back(usr);
-  /*
-	std::cout << "Join successful! " << std::endl;
-  std::cout << usr << std::endl;
-  */
-  std::string channel = this->get_name();
-  
-  std::string topic = this->get_topic();
-  if (topic.empty())
-  	server::send_message(RPL_NOTOPIC(channel), usr.get_fd());
-  else
-  	server::send_message(RPL_TOPIC(channel, topic), usr.get_fd());
-  
-  	std::string members;
-	std::vector<user>::iterator it;
-  	for (it = this->list_of_members.begin(); it != this->list_of_members.end(); it++)
-		members += (it->get_nick() + " ");
-  	for (it = this->list_of_members.begin(); it != this->list_of_members.end(); it++)
-  		server::send_message(RPL_NAMREPLY(channel, members), usr.get_fd());
+  	std::string channel = this->get_name();
+	std::string topic = this->get_topic();
+	if (topic.empty())
+		server::send_message(RPL_NOTOPIC(channel), usr.get_fd());
+	else
+		server::send_message(RPL_TOPIC(channel, topic), usr.get_fd());
+	
+		std::string members;
+		std::vector<user>::iterator it;
+		for (it = this->list_of_members.begin(); it != this->list_of_members.end(); it++)
+			members += (it->get_nick() + " ");
+		for (it = this->list_of_members.begin(); it != this->list_of_members.end(); it++)
+			server::send_message(RPL_NAMREPLY(channel, members), usr.get_fd());
 }
 
 void	channel::rmv_member(user &usr)
@@ -94,8 +90,8 @@ void	channel::rmv_member(user &usr)
     if (it->get_nick() == usr.get_nick())
     {
 	    this->list_of_members.erase(it);
-      usr.set_n_channels(usr.get_n_channels() - 1);
-      return ;
+		usr.set_n_channels(usr.get_n_channels() - 1);
+		return ;
     }
   }
 }
@@ -115,9 +111,7 @@ bool channel::is_user_operator(const user &usr)
   for (std::vector<user>::iterator it = this->list_of_members.begin(); it != this->list_of_members.end(); it++)
   {
     if (it->get_nick() == usr.get_nick())
-    {
       return (it->get_op());
-    }
   }
   return false;
 }
@@ -128,8 +122,8 @@ void	channel::set_user_operator(const user &usr, const bool &flag)
   {
     if (it->get_nick() == usr.get_nick())
     {
-      it->set_op(flag);
-      return;
+		it->set_op(flag);
+		return;
     }
   }
 }

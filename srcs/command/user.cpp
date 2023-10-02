@@ -6,7 +6,7 @@
 /*   By: crisfern <crisfern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/28 11:21:43 by crisfern          #+#    #+#             */
-/*   Updated: 2023/09/28 11:21:54 by crisfern         ###   ########.fr       */
+/*   Updated: 2023/10/02 12:27:24 by crisfern         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,8 @@
 //  hostname and servername are ignored by the server when the command 
 //  comes from a directly connected client
 
-void  cmd::username(server &svr, int poll_fd_pos, std::string str) {
+void  cmd::username(server &svr, int poll_fd_pos, std::string str)
+{
   std::string command =  "USER";
   poll_fd pollfd = svr.get_pollfd(poll_fd_pos);
   user &usr = svr.get_user(pollfd.fd);
@@ -43,7 +44,6 @@ void  cmd::username(server &svr, int poll_fd_pos, std::string str) {
   }
   
   std::string username = first_params_split[0];
-  // std::string hostname = first_params_split[1]; We can ignore hostname since we already have it because of the socket
   std::string servername = first_params_split[2];
   std::string realname = realname_split[1];
 
@@ -58,7 +58,6 @@ void  cmd::username(server &svr, int poll_fd_pos, std::string str) {
 	  }
   }
   usr.set_username(username);
-  //usr.set_hostname(hostname);
   usr.set_servername(servername);
   usr.set_realname(realname); 
   usr.is_registered(svr);

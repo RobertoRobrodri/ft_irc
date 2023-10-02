@@ -6,13 +6,13 @@
 /*   By: crisfern <crisfern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/28 11:22:31 by crisfern          #+#    #+#             */
-/*   Updated: 2023/09/29 13:38:26 by crisfern         ###   ########.fr       */
+/*   Updated: 2023/10/02 12:11:54 by crisfern         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef CHANNEL_HPP
 #define CHANNEL_HPP
-#define MAX_NUMBER_OF_CHN 100	
+#define MAX_NUMBER_OF_CHN 100
 #include <string>
 #include <iostream>
 #include "../server/server.hpp"

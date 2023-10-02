@@ -6,7 +6,7 @@
 /*   By: crisfern <crisfern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/28 11:23:23 by crisfern          #+#    #+#             */
-/*   Updated: 2023/09/28 11:23:28 by crisfern         ###   ########.fr       */
+/*   Updated: 2023/10/02 12:30:29 by crisfern         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,19 +80,17 @@ bool	autosocket::server_listening(void)
 		return 0;
 	fcntl(this->fd, F_SETFL, O_NONBLOCK);
 	std::cout << "Init socket" << std::endl;
-	// No sé que opciones tendremos que habilitar pero vamos a tener que usarlo
 	if (setsockopt(this->fd, SOL_SOCKET, SO_REUSEADDR, &opt, sizeof(opt)) == -1)
 	{
 		perror("Bad socket ");
 		return 0;
 	}
-	// Asigna un nombre al socket; Asigna la info de address al socket
+	// Assigns a name to socket; Assigns info address to socket
 	if (bind(this->fd, (const sock_addr*)&this->addr, sizeof(this->addr)) == -1)
 	{
 		perror("Error binding ");
 		return 0;
 	}
-	// Tenemos que definir un max_size para la cola
 	if (listen(this->fd, MAX_CLIENTS) == -1)
 	{
 		perror("Can't hear you");

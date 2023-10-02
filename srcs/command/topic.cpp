@@ -6,7 +6,7 @@
 /*   By: crisfern <crisfern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/28 11:19:39 by crisfern          #+#    #+#             */
-/*   Updated: 2023/09/28 11:21:16 by crisfern         ###   ########.fr       */
+/*   Updated: 2023/10/02 12:26:33 by crisfern         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,7 +73,6 @@ void cmd::topic(server &svr, int poll_fd_pos, std::string str)
           chn->set_topic(str.substr(str.find(msglist[1])));
           return ;
         }
-
       }
       else
       {

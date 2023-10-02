@@ -6,7 +6,7 @@
 /*   By: crisfern <crisfern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/28 11:13:47 by crisfern          #+#    #+#             */
-/*   Updated: 2023/09/28 11:13:56 by crisfern         ###   ########.fr       */
+/*   Updated: 2023/10/02 12:34:24 by crisfern         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,6 @@ namespace cmd
 {
 	void nick(server &svr, int poll_fd_pos, std::string str);
 	void username(server &svr, int poll_fd_pos, std::string str);
-	void pong(server &svr, int poll_fd_pos, std::string str);
 	void quit(server &svr, int poll_fd_pos, std::string str);
 	void privmsg(server &svr, int poll_fd_pos, std::string str);
 	void join(server &svr, int poll_fd_pos, std::string str);

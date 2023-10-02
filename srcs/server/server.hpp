@@ -6,7 +6,7 @@
 /*   By: crisfern <crisfern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/28 11:25:34 by crisfern          #+#    #+#             */
-/*   Updated: 2023/09/29 13:44:50 by crisfern         ###   ########.fr       */
+/*   Updated: 2023/10/02 12:33:24 by crisfern         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,7 @@ class	channel;
 typedef void (*command_function)(server &svr, int poll_fd_pos, std::string name);
 typedef std::map<std::string, command_function> cmd_map;
 
-typedef struct t_Data_Server {             //Struct para almacenar los datos del servidor
+typedef struct t_Data_Server {             //Struct for store server data
 	std::string host;
 	std::string port;
 	std::string pass;
@@ -70,7 +70,7 @@ class	server {
 	public:
 		int 							_active_fds;
 		autosocket						*server_socket;
-		poll_fd							poll_fds[MAX_CLIENTS + 1]; // La primera posición es nuestro server
+		poll_fd							poll_fds[MAX_CLIENTS + 1]; // First position is our server
 		data_server						data;
 		cmd_map 						list_of_cmds;
 		std::map<int, user> 			list_of_users;

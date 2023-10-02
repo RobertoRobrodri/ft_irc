@@ -6,11 +6,11 @@
 /*   By: crisfern <crisfern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/28 11:19:28 by crisfern          #+#    #+#             */
-/*   Updated: 2023/09/28 11:19:30 by crisfern         ###   ########.fr       */
+/*   Updated: 2023/10/02 12:26:01 by crisfern         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-// Todos los defines con los mensajes con los que tiene que responder el servidor
+// All messages that server needs to answer with
 #ifndef REPLY_HPP
 #define REPLY_HPP
 

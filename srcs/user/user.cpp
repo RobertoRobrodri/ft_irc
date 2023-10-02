@@ -6,32 +6,36 @@
 /*   By: crisfern <crisfern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/28 11:26:28 by crisfern          #+#    #+#             */
-/*   Updated: 2023/09/29 13:51:16 by crisfern         ###   ########.fr       */
+/*   Updated: 2023/10/02 12:19:44 by crisfern         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "user.hpp"
 #include "../command/reply.hpp"
 
-user::user( void ) : _fd(0), _is_registered(false), _n_channels(0), _op(false) {
+user::user( void ) : _fd(0), _is_registered(false), _n_channels(0), _op(false)
+{
   return ;
 }
 
-user::user( int fd, std::string hostname ) : _fd(fd), _hostname(hostname), _is_registered(false), _n_channels(0), _op(false) {
+user::user( int fd, std::string hostname ) : _fd(fd), _hostname(hostname), _is_registered(false), _n_channels(0), _op(false)
+{
   return ;
 }
 
-user::user( const user & var ) {
+user::user( const user & var )
+{
   *this = var;
   return ;
 }
 
-user::~user( void ) {
+user::~user( void )
+{
   return ;
-
 }
 
-user & user::operator=(const user &tmp) {
+user & user::operator=(const user &tmp) 
+{
   this->set_username(tmp.get_username());
   this->set_nick(tmp.get_nick());
   this->set_hostname(tmp.get_hostname());
@@ -75,7 +79,7 @@ void		user::send_to_channel(server &svr, channel *chn, std::string chn_name, std
 {
   if(chn)
   {
-    if (chn->is_user_in_channel(*this))//TODO habria que comprobar o de los modos también
+    if (chn->is_user_in_channel(*this))
     {
       for (size_t i = 0; i < chn->get_list_of_members().size(); i++)
         if (chn->get_list_of_members()[i].get_nick() != this->get_nick())
@@ -158,7 +162,8 @@ void		user::set_hostname(std::string host)
 }
 
 void		user::set_servername(std::string srv)
-{this->_servername = srv;
+{
+  this->_servername = srv;
 }
 
 void		user::set_realname(std::string realname)

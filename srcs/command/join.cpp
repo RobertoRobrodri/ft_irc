@@ -6,7 +6,7 @@
 /*   By: crisfern <crisfern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/28 11:14:38 by crisfern          #+#    #+#             */
-/*   Updated: 2023/09/28 11:14:51 by crisfern         ###   ########.fr       */
+/*   Updated: 2023/10/02 12:22:08 by crisfern         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,28 +51,28 @@ void	join_existing_channel(server &svr, channel *chn, user &usr, std::string pas
 	else
 	{ 
 		if (chn->get_mode().find("i") != std::string::npos)// Invite only channel
-        {
-          svr.send_message(ERR_INVITEONLYCHAN(channel), usr.get_fd());
+    {
+      svr.send_message(ERR_INVITEONLYCHAN(channel), usr.get_fd());
 			return ;
-        } 
-        if (chn->get_mode().find("k") != std::string::npos &&// Require password
-		   	chn->get_password().compare(password))
-        {
-            svr.send_message(ERR_BADCHANNELKEY(channel), usr.get_fd());
-            return ;
-        }
-        if (chn->get_mode().find("l") != std::string::npos &&// Limit of users
-				chn->get_list_of_members().size() >= chn->get_user_limit())
+    } 
+    if (chn->get_mode().find("k") != std::string::npos &&// Require password
+		chn->get_password().compare(password))
+    {
+      svr.send_message(ERR_BADCHANNELKEY(channel), usr.get_fd());
+      return ;
+    }
+    if (chn->get_mode().find("l") != std::string::npos &&// Limit of users
+		chn->get_list_of_members().size() >= chn->get_user_limit())
 		{
-            svr.send_message(ERR_CHANNELISFULL(channel), usr.get_fd());
-            return ;
-        }
-        if (usr.get_n_channels() >= MAX_NUMBER_OF_CHN)// Limit of channels
-        {
-            svr.send_message(ERR_TOOMANYCHANNELS(channel), usr.get_fd());
-            return ;
-        }
-        chn->add_member(usr);
+      svr.send_message(ERR_CHANNELISFULL(channel), usr.get_fd());
+      return ;
+    }
+    if (usr.get_n_channels() >= MAX_NUMBER_OF_CHN)// Limit of channels
+    {
+      svr.send_message(ERR_TOOMANYCHANNELS(channel), usr.get_fd());
+      return ;
+    }
+    chn->add_member(usr);
 	}
 }
 

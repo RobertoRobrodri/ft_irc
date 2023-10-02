@@ -6,7 +6,7 @@
 /*   By: crisfern <crisfern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/28 11:22:03 by crisfern          #+#    #+#             */
-/*   Updated: 2023/09/28 11:22:15 by crisfern         ###   ########.fr       */
+/*   Updated: 2023/10/02 12:14:57 by crisfern         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,6 @@ bool	is_good_host(std::string host)
 	return (1);
 }
 
-
 bool	is_good_port(std::string port)
 {
 	int port_i;
@@ -64,7 +63,6 @@ bool	is_good_port(std::string port)
 
 bool	check_data_correct(char **argv)
 {
-	// TODO optimizar esta mierda
 	std::vector <std::string>seglist = ft_split(argv[1], ':');
 	std::string arg_2(argv[2]), arg_3(argv[3]);
 

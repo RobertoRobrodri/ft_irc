@@ -12,17 +12,17 @@ send -- "JOIN #elpacochannel\r"
 
 send -- "MODE #elpacochannel t+t pepe\r"
 
-#send -- "MODE #elpacochannel +l 10\r"
+send -- "MODE #elpacochannel +l 10\r"
 
-#send -- "MODE #elpacochannel +k pepe\r"
+send -- "MODE #elpacochannel +k pepe\r"
 
-#send -- "MODE #elpacochannel +p\r"
+send -- "MODE #elpacochannel +p\r"
 
-#send -- "MODE #elpacochannel +s\r"
+send -- "MODE #elpacochannel +s\r"
 
-#send -- "MODE #elpacochannel -s\r"
+send -- "MODE #elpacochannel -s\r"
 
-#send -- "MODE #elpacochannel -s\r"
+send -- "MODE #elpacochannel -s\r"
 
 interact
 
