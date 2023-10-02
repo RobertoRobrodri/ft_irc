@@ -6,7 +6,7 @@
 # define RPL_UMODEIS(string) ": 221 : " + string +  "\r\n"
 # define RPL_AWAY(nick, msg) ": 301 " + nick + " :" + msg + "\r\n"
 # define RPL_LISTSTART ": 321 Channel :Users Name\r\n"
-# define RPL_LIST(channel, private, topic) ": 322 " + channel + " " + private + ": " + topic + "\r\n"
+# define RPL_LIST(channel, priv, topic) ": 322 " + channel + " " + priv + ": " + topic + "\r\n"
 # define RPL_LISTEND ": 323 :End of /LIST\r\n"
 # define RPL_UMODEIS(string) ": 221 : " + string +  "\r\n"
 # define RPL_CHANNELMODEIS(channel, mode, params) ": 324 : " + channel + " " + mode + " " + params + "\r\n"

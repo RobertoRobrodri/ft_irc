@@ -122,26 +122,6 @@ void	channel::set_user_operator(const user &usr, const bool &flag)
   }
 }
 
-void	channel::broadcast_channel_mode(std::string &modes, std::vector<std::string> mode_params, server &srv)
-{
-	std::string params;
-	for (std::vector<std::string>::iterator i = mode_params.begin(); i != mode_params.end(); ++i)
-    	params += *i;
-	for (std::vector<user>::iterator it = this->list_of_members.begin(); it != this->list_of_members.end(); it++)
-		srv.send_message(RPL_CHANNELMODEIS(this->_name, modes, params), it->get_fd());
-}
-
-void	channel::broadcast_user_mode(bool sign, server &srv)
-{
-	std::string mode;
-	if (sign)
-		mode = "o";
-	else
-		mode = "";
-	for (std::vector<user>::iterator it = this->list_of_members.begin(); it != this->list_of_members.end(); it++)
-		srv.send_message(RPL_UMODEIS(mode), it->get_fd());
-}
-
 user   *channel::get_user_from_nick(std::string name)
 {
   	std::vector<user>::iterator it;

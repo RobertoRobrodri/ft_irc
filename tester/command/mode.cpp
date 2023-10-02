@@ -88,8 +88,9 @@ void cmd::mode(server &svr, int poll_fd_pos, std::string str)
 	std::vector<std::string> mode_params = msglist;
 	mode_params.erase(mode_params.begin(), mode_params.begin() + 2);
 	chn->parse_mode_flag(usr, msglist[1], mode_params, svr);
-	std::cout << *chn << std::endl;
+//	std::cout << *chn << std::endl;
 }
+
 void	test_mode_cmd(server *server)
 {
 	std::cout << BLUE << "Test mode command\n";
@@ -99,6 +100,7 @@ void	test_mode_cmd(server *server)
 	cmd::username(*server, 2, "user2 hostname2 servername2 :louise");
 	cmd::nick(*server, 1, "nick_1");
 	cmd::nick(*server, 2, "nick_2");
+	
 	user usr1 = server->get_user(4);
 	user usr2 = server->get_user(5);
 	cmd::join(*server, 1, "#TestChannel");
@@ -113,6 +115,7 @@ void	test_mode_cmd(server *server)
 	std::cout << CYAN << "Test 2: Give 'chanop' privileges to nick_2 on channel #TestChannel\n" << RESET;
 	std::cout << YELLOW << "MODE #TestChannel +o nick_2\n" << RESET;
 	cmd::mode(*server, 1, "#TestChannel +o nick_2");
+	
 	std::cout << CYAN << "Test 3: Remove invite-only flag\n" << RESET;
 	std::cout << YELLOW << "MODE #TestChannel -i\n" << RESET;
 	cmd::mode(*server, 1, "#TestChannel -i");
