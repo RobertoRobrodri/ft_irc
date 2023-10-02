@@ -1,0 +1,43 @@
+#!/usr/bin/expect
+
+set timeout 2
+spawn nc -v 127.0.0.1 6667
+
+sleep 2
+send -- "NICK pizapaco\r"
+sleep 2
+send -- "USER 1 2 3 :4\r"
+expect ": 001 :Welcome to the Internet Relay Network pizapaco!\r"
+send -- "JOIN #elpacochannel\r"
+sleep 2
+send -- "TOPIC #elpacochannel ay paquito\r"
+sleep 2
+send -- "JOIN #zorrasdramaticas\r"
+sleep 2
+send -- "TOPIC #zorrasdramaticas El canal fav de Guilmira\r"
+sleep 2
+send -- "JOIN #cachorritasdramaticas\r"
+sleep 2
+send -- "TOPIC #cachorritasdramaticas Guau Guau\r"
+sleep 2
+send -- "JOIN #panchitosdramaticos\r"
+sleep 2
+send -- "TOPIC #panchitosdramaticos Los panchitos son los de comer\r"
+sleep 2
+send -- "MODE #zorrasdramaticas +s\r"
+sleep 2
+send -- "MODE #cachorritasdramaticas +p\r"
+sleep 2
+send -- "MODE #panchitosdramaticos +sp\r"
+send -- "NAMES\r"
+sleep 2
+send -- "LIST\r"
+
+interact
+
+
+## ERRORES
+
+## Eliminar un modo que no está seteado
+## Añadir un modo dos o más veces
+## Añadir muchos + o -

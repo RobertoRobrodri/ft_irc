@@ -142,25 +142,38 @@ void	channel::broadcast_user_mode(bool sign, server &srv)
 		srv.send_message(RPL_UMODEIS(mode), it->get_fd());
 }
 
+user   *channel::get_user_from_nick(std::string name)
+{
+  	std::vector<user>::iterator it;
+
+	for (it = this->list_of_members.begin(); it != this->list_of_members.end(); it++)
+	{
+		if (it->get_nick().compare(name) == 0)
+			return &*it;
+	}
+	return NULL;
+}
+
 void 	channel::parse_mode_flag(user &usr, std::string &modes, std::vector<std::string> mode_params, server &srv)
 {
 	bool sign = 0;
 	size_t j = 0;
   	std::string tmp;
 
-  	//std::cout << modes << std::endl;
 	for (size_t i = 0; i < modes.size(); i++)
 	{
 		switch(modes[i])
 		{
 			case '+':
 			{
-				sign = true;
+				if (i == 0)
+					sign = true;
         		break;
 			}
 			case '-':
 			{
-				sign = false;
+				if (i == 0)
+					sign = false;
         		break;
 			}
 			case 'o':
@@ -182,6 +195,8 @@ void 	channel::parse_mode_flag(user &usr, std::string &modes, std::vector<std::s
       		{
       			if (sign == true)
       			{
+					if (this->get_mode().find_first_of("itps") != std::string::npos)
+						break ;
 					tmp = this->get_mode();
       				tmp.push_back(modes[i]);
       				this->set_mode(tmp);
@@ -189,8 +204,11 @@ void 	channel::parse_mode_flag(user &usr, std::string &modes, std::vector<std::s
 				else
 				{
 					size_t pos = this->get_mode().find(modes[i]);
-					tmp = this->get_mode().erase(pos, 1);
-          			this->set_mode(tmp);
+					if (pos != std::string::npos)
+					{
+						tmp = this->get_mode().erase(pos, 1);
+						this->set_mode(tmp);
+					}
 				}
 				broadcast_channel_mode(modes, mode_params, srv);
         		break;
@@ -203,6 +221,8 @@ void 	channel::parse_mode_flag(user &usr, std::string &modes, std::vector<std::s
             			break ;
 					this->set_user_limit(atoi(mode_params[j++].c_str()));
 					tmp = this->get_mode();
+					if (tmp.find('l') != std::string::npos)
+						break ;
           			tmp.push_back(modes[i]);
           			this->set_mode(tmp);
 				}
@@ -210,8 +230,11 @@ void 	channel::parse_mode_flag(user &usr, std::string &modes, std::vector<std::s
 				{
 					this->set_user_limit(0);
 					size_t pos = this->get_mode().find('l');
-					tmp = this->get_mode().erase(pos);
-          			this->set_mode(tmp);
+					if (pos != std::string::npos)
+					{
+						tmp = this->get_mode().erase(pos);
+						this->set_mode(tmp);
+					}
 				}
 				broadcast_channel_mode(modes, mode_params, srv);
         		break;
@@ -224,6 +247,8 @@ void 	channel::parse_mode_flag(user &usr, std::string &modes, std::vector<std::s
             			break ;
 					this->set_password(mode_params[j++]);
 					tmp = this->get_mode();
+					if (tmp.find('k') != std::string::npos)
+						break ;
           			tmp.push_back(modes[i]);
           			this->set_mode(tmp);
         		}
@@ -231,8 +256,11 @@ void 	channel::parse_mode_flag(user &usr, std::string &modes, std::vector<std::s
 				{
 					this->set_password("");
 					size_t pos = this->get_mode().find('k');
-					tmp = this->get_mode().erase(pos);
-          			this->set_mode(tmp);
+					if (pos != std::string::npos)
+					{
+						tmp = this->get_mode().erase(pos);
+						this->set_mode(tmp);
+					}
 				}
 				broadcast_channel_mode(modes, mode_params, srv);
         		break ;

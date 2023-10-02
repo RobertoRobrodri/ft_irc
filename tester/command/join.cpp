@@ -106,7 +106,7 @@ void  cmd::join(server &svr, int poll_fd_pos, std::string str) {
       {
         if (usr.get_n_channels() >= MAX_NUMBER_OF_CHN)
         {
-              svr.send_message(ERR_TOOMANYCHANNELS(chn->get_name()), usr.get_fd());
+              svr.send_message(ERR_TOOMANYCHANNELS(it->first), usr.get_fd());
               return ;
         }
         svr.create_channel(usr, it->first, it->second);

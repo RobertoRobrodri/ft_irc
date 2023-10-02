@@ -35,7 +35,7 @@ void cmd::topic(server &svr, int poll_fd_pos, std::string str)
     {
       if (chn->is_user_in_channel(usr))
       {
-		if (chn->get_mode().find("t") != std::string::npos && !usr.get_op())
+		    if (chn->get_mode().find("t") != std::string::npos && !usr.get_op())
         {
             svr.send_message(ERR_CHANOPRIVSNEEDED(msglist[0]), usr.get_fd());
             return ;
@@ -52,6 +52,11 @@ void cmd::topic(server &svr, int poll_fd_pos, std::string str)
         }
         else
         {
+          if (chn->get_user_from_nick(usr.get_nick())->get_op() == false)
+          {
+            svr.send_message(ERR_CHANOPRIVSNEEDED(msglist[0]), usr.get_fd());
+            return ;
+          }
           std::string new_topic = str.substr(str.find(msglist[1]));
           chn->set_topic(str.substr(str.find(msglist[1])));
           return ;
