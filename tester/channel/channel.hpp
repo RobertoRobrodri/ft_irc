@@ -55,6 +55,8 @@ class	channel {
 		bool	is_user_in_channel(const user &usr);
 		bool 	is_user_operator(const user &usr);
 		void	set_user_operator(const user &usr, const bool &flag);
+		void	broadcast_channel_mode(std::string &modes, std::vector<std::string> mode_params, server &srv);
+		void	broadcast_user_mode(bool sign, server &srv);
 		void 	parse_mode_flag(user &usr, std::string &modes, std::vector<std::string> mode_params, server &srv);
 };
 std::ostream &operator<<(std::ostream& os, const channel &tmp);
