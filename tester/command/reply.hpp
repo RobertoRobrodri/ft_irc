@@ -3,6 +3,7 @@
 #define REPLY_HPP
 
 # define RPL_WELCOME(nick, user, host) ": 001 :Welcome to the Internet Relay Network " + nick + "!\n" + user + "@" + host + "\r\n"
+# define RPL_UMODEIS(string) ": 221 : " + string +  "\r\n"
 # define RPL_CHANNELMODEIS(channel, mode, params) ": 324 : " + channel + " " + mode + " " + params + "\r\n"
 # define RPL_NOTOPIC(channel) ": 331 " + channel + " :No topic is set\r\n"
 # define RPL_TOPIC(channel, topic) ": 332 " + channel + " :" + topic + "\r\n"
