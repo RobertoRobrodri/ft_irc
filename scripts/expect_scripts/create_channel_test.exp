@@ -3,7 +3,7 @@
 
 set timeout 2
 
-spawn nc -v 127.0.0.1 6667
+spawn nc -vc 127.0.0.1 6776
 
 send -- "NICK pacopiza\r"
 send -- "USER pacopiza 2 3 :4\r"

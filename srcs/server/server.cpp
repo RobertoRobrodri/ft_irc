@@ -170,14 +170,16 @@ bool	server::accept_communication(void) // No test
 		perror(" FCNTL failed");
 		return 1;
 	}
-	std::cout << this->_active_fds << std::endl;
 	if (this->_active_fds <= MAX_CLIENTS)
 	{
 		this->add_user(fd, client_addr);
 		std::cout << YELLOW << "Accepted communication from: " << fd << RESET << std::endl;
 	}
 	else
+	{
+		server::send_message("Too many hoes in my server ;)", fd);
 		close(fd);
+	}
 	return 0;
 }
 
@@ -202,8 +204,9 @@ bool	server::receive_communication(int poll_fd_pos) // No test
 		this->delete_user(poll_fd_pos);
 		return 0;
     }
-	buffer[len-1] = 0; //El intro lo ponemos a cero
-	if (buffer[0] != 0)
+//	buffer[len-1] = 0; //El intro lo ponemos a cero
+	std::string str = buffer;
+	if (buffer[0] != 0 && str.find("\r\n") != std::string::npos)
 	{
 		std::multimap<std::string, std::string> commands = this->parse_message(buffer);
 		this->execute_commands(poll_fd_pos, commands);
