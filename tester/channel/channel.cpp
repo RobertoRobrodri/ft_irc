@@ -134,6 +134,26 @@ user   *channel::get_user_from_nick(std::string name)
 	return NULL;
 }
 
+void	channel::broadcast_channel_mode(std::string &modes, std::vector<std::string> mode_params, server &srv)
+{
+	std::string params;
+	for (std::vector<std::string>::iterator i = mode_params.begin(); i != mode_params.end(); ++i)
+    	params += *i;
+	for (std::vector<user>::iterator it = this->list_of_members.begin(); it != this->list_of_members.end(); it++)
+		srv.send_message(RPL_CHANNELMODEIS(this->_name, modes, params), it->get_fd());
+}
+
+void	channel::broadcast_user_mode(bool sign, server &srv)
+{
+	std::string mode;
+	if (sign)
+		mode = "o";
+	else
+		mode = "";
+	for (std::vector<user>::iterator it = this->list_of_members.begin(); it != this->list_of_members.end(); it++)
+		srv.send_message(RPL_UMODEIS(mode), it->get_fd());
+}
+
 void 	channel::parse_mode_flag(user &usr, std::string &modes, std::vector<std::string> mode_params, server &srv)
 {
 	bool sign = 0;
@@ -165,6 +185,7 @@ void 	channel::parse_mode_flag(user &usr, std::string &modes, std::vector<std::s
 				if (!new_op)
 					break;
 				set_user_operator(*new_op, sign);
+				broadcast_user_mode(sign, srv);
         		break;
 			}
 			case 'i':	// Invite only
@@ -189,6 +210,7 @@ void 	channel::parse_mode_flag(user &usr, std::string &modes, std::vector<std::s
 						this->set_mode(tmp);
 					}
 				}
+				broadcast_channel_mode(modes, mode_params, srv);
         		break;
       		}
 			case 'l':	// set user limit
@@ -214,6 +236,7 @@ void 	channel::parse_mode_flag(user &usr, std::string &modes, std::vector<std::s
 						this->set_mode(tmp);
 					}
 				}
+				broadcast_channel_mode(modes, mode_params, srv);
         		break;
 			}
 			case 'k':	// set password for channel
@@ -239,6 +262,7 @@ void 	channel::parse_mode_flag(user &usr, std::string &modes, std::vector<std::s
 						this->set_mode(tmp);
 					}
 				}
+				broadcast_channel_mode(modes, mode_params, srv);
         		break ;
 			}
       		default :
@@ -249,9 +273,4 @@ void 	channel::parse_mode_flag(user &usr, std::string &modes, std::vector<std::s
       		}
 		}
 	}
-		std::string params;
-		for (std::vector<std::string>::iterator i = mode_params.begin(); i != mode_params.end(); ++i)
-    		params += *i;
-		for (std::vector<user>::iterator it = this->list_of_members.begin(); it != this->list_of_members.end(); it++)
-			srv.send_message(RPL_CHANNELMODEIS(this->_name, modes, params), it->get_fd());
 }
