@@ -12,7 +12,7 @@ NAME 		= ircserv
 MOCK		= mock
 CC 			= c++
 INCLUDE 	= -std=c++98
-CXXFLAGS 	= -Wall -Wextra -g -Wno-c++11-compat-deprecated-writable-strings #-fsanitize=address #-Werror
+CXXFLAGS 	= -Wall -Wextra -g -Wno-c++11-compat-deprecated-writable-strings -fsanitize=address -Werror
 
 # PATHS #
 #

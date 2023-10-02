@@ -6,7 +6,7 @@
 /*   By: crisfern <crisfern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/28 11:23:51 by crisfern          #+#    #+#             */
-/*   Updated: 2023/10/02 14:44:18 by crisfern         ###   ########.fr       */
+/*   Updated: 2023/10/02 15:47:14 by crisfern         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -281,8 +281,10 @@ void	server::create_channel(user &usr, std::string name, std::string password)
 	channel cnn(name, password);
 	if (!password.empty())
 		cnn.set_mode("k");
+	usr.set_nick(usr.get_nick().insert(0, "@"));
 	usr.set_op(true);
 	cnn.add_member(usr);
+	usr.set_nick(usr.get_nick().erase(0, 1));
 	usr.set_op(false);
 	this->list_of_channels.insert(std::pair<std::string, channel>(name, cnn));
 	std::cout << name << " channel created!" << std::endl;

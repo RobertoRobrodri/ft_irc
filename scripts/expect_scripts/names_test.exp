@@ -1,7 +1,7 @@
 #!/usr/bin/expect
 
 set timeout 2
-spawn nc -cv 127.0.0.1 6667
+spawn nc -cv 127.0.0.1 6776
 
 sleep 2
 send -- "NICK pizapaco\r"

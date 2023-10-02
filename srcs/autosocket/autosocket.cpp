@@ -6,7 +6,7 @@
 /*   By: crisfern <crisfern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/28 11:23:23 by crisfern          #+#    #+#             */
-/*   Updated: 2023/10/02 12:30:29 by crisfern         ###   ########.fr       */
+/*   Updated: 2023/10/02 15:08:47 by crisfern         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,7 @@ autosocket::~autosocket( void ) {
   
   std::cout << "Autosocket Destructor called" << std::endl;
   close(this->fd);
+  delete this;
   return ;
 }
 
