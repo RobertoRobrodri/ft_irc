@@ -268,8 +268,10 @@ void	server::create_channel(user &usr, std::string name, std::string password) /
 	if (!password.empty())
 		cnn.set_mode("k");
 	usr.set_op(true);
+	usr.set_nick(usr.get_nick().insert(0, "@"));
 	cnn.add_member(usr);
 	usr.set_op(false);
+	usr.set_nick(usr.get_nick().erase(0, 1));
 	this->list_of_channels.insert(std::pair<std::string, channel>(name, cnn));
 	std::cout << name << " channel created!" << std::endl;
 	std::cout << cnn << std::endl;
