@@ -3,6 +3,7 @@
 #define REPLY_HPP
 
 # define RPL_WELCOME(nick, user, host) ": 001 :Welcome to the Internet Relay Network " + nick + "!\n" + user + "@" + host + "\r\n"
+# define RPL_UMODEIS(string) ": 221 : " + string +  "\r\n"
 # define RPL_AWAY(nick, msg) ": 301 " + nick + " :" + msg + "\r\n"
 # define RPL_LISTSTART ": 321 Channel :Users Name\r\n"
 # define RPL_LIST(channel, private, topic) ": 322 " + channel + " " + private + ": " + topic + "\r\n"
