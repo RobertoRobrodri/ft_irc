@@ -44,7 +44,6 @@ void cmd::nick(server &svr, int poll_fd_pos, std::string str) {
   }
   usr.set_nick(str);
   usr.is_registered(svr);
-  std::cout << usr << std::endl;
 }
 
 void	test_nick_cmd(server *server)
