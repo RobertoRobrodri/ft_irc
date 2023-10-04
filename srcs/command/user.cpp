@@ -36,13 +36,19 @@ void  cmd::username(server &svr, int poll_fd_pos, std::string str)
 // because it may contain space characters and must be prefixed with a
 // colon (':') to make sure this is recognised as such.
   std::vector<std::string> realname_split = ft_split(str, ':');// Separate realname 
+  if (realname_split.size() < 2)
+  {
+    {
+      svr.send_message(ERR_NEEDMOREPARAMS(command), usr.get_fd());
+      return ;
+    }  
+  }
   std::vector<std::string> first_params_split = ft_split(realname_split[0], ' ');
-  if (first_params_split.size() + 1 < 4 || realname_split.size() < 2)
+  if (first_params_split.size() + 1 < 4 )
   {
     svr.send_message(ERR_NEEDMOREPARAMS(command), usr.get_fd());
     return ;
   }
-  
   std::string username = first_params_split[0];
   std::string servername = first_params_split[2];
   std::string realname = realname_split[1];
