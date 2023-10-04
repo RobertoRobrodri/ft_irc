@@ -6,7 +6,7 @@
 /*   By: crisfern <crisfern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/28 11:23:51 by crisfern          #+#    #+#             */
-/*   Updated: 2023/10/02 14:44:18 by crisfern         ###   ########.fr       */
+/*   Updated: 2023/10/04 11:08:17 by mzomeno-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -214,11 +214,8 @@ bool	server::send_message(std::string msg, int fd)
 {
 	int len = send(fd, msg.c_str(), msg.length(), 0);
 	if (len < 0)
-    {
-		if (errno == 9)
-			std::cout << RED << "(mocking message) " << RESET << msg << std::endl;
-		else
-			perror(" send() failed");
+	{
+		perror(" send() failed");
 		return 1;
     }
 	return 0;
