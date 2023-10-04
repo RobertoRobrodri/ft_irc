@@ -6,7 +6,7 @@
 /*   By: crisfern <crisfern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/28 11:22:42 by crisfern          #+#    #+#             */
-/*   Updated: 2023/10/04 11:32:32 by mzomeno-         ###   ########.fr       */
+/*   Updated: 2023/10/04 11:45:32 by mzomeno-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,7 +85,7 @@ void	channel::add_member(user &usr)
 			members += (it->get_nick() + " ");
 		}
 		for (it = this->list_of_members.begin(); it != this->list_of_members.end(); it++)
-			server::send_message(RPL_NAMREPLY(channel, members), usr.get_fd());
+			server::send_message(RPL_NAMREPLY(channel, members), it->get_fd());
 }
 
 void	channel::rmv_member(user &usr)
