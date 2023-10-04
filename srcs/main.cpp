@@ -6,7 +6,7 @@
 /*   By: crisfern <crisfern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/28 11:25:59 by crisfern          #+#    #+#             */
-/*   Updated: 2023/09/28 11:50:06 by crisfern         ###   ########.fr       */
+/*   Updated: 2023/10/04 11:00:11 by mzomeno-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,8 +25,6 @@ int exit_msg(std::string msg)
 
 int main(int argc, char **argv)
 {
-	char *port = "6776";
-	char *pass = "pass";
 	server *serv;
 
 	atexit(leaks);
@@ -38,7 +36,7 @@ int main(int argc, char **argv)
 			serv = new server(argv[1], argv[2], argv[3]);
 		}
 		else
-			serv = new server(port, pass);
+			serv = new server("6776", "pass");
 		if (serv->wait_for_connection())
 			throw std::runtime_error("Conection failed");
 	}
