@@ -6,7 +6,7 @@
 /*   By: crisfern <crisfern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/28 11:19:28 by crisfern          #+#    #+#             */
-/*   Updated: 2023/10/02 12:26:01 by crisfern         ###   ########.fr       */
+/*   Updated: 2023/10/04 12:52:15 by mzomeno-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,7 @@
 # define ERR_NOTONCHANNEL(channel) ": 442 " + channel + " :You're not on that channel\r\n"
 # define ERR_USERONCHANNEL(user, channel) ": 443 " + user + " " + channel + ":is already on channel\r\n"
 # define ERR_NOTREGISTERED ": 451 :You have not registered\r\n"
+# define ERR_NICKNOTREGISTERED(nick) ": 452 :" + nick + " is not registered\r\n"
 # define ERR_NEEDMOREPARAMS(command) ": 461 " + command + " :Not enough parameters\r\n"
 # define ERR_ALREADYREGISTERED ": 462 :You may not reregister\r\n"
 # define ERR_CHANNELISFULL(channel) ": 471 " + channel + " :Cannot join channel (+l)\r\n"
