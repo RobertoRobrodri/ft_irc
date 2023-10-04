@@ -6,7 +6,7 @@
 /*   By: crisfern <crisfern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/28 11:23:51 by crisfern          #+#    #+#             */
-/*   Updated: 2023/10/04 11:27:04 by mzomeno-         ###   ########.fr       */
+/*   Updated: 2023/10/04 12:11:37 by mzomeno-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -210,15 +210,11 @@ bool	server::receive_communication(int poll_fd_pos)
 	return 0;
 }
 
-bool	server::send_message(std::string msg, int fd)
+void	server::send_message(std::string msg, int fd)
 {
 	int len = send(fd, msg.c_str(), msg.length(), 0);
 	if (len < 0)
-	{
 		perror(" send() failed");
-		return 1;
-    }
-	return 0;
 }
 
 void	server::delete_user(int poll_fd_pos)

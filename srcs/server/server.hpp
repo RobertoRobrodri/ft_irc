@@ -6,7 +6,7 @@
 /*   By: crisfern <crisfern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/28 11:25:34 by crisfern          #+#    #+#             */
-/*   Updated: 2023/10/02 12:33:24 by crisfern         ###   ########.fr       */
+/*   Updated: 2023/10/04 12:13:01 by mzomeno-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,7 +108,7 @@ class	server {
 		void	add_user(int fd, sock_in client_addr);
 		void	delete_user(int i);
 		void	execute_commands(int poll_fd_pos, std::multimap<std::string, std::string> commands);
-		static bool	send_message(std::string msg, int fd);
+		static void	send_message(std::string msg, int fd);
 		user	*get_user_from_nick(std::string nick);
 		channel *get_channel_from_name(std::string name);
 		void	create_channel(user &usr, std::string name, std::string password);
