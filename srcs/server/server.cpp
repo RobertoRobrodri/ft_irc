@@ -6,7 +6,7 @@
 /*   By: crisfern <crisfern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/28 11:23:51 by crisfern          #+#    #+#             */
-/*   Updated: 2023/10/04 12:11:37 by mzomeno-         ###   ########.fr       */
+/*   Updated: 2023/10/04 13:01:19 by mzomeno-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -271,6 +271,8 @@ void	server::execute_commands(int poll_fd_pos, std::multimap<std::string, std::s
 
 void	server::create_channel(user &usr, std::string name, std::string password)
 {
+	if (name[0] != '#' && name[0] != '&')
+		name.insert(0, "#");
 	channel cnn(name, password);
 	if (!password.empty())
 		cnn.set_mode("k");
