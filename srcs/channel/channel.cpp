@@ -6,7 +6,7 @@
 /*   By: crisfern <crisfern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/28 11:22:42 by crisfern          #+#    #+#             */
-/*   Updated: 2023/10/02 12:14:29 by crisfern         ###   ########.fr       */
+/*   Updated: 2023/10/04 11:32:32 by mzomeno-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,6 +59,8 @@ std::ostream &operator<<(std::ostream& os, const channel &tmp)
 	os << "User limit if set: " << tmp.get_user_limit() << std::endl;
 	os << "List of members: " << std::endl;
 	for (it = lst.begin(); it != lst.end(); it++)
+		if (it->get_op())
+			os << "@";
     	os << it->get_nick() << std::endl;
 	return (os);
 }
@@ -77,7 +79,11 @@ void	channel::add_member(user &usr)
 		std::string members;
 		std::vector<user>::iterator it;
 		for (it = this->list_of_members.begin(); it != this->list_of_members.end(); it++)
+		{
+			if (it->get_op())
+				members += "@";
 			members += (it->get_nick() + " ");
+		}
 		for (it = this->list_of_members.begin(); it != this->list_of_members.end(); it++)
 			server::send_message(RPL_NAMREPLY(channel, members), usr.get_fd());
 }

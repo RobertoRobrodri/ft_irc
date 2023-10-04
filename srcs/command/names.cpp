@@ -6,7 +6,7 @@
 /*   By: crisfern <crisfern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/28 11:16:16 by crisfern          #+#    #+#             */
-/*   Updated: 2023/10/02 12:23:01 by crisfern         ###   ########.fr       */
+/*   Updated: 2023/10/04 11:41:33 by mzomeno-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,14 +31,22 @@ void cmd::names(server &svr, int poll_fd_pos, std::string str)
                 {
                     std::string members_lst;
                     for (std::vector<user>::iterator itt = members.begin(); itt != members.end(); itt++)
-                        members_lst += (itt->get_nick() + " ");
+					{
+						if (itt->get_op())
+							members_lst += "@";
+						members_lst += (itt->get_nick() + " ");
+					}
                     svr.send_message(RPL_NAMREPLY(it->first, members_lst), usr.get_fd());
                 }
                 else
                 {
                     for (std::vector<user>::iterator itt = members.begin(); itt != members.end(); itt++)
                         if (secret_lst.find(itt->get_nick()) == std::string::npos)
+						{
+							if (itt->get_op())
+								secret_lst += "@";
                             secret_lst += (itt->get_nick() + " ");
+						}
                 }
             }
             std::string schn = "*";
@@ -61,8 +69,12 @@ void cmd::names(server &svr, int poll_fd_pos, std::string str)
                     std::vector<user> members = chn->get_list_of_members();
                     std::string members_lst;
                     for (std::vector<user>::iterator it = members.begin(); it != members.end(); it++)
+					{
+						if (it->get_op())
+							members_lst += "@";
                         members_lst += (it->get_nick() + " ");
-                    svr.send_message(RPL_NAMREPLY(chnlist[i], members_lst), usr.get_fd());
+					}
+					svr.send_message(RPL_NAMREPLY(chnlist[i], members_lst), usr.get_fd());
                 }
             }
         }
