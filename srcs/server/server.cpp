@@ -6,7 +6,7 @@
 /*   By: crisfern <crisfern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/28 11:23:51 by crisfern          #+#    #+#             */
-/*   Updated: 2023/10/04 13:01:19 by mzomeno-         ###   ########.fr       */
+/*   Updated: 2023/10/16 12:21:25 by mzomeno-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -202,7 +202,7 @@ bool	server::receive_communication(int poll_fd_pos)
 		return 0;
     }
 	std::string str = buffer;
-	if (buffer[0] != 0 && str.find("\r\n") != std::string::npos)
+	if (buffer[0] != 0)
 	{
 		std::multimap<std::string, std::string> commands = this->parse_message(buffer);
 		this->execute_commands(poll_fd_pos, commands);
@@ -271,8 +271,6 @@ void	server::execute_commands(int poll_fd_pos, std::multimap<std::string, std::s
 
 void	server::create_channel(user &usr, std::string name, std::string password)
 {
-	if (name[0] != '#' && name[0] != '&')
-		name.insert(0, "#");
 	channel cnn(name, password);
 	if (!password.empty())
 		cnn.set_mode("k");
