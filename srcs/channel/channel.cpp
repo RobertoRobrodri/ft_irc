@@ -6,7 +6,7 @@
 /*   By: crisfern <crisfern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/28 11:22:42 by crisfern          #+#    #+#             */
-/*   Updated: 2023/10/04 11:45:32 by mzomeno-         ###   ########.fr       */
+/*   Updated: 2023/10/16 15:24:16 by mzomeno-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,9 +59,11 @@ std::ostream &operator<<(std::ostream& os, const channel &tmp)
 	os << "User limit if set: " << tmp.get_user_limit() << std::endl;
 	os << "List of members: " << std::endl;
 	for (it = lst.begin(); it != lst.end(); it++)
+	{
 		if (it->get_op())
 			os << "@";
     	os << it->get_nick() << std::endl;
+	}
 	return (os);
 }
 

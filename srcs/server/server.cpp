@@ -6,7 +6,7 @@
 /*   By: crisfern <crisfern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/28 11:23:51 by crisfern          #+#    #+#             */
-/*   Updated: 2023/10/16 12:21:25 by mzomeno-         ###   ########.fr       */
+/*   Updated: 2023/10/16 15:04:54 by mzomeno-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,13 +17,10 @@
 #include <netinet/in.h>
 
 server::server( void )
-{
-	std::cout << "Server Default constructor called" << std::endl;
-}
+{}
 
 server::server( std::string port , std::string pass ) : _active_fds(1)
 {	
-	std::cout << "Server Parameter constructor called" << std::endl;
 	this->data.host 		= SERVER_HOST;
 	this->data.port 		= port;
 	this->data.pass 		= pass;
@@ -33,7 +30,6 @@ server::server( std::string port , std::string pass ) : _active_fds(1)
 
 server::server( std::string network , std::string port , std::string pass ) : _active_fds(1)
 {	
-	std::cout << "Server Parameter constructor called" << std::endl;
 	std::vector <std::string>seglist = ft_split(network, ':');
 	this->data.host 		= seglist[0];
 	this->data.network_port = seglist[1];
@@ -47,14 +43,11 @@ server::server( std::string network , std::string port , std::string pass ) : _a
 server::server( const server & var )
 {
 	(void)var;
-	std::cout << "Server Copy constructor called" << std::endl;
-
 }
 
 // DESTRUCTOR
 server::~server( void )
 {
-	std::cout << "Server Destructor constructor called" << std::endl;
 	delete this->server_socket;
 }
 
@@ -62,7 +55,6 @@ server::~server( void )
 server & server::operator=(const server &tmp)
 {
 	(void)tmp;
-	std::cout << "Server Operator equalizer called" << std::endl;
 	return *this;
 }
 
@@ -175,7 +167,7 @@ bool	server::accept_communication(void)
 	}
 	else
 	{
-		server::send_message("Too many users in server ;)", fd);
+		server::send_message("Too many users in server", fd);
 		close(fd);
 	}
 	return 0;
@@ -186,7 +178,6 @@ bool	server::receive_communication(int poll_fd_pos)
 	char buffer[MSG_SIZE];
 	int len;
 
-	std::cout << "Message received" << std::endl;
 	memset(buffer, 0, MSG_SIZE); //Buffer initialization with zeros
 	len = recv(this->poll_fds[poll_fd_pos].fd, buffer, sizeof(buffer), 0);
 	if (len < 0)

@@ -6,20 +6,17 @@
 /*   By: crisfern <crisfern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/28 11:23:23 by crisfern          #+#    #+#             */
-/*   Updated: 2023/10/02 12:30:29 by crisfern         ###   ########.fr       */
+/*   Updated: 2023/10/16 15:05:35 by mzomeno-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "autosocket.hpp"
 
 autosocket::autosocket( void ) {
-
-  std::cout << "Autosocket Default constructor called" << std::endl;
   return ;
 }
 
 autosocket::autosocket( std::string port, std::string host ) {
-  std::cout << "Autosocket Parameter constructor called" << std::endl;
   this->init_socket_struct(port, host);
   try {
     if (this->server_listening() == 0)
@@ -33,15 +30,11 @@ autosocket::autosocket( std::string port, std::string host ) {
 }
 
 autosocket::autosocket( const autosocket & var ) {
-  
-  std::cout << "Autosocket Copy constructor called" << std::endl;
   *this = var;
   return ;
 }
 
 autosocket::~autosocket( void ) {
-  
-  std::cout << "Autosocket Destructor called" << std::endl;
   close(this->fd);
   return ;
 }
@@ -49,13 +42,12 @@ autosocket::~autosocket( void ) {
 // Overloading
 autosocket & autosocket::operator=(const autosocket &tmp) {
 	(void) tmp;
-	std::cout << "Autosocket Operator equalizer called" << std::endl;
 	return (*this);
 }
 
 std::ostream &operator<<(std::ostream& os, const autosocket &tmp) {
 	(void) tmp;
-	os << std::endl << "Autosocket Operator output called" << std::endl;
+	os << std::endl;
 	return (os);
 }
 
