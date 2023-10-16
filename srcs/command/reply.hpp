@@ -6,7 +6,7 @@
 /*   By: crisfern <crisfern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/28 11:19:28 by crisfern          #+#    #+#             */
-/*   Updated: 2023/10/04 12:52:15 by mzomeno-         ###   ########.fr       */
+/*   Updated: 2023/10/16 12:09:51 by mzomeno-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,7 @@
 # define RPL_NAMREPLY(channel, members) ": 353 " + channel + " :" + members + "\r\n"
 # define RPL_ENDOFNAMES(channel) ": 366 " + channel + " :End of /NAMES list\r\n"
 # define ERR_NOSUCHNICK(rcv) ": 401 " + rcv + " :No such nick/channel\r\n"
+# define ERR_ERRONEUSCHANNELNAME(channel) ": 402 " + channel + " :Erroneus channel name\r\n"
 # define ERR_NOSUCHCHANNEL(channel) ": 403 " + channel + " :No such channel\r\n"
 # define ERR_CANNOTSENDTOCHAN(channel) ": 404 " + channel + " :Cannot send to channel\r\n"
 # define ERR_TOOMANYCHANNELS(channel) ": 405 " + channel + " :You have joined too many channels\r\n"

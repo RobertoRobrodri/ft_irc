@@ -6,7 +6,7 @@
 /*   By: crisfern <crisfern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/28 11:14:38 by crisfern          #+#    #+#             */
-/*   Updated: 2023/10/02 12:22:08 by crisfern         ###   ########.fr       */
+/*   Updated: 2023/10/16 12:15:43 by mzomeno-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,36 +44,18 @@ void	join_existing_channel(server &svr, channel *chn, user &usr, std::string pas
 	std::string channel = chn->get_name();
 	std::string user = usr.get_nick();
 	if (chn->is_user_in_channel(usr) == true)
-	{
-		svr.send_message(ERR_USERONCHANNEL(user, channel), usr.get_fd());
-		return ;
-	}
-	else
-	{ 
-		if (chn->get_mode().find("i") != std::string::npos)// Invite only channel
-    {
-      svr.send_message(ERR_INVITEONLYCHAN(channel), usr.get_fd());
-			return ;
-    } 
-    if (chn->get_mode().find("k") != std::string::npos &&// Require password
-		chn->get_password().compare(password))
-    {
-      svr.send_message(ERR_BADCHANNELKEY(channel), usr.get_fd());
-      return ;
-    }
-    if (chn->get_mode().find("l") != std::string::npos &&// Limit of users
-		chn->get_list_of_members().size() >= chn->get_user_limit())
-		{
-      svr.send_message(ERR_CHANNELISFULL(channel), usr.get_fd());
-      return ;
-    }
-    if (usr.get_n_channels() >= MAX_NUMBER_OF_CHN)// Limit of channels
-    {
-      svr.send_message(ERR_TOOMANYCHANNELS(channel), usr.get_fd());
-      return ;
-    }
-    chn->add_member(usr);
-	}
+		return svr.send_message(ERR_USERONCHANNEL(user, channel), usr.get_fd());
+	if (chn->get_mode().find("i") != std::string::npos)// Invite only channel
+		return svr.send_message(ERR_INVITEONLYCHAN(channel), usr.get_fd());
+	if (chn->get_mode().find("k") != std::string::npos &&
+			chn->get_password().compare(password))// Require password
+		return svr.send_message(ERR_BADCHANNELKEY(channel), usr.get_fd());
+	if (chn->get_mode().find("l") != std::string::npos &&
+			chn->get_list_of_members().size() >= chn->get_user_limit())// Limit of users
+		return svr.send_message(ERR_CHANNELISFULL(channel), usr.get_fd());
+	if (usr.get_n_channels() >= MAX_NUMBER_OF_CHN)// Limit of channels
+		return svr.send_message(ERR_TOOMANYCHANNELS(channel), usr.get_fd());
+	chn->add_member(usr);
 }
 
 void  cmd::join(server &svr, int poll_fd_pos, std::string str) {
@@ -84,10 +66,7 @@ void  cmd::join(server &svr, int poll_fd_pos, std::string str) {
     std::string command = "JOIN";
     std::vector<std::string> channel_params = ft_split(str, ' ');
     if (str == "")
-    {
-      svr.send_message(ERR_NEEDMOREPARAMS(command), usr.get_fd());
-      return ;
-    }
+      return svr.send_message(ERR_NEEDMOREPARAMS(command), usr.get_fd());
     std::map<std::string, std::string>channels_and_passwords;
     std::vector<std::string> channels = ft_split(channel_params[0], ',');
     std::vector<std::string>::iterator channel_it = channels.begin();
@@ -109,18 +88,15 @@ void  cmd::join(server &svr, int poll_fd_pos, std::string str) {
     }
     for (std::map<std::string, std::string>::iterator it = channels_and_passwords.begin(); it != channels_and_passwords.end(); it++)
     {
-      channel *chn = svr.get_channel_from_name(it->first);
+		if (it->first[0] != '#' && it->first[0] != '&')
+      		return svr.send_message(ERR_ERRONEUSCHANNELNAME(it->first), usr.get_fd());
+      	channel *chn = svr.get_channel_from_name(it->first);
       if (chn)
-      {
         join_existing_channel(svr, chn, usr, it->second);
-      }
       else
       {
         if (usr.get_n_channels() >= MAX_NUMBER_OF_CHN)
-        {
-              svr.send_message(ERR_TOOMANYCHANNELS(it->first), usr.get_fd());
-              return ;
-        }
+              return svr.send_message(ERR_TOOMANYCHANNELS(it->first), usr.get_fd());
         svr.create_channel(usr, it->first, it->second);
       }
     }
