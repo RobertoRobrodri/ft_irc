@@ -82,8 +82,8 @@ void		user::send_to_channel(server &svr, channel *chn, std::string chn_name, std
     if (chn->is_user_in_channel(*this))
     {
       for (size_t i = 0; i < chn->get_list_of_members().size(); i++)
-        if (chn->get_list_of_members()[i].get_nick() != this->get_nick())
-        	svr.send_message("From " + chn_name + ":\n" + msg + "\n", chn->get_list_of_members()[i].get_fd());
+        if (chn->get_list_of_members()[i]->get_nick() != this->get_nick())
+        	svr.send_message("From " + chn_name + ":\n" + msg + "\n", chn->get_list_of_members()[i]->get_fd());
     }
     else
       svr.send_message(ERR_CANNOTSENDTOCHAN(chn_name), this->get_fd());

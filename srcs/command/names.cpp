@@ -26,26 +26,26 @@ void cmd::names(server &svr, int poll_fd_pos, std::string str)
             for (std::map<std::string, channel>::iterator it = chnlist.begin(); it != chnlist.end(); it++)
             {
                 channel chn = it->second;
-                std::vector<user> members = chn.get_list_of_members();
+                std::vector<user*> members = chn.get_list_of_members();
                 if (chn.is_user_in_channel(usr) || ((chn.get_mode().find("p") == std::string::npos) && (chn.get_mode().find("s") == std::string::npos)))
                 {
                     std::string members_lst;
-                    for (std::vector<user>::iterator itt = members.begin(); itt != members.end(); itt++)
+                    for (std::vector<user*>::iterator itt = members.begin(); itt != members.end(); itt++)
 					{
-						if (itt->get_op())
+						if ((*itt)->get_op())
 							members_lst += "@";
-						members_lst += (itt->get_nick() + " ");
+						members_lst += ((*itt)->get_nick() + " ");
 					}
                     svr.send_message(RPL_NAMREPLY(it->first, members_lst), usr.get_fd());
                 }
                 else
                 {
-                    for (std::vector<user>::iterator itt = members.begin(); itt != members.end(); itt++)
-                        if (secret_lst.find(itt->get_nick()) == std::string::npos)
+                    for (std::vector<user*>::iterator itt = members.begin(); itt != members.end(); itt++)
+                        if (secret_lst.find((*itt)->get_nick()) == std::string::npos)
 						{
-							if (itt->get_op())
+							if ((*itt)->get_op())
 								secret_lst += "@";
-                            secret_lst += (itt->get_nick() + " ");
+                            secret_lst += ((*itt)->get_nick() + " ");
 						}
                 }
             }
@@ -66,13 +66,13 @@ void cmd::names(server &svr, int poll_fd_pos, std::string str)
             {
                 if (chn->is_user_in_channel(usr) || ((chn->get_mode().find("p") == std::string::npos) && (chn->get_mode().find("s") == std::string::npos)))
                 {
-                    std::vector<user> members = chn->get_list_of_members();
+                    std::vector<user*> members = chn->get_list_of_members();
                     std::string members_lst;
-                    for (std::vector<user>::iterator it = members.begin(); it != members.end(); it++)
+                    for (std::vector<user*>::iterator it = members.begin(); it != members.end(); it++)
 					{
-						if (it->get_op())
+						if ((*it)->get_op())
 							members_lst += "@";
-                        members_lst += (it->get_nick() + " ");
+                        members_lst += ((*it)->get_nick() + " ");
 					}
 					svr.send_message(RPL_NAMREPLY(chnlist[i], members_lst), usr.get_fd());
                 }

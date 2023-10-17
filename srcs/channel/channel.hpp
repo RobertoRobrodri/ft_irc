@@ -27,7 +27,8 @@ class	channel {
 
 		std::string				_name;
 		std::string				_topic;
-		std::vector<user> 		list_of_members;
+		std::vector<user*> 		list_of_members;
+		std::map<user*, bool>	list_of_operators;
 		std::string 			_password;
 		std::string 			_mode;
 		size_t 					_user_limit;
@@ -48,7 +49,7 @@ class	channel {
 
 		std::string get_name(void) const;
 		std::string get_topic(void) const;
-		std::vector<user> get_list_of_members(void) const;
+		std::vector<user*> get_list_of_members(void) const;
 		std::string get_password(void) const;
 		std::string get_mode(void) const;
 		size_t get_user_limit(void) const;
@@ -62,6 +63,7 @@ class	channel {
 		void set_password(std::string pass);
 		void set_mode(std::string mode);
 		void set_user_limit(size_t i);
+		void set_user_operator(user &usr, const bool &flag);
 
 		/*###########################################
 		#				FUNCTIONS					#
@@ -70,8 +72,7 @@ class	channel {
 		void	add_member(user &usr);
 		void	rmv_member(user &usr);
 		bool	is_user_in_channel(const user &usr);
-		bool 	is_user_operator(const user &usr);
-		void	set_user_operator(const user &usr, const bool &flag);
+		bool 	is_user_operator(user &usr);
 		int 	parse_mode_flag(user &usr, std::string &modes, std::vector<std::string> mode_params, server &srv);
 };
 std::ostream &operator<<(std::ostream& os, const channel &tmp);

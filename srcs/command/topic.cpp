@@ -43,10 +43,10 @@ void	modify_topic(server &svr, std::string channel_name, std::string topic, chan
 		return svr.send_message(ERR_CHANOPRIVSNEEDED(channel_name), usr.get_fd());
 	
 	chn->set_topic(topic);
-	std::vector<user>::iterator it;
-	std::vector<user> lst = chn->get_list_of_members();
+	std::vector<user*>::iterator it;
+	std::vector<user*> lst = chn->get_list_of_members();
 	for (it = lst.begin(); it != lst.end(); it++)
-		check_topic(svr, channel_name, topic, *it);
+		check_topic(svr, channel_name, topic, *(*it));
 }
 
 void cmd::topic(server &svr, int poll_fd_pos, std::string str)

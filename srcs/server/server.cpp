@@ -193,6 +193,7 @@ bool	server::receive_communication(int poll_fd_pos)
 		return 0;
     }
 	std::string str = buffer;
+	std::cout << GREEN << buffer << RESET << std::endl;
 	if (buffer[0] != 0 && str.find("\r\n") != std::string::npos)
 	{
 		std::multimap<std::string, std::string> commands = this->parse_message(buffer);
@@ -265,9 +266,8 @@ void	server::create_channel(user &usr, std::string name, std::string password)
 	channel cnn(name, password);
 	if (!password.empty())
 		cnn.set_mode("k");
-	usr.set_op(true);
 	cnn.add_member(usr);
-	usr.set_op(false);
+	cnn.set_user_operator(usr, true);
 	this->list_of_channels.insert(std::pair<std::string, channel>(name, cnn));
 	std::cout << name << " channel created!" << std::endl;
 	std::cout << cnn << std::endl;

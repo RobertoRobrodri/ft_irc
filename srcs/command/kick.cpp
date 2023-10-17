@@ -55,7 +55,7 @@ void cmd::kick(server &svr, int poll_fd_pos, std::string str)
 		  svr.send_message(ERR_NOTONCHANNEL(chnlist[i]), usr.get_fd());
 		  continue ;
 	  }
-	  if (chn->get_user_from_nick(usr.get_nick())->get_op() == false)
+	  if (chn->is_user_operator(usr) == false)
 	  {
 		  svr.send_message(ERR_CHANOPRIVSNEEDED(chnlist[i]), usr.get_fd());
 		  continue ;
