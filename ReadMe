@@ -7,7 +7,7 @@
 3. Establish conection with server
 NETCAT - nc localhost <port>
 =======
-	nc -v 127.0.0.1 6776
+	nc -vc 127.0.0.1 6776
 
 4. Connect with irrsi client
 IRSSI - cliente por terminal
