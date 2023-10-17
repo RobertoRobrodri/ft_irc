@@ -6,7 +6,7 @@
 /*   By: crisfern <crisfern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/28 11:25:59 by crisfern          #+#    #+#             */
-/*   Updated: 2023/10/16 15:07:23 by mzomeno-         ###   ########.fr       */
+/*   Updated: 2023/10/17 17:03:04 by mzomeno-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,14 +35,14 @@ int main(int argc, char **argv)
 				throw std::runtime_error("Data incorrect");
 			serv = new server(argv[1], argv[2], argv[3]);
 			std::cout << YELLOW << "Server initialized!\n" <<
-				"To test new connections, open a new tab and type nc -v <host> <port>\n"
+				"To test new connections, open a new tab and type nc -vc <host> <port>\n"
 				<< RESET;
 		}
 		else
 		{
 			serv = new server("6776", "pass");
 			std::cout << YELLOW << "Server initialized!\n" <<
-				"To test new connections, open a new tab and type nc -v 127.0.0.1 6776\n"
+				"To test new connections, open a new tab and type nc -vc 127.0.0.1 6776\n"
 				<< RESET;
 		}
 		if (serv->wait_for_connection())
