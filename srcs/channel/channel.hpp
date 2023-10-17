@@ -6,7 +6,7 @@
 /*   By: crisfern <crisfern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/28 11:22:31 by crisfern          #+#    #+#             */
-/*   Updated: 2023/10/02 12:11:54 by crisfern         ###   ########.fr       */
+/*   Updated: 2023/10/17 17:28:51 by mzomeno-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,7 +72,7 @@ class	channel {
 		bool	is_user_in_channel(const user &usr);
 		bool 	is_user_operator(const user &usr);
 		void	set_user_operator(const user &usr, const bool &flag);
-		void 	parse_mode_flag(user &usr, std::string &modes, std::vector<std::string> mode_params, server &srv);
+		int 	parse_mode_flag(user &usr, std::string &modes, std::vector<std::string> mode_params, server &srv);
 };
 std::ostream &operator<<(std::ostream& os, const channel &tmp);
 

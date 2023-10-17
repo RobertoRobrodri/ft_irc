@@ -6,7 +6,7 @@
 /*   By: crisfern <crisfern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/28 11:15:55 by crisfern          #+#    #+#             */
-/*   Updated: 2023/09/28 11:16:06 by crisfern         ###   ########.fr       */
+/*   Updated: 2023/10/17 17:29:25 by mzomeno-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,6 +99,6 @@ void cmd::mode(server &svr, int poll_fd_pos, std::string str)
 	}
 	std::vector<std::string> mode_params = msglist;
 	mode_params.erase(mode_params.begin(), mode_params.begin() + 2);
-	chn->parse_mode_flag(usr, msglist[1], mode_params, svr);
-	std::cout << *chn << std::endl;
+	if (!chn->parse_mode_flag(usr, msglist[1], mode_params, svr))
+		std::cout << *chn << std::endl;
 }

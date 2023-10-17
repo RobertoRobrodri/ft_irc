@@ -6,7 +6,7 @@
 /*   By: crisfern <crisfern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/28 11:22:42 by crisfern          #+#    #+#             */
-/*   Updated: 2023/10/16 15:24:16 by mzomeno-         ###   ########.fr       */
+/*   Updated: 2023/10/17 18:17:40 by mzomeno-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -136,7 +136,7 @@ void	channel::set_user_operator(const user &usr, const bool &flag)
   }
 }
 
-void 	channel::parse_mode_flag(user &usr, std::string &modes, std::vector<std::string> mode_params, server &srv)
+int 	channel::parse_mode_flag(user &usr, std::string &modes, std::vector<std::string> mode_params, server &srv)
 {
 	bool sign = 0;
 	size_t j = 0;
@@ -176,7 +176,7 @@ void 	channel::parse_mode_flag(user &usr, std::string &modes, std::vector<std::s
       		{
       			if (sign == true)
       			{
-					if (this->get_mode().find_first_of("itps") != std::string::npos)
+					if (this->get_mode().find(modes[i]) != std::string::npos)
 						break ;
 					tmp = this->get_mode();
       				tmp.push_back(modes[i]);
@@ -212,7 +212,7 @@ void 	channel::parse_mode_flag(user &usr, std::string &modes, std::vector<std::s
 					size_t pos = this->get_mode().find('l');
 					if (pos != std::string::npos)
 					{
-						tmp = this->get_mode().erase(pos);
+						tmp = this->get_mode().erase(pos, 1);
 						this->set_mode(tmp);
 					}
 				}
@@ -237,7 +237,7 @@ void 	channel::parse_mode_flag(user &usr, std::string &modes, std::vector<std::s
 					size_t pos = this->get_mode().find('k');
 					if (pos != std::string::npos)
 					{
-						tmp = this->get_mode().erase(pos);
+						tmp = this->get_mode().erase(pos, 1);
 						this->set_mode(tmp);
 					}
 				}
@@ -247,7 +247,7 @@ void 	channel::parse_mode_flag(user &usr, std::string &modes, std::vector<std::s
       		{
 				std::string mode (&modes[i]);
 				srv.send_message(ERR_UNKNOWNMODE(mode), usr.get_fd());
-        		return;
+        		return 1;
       		}
 		}
 	}
@@ -256,6 +256,7 @@ void 	channel::parse_mode_flag(user &usr, std::string &modes, std::vector<std::s
     		params += *i;
 		for (std::vector<user>::iterator it = this->list_of_members.begin(); it != this->list_of_members.end(); it++)
 			srv.send_message(RPL_CHANNELMODEIS(this->_name, modes, params), it->get_fd());
+		return 0;
 }
 
 /*###########################################
