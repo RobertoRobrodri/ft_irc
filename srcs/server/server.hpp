@@ -74,7 +74,7 @@ class	server {
 		data_server						data;
 		cmd_map 						list_of_cmds;
 		std::map<int, user> 			list_of_users;
-		std::map<std::string, channel> 	list_of_channels;
+		std::map<std::string, channel*> 	list_of_channels;
 
 		server	( void );
 		bool									fd_ready(void);
@@ -99,7 +99,7 @@ class	server {
 		user& 	get_user(int i);
 		pollfd&	get_pollfd(int i);
 		std::map<int, user> get_list_of_users(void) const;
-		std::map<std::string, channel> get_list_of_channels(void) const;
+		std::map<std::string, channel*> get_list_of_channels(void) const;
 
 		/*###########################################
 		#				FUNCTIONS					#

@@ -21,13 +21,13 @@ void cmd::names(server &svr, int poll_fd_pos, std::string str)
     {
         if (str == "")
         {
-            std::map<std::string, channel> chnlist = svr.get_list_of_channels();
+            std::map<std::string, channel*> chnlist = svr.get_list_of_channels();
             std::string secret_lst;
-            for (std::map<std::string, channel>::iterator it = chnlist.begin(); it != chnlist.end(); it++)
+            for (std::map<std::string, channel*>::iterator it = chnlist.begin(); it != chnlist.end(); it++)
             {
-                channel chn = it->second;
-                std::vector<user*> members = chn.get_list_of_members();
-                if (chn.is_user_in_channel(usr) || ((chn.get_mode().find("p") == std::string::npos) && (chn.get_mode().find("s") == std::string::npos)))
+                channel *chn = it->second;
+                std::vector<user*> members = chn->get_list_of_members();
+                if (chn->is_user_in_channel(usr) || ((chn->get_mode().find("p") == std::string::npos) && (chn->get_mode().find("s") == std::string::npos)))
                 {
                     std::string members_lst;
                     for (std::vector<user*>::iterator itt = members.begin(); itt != members.end(); itt++)

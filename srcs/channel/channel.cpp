@@ -116,8 +116,7 @@ bool	channel::is_user_in_channel(const user &usr)
 
 bool channel::is_user_operator(user &usr)
 {
-	std::cout << this->list_of_operators.size() << std::endl;
-  return this->list_of_operators[&usr];
+  	return this->list_of_operators[&usr];
 }
 
 void	channel::set_user_operator(user &usr, const bool &flag)

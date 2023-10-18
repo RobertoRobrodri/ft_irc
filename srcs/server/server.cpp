@@ -138,8 +138,8 @@ void	server::add_user(int fd, sock_in client_addr)
 	this->poll_fds[this->_active_fds].fd = fd;
 	this->poll_fds[this->_active_fds].events = POLLIN;
 	this->_active_fds++;
-	user 	new_user(fd, inet_ntop(AF_INET, &(client_addr.sin_addr), ip_address, sizeof(ip_address)));
-	this->list_of_users.insert(std::pair<int, user>(fd, new_user));
+	user 	*new_user = new user(fd, inet_ntop(AF_INET, &(client_addr.sin_addr), ip_address, sizeof(ip_address)));
+	this->list_of_users[fd] = *new_user;
 }
 
 bool	server::accept_communication(void)
@@ -263,12 +263,12 @@ void	server::execute_commands(int poll_fd_pos, std::multimap<std::string, std::s
 
 void	server::create_channel(user &usr, std::string name, std::string password)
 {
-	channel cnn(name, password);
+	channel *cnn = new channel(name, password);
 	if (!password.empty())
-		cnn.set_mode("k");
-	cnn.add_member(usr);
-	cnn.set_user_operator(usr, true);
-	this->list_of_channels.insert(std::pair<std::string, channel>(name, cnn));
+		cnn->set_mode("k");
+	cnn->add_member(usr);
+	cnn->set_user_operator(usr, true);
+	this->list_of_channels[name] = cnn;
 	std::cout << name << " channel created!" << std::endl;
 	std::cout << cnn << std::endl;
 }
@@ -287,12 +287,12 @@ user *server::get_user_from_nick(std::string nick)
 
 channel *server::get_channel_from_name(std::string name)
 {
-	std::map<std::string, channel>::iterator it;
+	std::map<std::string, channel*>::iterator it;
 
 	for (it = this->list_of_channels.begin(); it != this->list_of_channels.end(); it++)
 	{
-		if (it->second.get_name().compare(name) == 0)
-			return &(it->second);
+		if (it->second->get_name().compare(name) == 0)
+			return (it->second);
 	}
 	return NULL;
 }
@@ -372,7 +372,7 @@ std::map<int, user> server::get_list_of_users(void) const
 	return(this->list_of_users);
 }
 
-std::map<std::string, channel> server::get_list_of_channels(void) const
+std::map<std::string, channel*> server::get_list_of_channels(void) const
 {
 	return(this->list_of_channels);
 }
