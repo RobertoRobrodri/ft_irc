@@ -29,17 +29,19 @@
 
 void cmd::kick(server &svr, int poll_fd_pos, std::string str)
 {
+  std::string command = "KICK";
   poll_fd pollfd = svr.get_pollfd(poll_fd_pos);
   user &usr = svr.get_user(pollfd.fd);
   
   if (usr.get_is_registered() == false)
 	  return svr.send_message(ERR_NOTREGISTERED, usr.get_fd());
-  
-  std::string command = "KICK";
+
   if (str == "")
       return svr.send_message(ERR_NEEDMOREPARAMS(command), usr.get_fd());
   
   std::vector<std::string> msglist = ft_split(str, ' ');
+  if (msglist.size() < 2)
+    return svr.send_message(ERR_NEEDMOREPARAMS(command), usr.get_fd());
   std::vector<std::string> chnlist = ft_split(msglist[0], ',');
   std::vector<std::string> usrlist = ft_split(msglist[1], ',');
   for (size_t i = 0; i < chnlist.size(); i++)
