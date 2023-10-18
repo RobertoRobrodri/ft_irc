@@ -89,7 +89,7 @@ void  cmd::join(server &svr, int poll_fd_pos, std::string str) {
     for (std::map<std::string, std::string>::iterator it = channels_and_passwords.begin(); it != channels_and_passwords.end(); it++)
     {
 		if (it->first[0] != '#' && it->first[0] != '&')
-      		return svr.send_message(ERR_ERRONEUSCHANNELNAME(it->first), usr.get_fd());
+      		return ;
       	channel *chn = svr.get_channel_from_name(it->first);
       if (chn)
         join_existing_channel(svr, chn, usr, it->second);

@@ -42,11 +42,8 @@ void cmd::invite(server &svr, int poll_fd_pos, std::string str)
 		return svr.send_message(ERR_NEEDMOREPARAMS(command), usr.get_fd());
   
   	user *new_user = svr.get_user_from_nick(msglist[0]);
-  	if (!new_user)
+  	if ((!new_user) || (new_user->get_is_registered() == false))
 		return svr.send_message(ERR_NOSUCHNICK(msglist[0]), usr.get_fd());
-  	
-	if (new_user->get_is_registered() == false)
-		return svr.send_message(ERR_NICKNOTREGISTERED(msglist[0]), usr.get_fd());
 	
 	if (usr.get_is_registered() == false)
 		return svr.send_message(ERR_NOTREGISTERED, usr.get_fd());
