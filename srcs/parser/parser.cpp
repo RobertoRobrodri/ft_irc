@@ -6,7 +6,7 @@
 /*   By: crisfern <crisfern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/28 11:22:03 by crisfern          #+#    #+#             */
-/*   Updated: 2023/10/02 12:14:57 by crisfern         ###   ########.fr       */
+/*   Updated: 2023/10/19 18:42:49 by crisfern         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,16 +14,31 @@
 
 std::vector<std::string> ft_split(std::string str, char separator)
 {
-	std::stringstream 	test(str);
-	std::string 		segment;
-	std::vector <std::string>seglist;
+	bool						flag = false;
+	size_t						index;
+	std::string 				segment;
+	std::vector <std::string>	seglist;
 
-	while (std::getline(test, segment, separator))
+	std::cout << "-" << str << "-" << std::endl;
+	if ((index = str.find_first_not_of(separator)) != std::string::npos)
+		str = str.substr(index);
+	if ((index = str.find_last_not_of(separator) + 1) != std::string::npos)
+		str = str.substr(0, index);
+	while (!flag)
 	{
-		size_t last_char = segment.find_last_of('\r');
-		if (last_char != std::string::npos)
-			segment.erase(last_char);
-		seglist.push_back(segment);
+		if ((index = str.find(separator)) != std::string::npos)
+		{
+			segment = str.substr(0, index);
+			str = str.substr(index);
+		}
+		else
+		{
+			segment = str;
+			flag = true;
+		}
+ 		seglist.push_back(segment);
+		if ((index = str.find_first_not_of(separator)) != std::string::npos)
+			str = str.substr(index);
 	}
 	return seglist;
 }

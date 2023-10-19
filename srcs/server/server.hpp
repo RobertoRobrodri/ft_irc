@@ -6,7 +6,7 @@
 /*   By: crisfern <crisfern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/28 11:25:34 by crisfern          #+#    #+#             */
-/*   Updated: 2023/10/04 12:13:01 by mzomeno-         ###   ########.fr       */
+/*   Updated: 2023/10/19 17:53:49 by crisfern         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,7 +74,7 @@ class	server {
 		data_server						data;
 		cmd_map 						list_of_cmds;
 		std::map<int, user> 			list_of_users;
-		std::map<std::string, channel*> 	list_of_channels;
+		std::map<std::string, channel*> list_of_channels;
 
 		server	( void );
 		bool									fd_ready(void);

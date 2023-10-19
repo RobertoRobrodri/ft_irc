@@ -6,7 +6,7 @@
 /*   By: crisfern <crisfern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/28 11:23:51 by crisfern          #+#    #+#             */
-/*   Updated: 2023/10/19 17:34:48 by crisfern         ###   ########.fr       */
+/*   Updated: 2023/10/19 18:01:54 by crisfern         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,6 +48,13 @@ server::server( const server & var )
 // DESTRUCTOR
 server::~server( void )
 {
+	std::map<std::string, channel*>::iterator	itc;
+	std::map<int, user> ::iterator				itu;
+
+	for(itc = this->list_of_channels.begin(); itc != this->list_of_channels.end(); itc++)
+		delete itc->second;
+	// for(itu = this->list_of_users.begin(); itu != this->list_of_users.end(); itu++)
+	// 	delete &(itu->second);
 	delete this->server_socket;
 }
 
@@ -219,7 +226,7 @@ void	server::delete_user(int poll_fd_pos)
 	this->poll_fds[this->_active_fds - 1].fd = 0;
 	this->poll_fds[this->_active_fds - 1].events = 0;
 	this->_active_fds--;
-	//TODO delete user
+	//TODO delete &(this->list_of_users[poll_fd_pos]);
 }
 
 // Spits string into COMAND + MSG, where message is the leftover of the string that will be parsed in different ways in each command
