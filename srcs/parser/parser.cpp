@@ -6,7 +6,7 @@
 /*   By: crisfern <crisfern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/28 11:22:03 by crisfern          #+#    #+#             */
-/*   Updated: 2023/10/19 18:42:49 by crisfern         ###   ########.fr       */
+/*   Updated: 2023/10/19 19:03:08 by crisfern         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,11 +15,10 @@
 std::vector<std::string> ft_split(std::string str, char separator)
 {
 	bool						flag = false;
-	size_t						index;
+	size_t						index, last_char;
 	std::string 				segment;
 	std::vector <std::string>	seglist;
 
-	std::cout << "-" << str << "-" << std::endl;
 	if ((index = str.find_first_not_of(separator)) != std::string::npos)
 		str = str.substr(index);
 	if ((index = str.find_last_not_of(separator) + 1) != std::string::npos)
@@ -36,6 +35,8 @@ std::vector<std::string> ft_split(std::string str, char separator)
 			segment = str;
 			flag = true;
 		}
+		if ((last_char = segment.find_last_of('\r') ) != std::string::npos)
+			segment.erase(last_char);
  		seglist.push_back(segment);
 		if ((index = str.find_first_not_of(separator)) != std::string::npos)
 			str = str.substr(index);

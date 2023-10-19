@@ -6,7 +6,7 @@
 /*   By: crisfern <crisfern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/28 11:23:51 by crisfern          #+#    #+#             */
-/*   Updated: 2023/10/19 18:01:54 by crisfern         ###   ########.fr       */
+/*   Updated: 2023/10/19 19:12:39 by crisfern         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -238,7 +238,7 @@ std::multimap<std::string, std::string> server::parse_message(std::string msg)
 	std::vector<std::string>::iterator v_it;
 	std::multimap<std::string, std::string> commands;
 	std::string cmd;
-	std::string args;
+	std::string args = "";
 	size_t ind;
 
 	for (v_it = seglist.begin(); v_it != seglist.end(); v_it++)
@@ -246,7 +246,11 @@ std::multimap<std::string, std::string> server::parse_message(std::string msg)
 		ind = v_it->find(" ");
 		cmd = v_it->substr(0, ind);
 		if (ind != std::string::npos)
-			args= v_it->substr(ind + 1);
+		{
+			args = v_it->substr(ind + 1);
+			if ((ind = args.find_first_not_of(' ')) != std::string::npos)
+				args = args.substr(ind);
+		}
 		commands.insert(std::pair<std::string, std::string>(cmd, args));
 	}
 	return commands;
@@ -261,9 +265,7 @@ void	server::execute_commands(int poll_fd_pos, std::multimap<std::string, std::s
 	for (it = commands.begin(); it != commands.end(); it++)
 	{
 		if (this->list_of_cmds[it->first])
-		{
 			this->list_of_cmds[it->first](*this, poll_fd_pos, it->second);
-		}
 		else if (usr.get_is_registered())
 			this->send_message(ERR_UNKNOWNCOMMAND(it->first), usr.get_fd());
 	}
