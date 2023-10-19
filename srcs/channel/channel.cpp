@@ -6,7 +6,7 @@
 /*   By: crisfern <crisfern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/28 11:22:42 by crisfern          #+#    #+#             */
-/*   Updated: 2023/10/17 18:17:40 by mzomeno-         ###   ########.fr       */
+/*   Updated: 2023/10/19 17:05:37 by crisfern         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,11 +59,7 @@ std::ostream &operator<<(std::ostream& os, const channel &tmp)
 	os << "User limit if set: " << tmp.get_user_limit() << std::endl;
 	os << "List of members: " << std::endl;
 	for (it = lst.begin(); it != lst.end(); it++)
-	{
-		if ((*it)->get_op())
-			os << "@";
     	os << (*it)->get_nick() << std::endl;
-	}
 	return (os);
 }
 
@@ -82,7 +78,7 @@ void	channel::add_member(user &usr)
 		std::vector<user*>::iterator it;
 		for (it = this->list_of_members.begin(); it != this->list_of_members.end(); it++)
 		{
-			if ((*it)->get_op())
+			if (this->is_user_operator(**it))
 				members += "@";
 			members += ((*it)->get_nick() + " ");
 		}

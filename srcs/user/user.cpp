@@ -6,19 +6,19 @@
 /*   By: crisfern <crisfern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/28 11:26:28 by crisfern          #+#    #+#             */
-/*   Updated: 2023/10/19 15:20:37 by mzomeno-         ###   ########.fr       */
+/*   Updated: 2023/10/19 17:03:23 by crisfern         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "user.hpp"
 #include "../command/reply.hpp"
 
-user::user( void ) : _fd(0), _is_registered(false), _n_channels(0), _op(false)
+user::user( void ) : _fd(0), _is_registered(false), _n_channels(0)
 {
   return ;
 }
 
-user::user( int fd, std::string hostname ) : _fd(fd), _hostname(hostname), _is_registered(false), _n_channels(0), _op(false)
+user::user( int fd, std::string hostname ) : _fd(fd), _hostname(hostname), _is_registered(false), _n_channels(0)
 {
   return ;
 }
@@ -44,7 +44,6 @@ user & user::operator=(const user &tmp)
   this->set_fd(tmp.get_fd());
   this->set_is_registered(tmp.get_is_registered());
   this->set_n_channels(tmp.get_n_channels());
-  this->set_op(tmp.get_op());
   return (*this);
   
 }
@@ -58,7 +57,6 @@ std::ostream &operator<<(std::ostream& os, const user &tmp) {
   os << "FD               |     " << tmp.get_fd() << std::endl;
   os << "User registered  |     " << tmp.get_is_registered() << std::endl;
   os << "Member of Nº chn |     " << tmp.get_n_channels() << std::endl;
-	os << "Is operator      |     " << tmp.get_op() << std::endl; 
   return (os);
 }
 
@@ -136,11 +134,6 @@ int 		user::get_n_channels(void) const
   return(this->_n_channels);
 }
 
-bool 		user::get_op(void) const
-{
-  return (this->_op);
-}
-
 /*###########################################
 #				           SETTERS						      #
 ############################################*/
@@ -183,9 +176,4 @@ void		user::set_is_registered(bool is_registered)
 void 		user::set_n_channels(int i)
 {
   this->_n_channels = i;
-}
-
-void		user::set_op(bool i)
-{
-  this->_op = i;
 }

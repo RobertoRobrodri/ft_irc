@@ -6,7 +6,7 @@
 /*   By: crisfern <crisfern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/28 11:19:39 by crisfern          #+#    #+#             */
-/*   Updated: 2023/10/04 12:35:35 by mzomeno-         ###   ########.fr       */
+/*   Updated: 2023/10/19 17:04:24 by crisfern         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ void	check_topic(server &svr, std::string channel_name, std::string topic, user 
 
 void	modify_topic(server &svr, std::string channel_name, std::string topic, channel *chn, user &usr)
 {
-	if (chn->get_mode().find("t") != std::string::npos && !usr.get_op())
+	if (chn->get_mode().find("t") != std::string::npos && !chn->is_user_operator(usr))
 		return svr.send_message(ERR_CHANOPRIVSNEEDED(channel_name), usr.get_fd());
 	
 	chn->set_topic(topic);

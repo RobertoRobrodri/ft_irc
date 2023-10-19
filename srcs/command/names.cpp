@@ -6,7 +6,7 @@
 /*   By: crisfern <crisfern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/28 11:16:16 by crisfern          #+#    #+#             */
-/*   Updated: 2023/10/04 11:41:33 by mzomeno-         ###   ########.fr       */
+/*   Updated: 2023/10/19 17:05:01 by crisfern         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ void cmd::names(server &svr, int poll_fd_pos, std::string str)
                     std::string members_lst;
                     for (std::vector<user*>::iterator itt = members.begin(); itt != members.end(); itt++)
 					{
-						if ((*itt)->get_op())
+						if (chn->is_user_operator(**itt))
 							members_lst += "@";
 						members_lst += ((*itt)->get_nick() + " ");
 					}
@@ -43,7 +43,7 @@ void cmd::names(server &svr, int poll_fd_pos, std::string str)
                     for (std::vector<user*>::iterator itt = members.begin(); itt != members.end(); itt++)
                         if (secret_lst.find((*itt)->get_nick()) == std::string::npos)
 						{
-							if ((*itt)->get_op())
+							if (chn->is_user_operator(**itt))
 								secret_lst += "@";
                             secret_lst += ((*itt)->get_nick() + " ");
 						}
@@ -70,7 +70,7 @@ void cmd::names(server &svr, int poll_fd_pos, std::string str)
                     std::string members_lst;
                     for (std::vector<user*>::iterator it = members.begin(); it != members.end(); it++)
 					{
-						if ((*it)->get_op())
+						if (chn->is_user_operator(**it))
 							members_lst += "@";
                         members_lst += ((*it)->get_nick() + " ");
 					}
