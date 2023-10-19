@@ -6,7 +6,7 @@
 /*   By: crisfern <crisfern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/28 11:23:51 by crisfern          #+#    #+#             */
-/*   Updated: 2023/10/19 17:11:43 by crisfern         ###   ########.fr       */
+/*   Updated: 2023/10/19 17:34:48 by crisfern         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -219,6 +219,7 @@ void	server::delete_user(int poll_fd_pos)
 	this->poll_fds[this->_active_fds - 1].fd = 0;
 	this->poll_fds[this->_active_fds - 1].events = 0;
 	this->_active_fds--;
+	//TODO delete user
 }
 
 // Spits string into COMAND + MSG, where message is the leftover of the string that will be parsed in different ways in each command

@@ -12,7 +12,7 @@ NAME 		= ircserv
 MOCK		= mock
 CC 			= c++
 INCLUDE 	= -std=c++98
-CXXFLAGS 	= -Wall -Wextra -Werror -g #-fsanitize=address
+CXXFLAGS 	= -Wall -Wextra -Werror -g -fsanitize=address
 
 # PATHS #
 #
@@ -80,13 +80,6 @@ $(OBJ_PATH)/%.o: $(SRC_PATH)/%.cpp | $(OBJ_PATH)
 
 $(NAME): $(OBJS) $(SERVER_MAIN) 
 	$(CC) $(CXXFLAGS) $(INCLUDE) $(OBJS) $(SERVER_MAIN) -o $(NAME)
-#	clear
-	$(GREEN) Program asembled $(RESET)
-
-$(MOCK): $(OBJS) $(MOCK_MAIN)
-	$(CC) $(CXXFLAGS) $(INCLUDE) $(OBJS) $(MOCK_MAIN) -o mock
-	$(GREEN) Mock program created $(RESET)
-	
 #	clear
 	$(GREEN) Program asembled $(RESET)
 	@echo "⠀⠀⠀	    ⣠⣴⣶⣿⣿⣷⣶⣄⣀⣀\n\
