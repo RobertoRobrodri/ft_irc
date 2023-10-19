@@ -6,7 +6,7 @@
 /*   By: crisfern <crisfern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/28 11:16:27 by crisfern          #+#    #+#             */
-/*   Updated: 2023/10/04 11:04:55 by mzomeno-         ###   ########.fr       */
+/*   Updated: 2023/10/19 15:22:45 by mzomeno-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,4 +55,5 @@ void cmd::nick(server &svr, int poll_fd_pos, std::string str) {
   }
   usr.set_nick(str);
   usr.is_registered(svr);
+  std::cout << usr << std::endl;
 }

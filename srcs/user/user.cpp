@@ -6,7 +6,7 @@
 /*   By: crisfern <crisfern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/28 11:26:28 by crisfern          #+#    #+#             */
-/*   Updated: 2023/10/02 12:19:44 by crisfern         ###   ########.fr       */
+/*   Updated: 2023/10/19 15:20:37 by mzomeno-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,6 @@ std::ostream &operator<<(std::ostream& os, const user &tmp) {
 
 void  user::is_registered(server &svr)
 {
-  std::cout << *this << std::endl;
   if (!this->_is_registered && !this->get_username().empty() && !this->get_nick().empty())
   {
     this->_is_registered = true;
