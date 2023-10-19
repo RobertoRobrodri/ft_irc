@@ -6,7 +6,7 @@
 /*   By: crisfern <crisfern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/28 11:17:00 by crisfern          #+#    #+#             */
-/*   Updated: 2023/09/28 11:17:12 by crisfern         ###   ########.fr       */
+/*   Updated: 2023/10/19 16:13:11 by mzomeno-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,13 +27,23 @@ void  cmd::notice(server &svr, int poll_fd_pos, std::string str) {
     
 	std::vector<std::string> rcvlist = ft_split(msglist[0], ',');
     std::string msg = str.substr(str.find(msglist[1]));
+    std::sort(rcvlist.begin(), rcvlist.end());
     for (size_t i = 0; i < rcvlist.size(); i++)
     {
-      if ((rcvlist[i][0] == '#') || (rcvlist[i][0] == '&'))
+      if (i == 0 || rcvlist[i] != rcvlist[i - 1])
       {
-        channel *chn = svr.get_channel_from_name(rcvlist[i]);
-        usr.send_to_channel(svr, chn, rcvlist[i], msg);
-      }
+      	if ((rcvlist[i][0] == '#') || (rcvlist[i][0] == '&'))
+      	{
+        	channel *chn = svr.get_channel_from_name(rcvlist[i]);
+        	usr.send_to_channel(svr, chn, rcvlist[i], msg);
+      	}
+      	else
+      	{
+        	user *receiver = svr.get_user_from_nick(rcvlist[i]);
+        	if (receiver)
+          		svr.send_message("From " + usr.get_nick() + ":\n" + msg + "\n", receiver->get_fd());
+      	}
+	  }
     }
   }
 }
