@@ -6,7 +6,7 @@
 /*   By: crisfern <crisfern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/28 11:22:03 by crisfern          #+#    #+#             */
-/*   Updated: 2023/10/19 19:03:08 by crisfern         ###   ########.fr       */
+/*   Updated: 2023/10/23 15:15:50 by mzomeno-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,22 +77,36 @@ bool	is_good_port(std::string port)
 	return (1);
 }
 
-bool	check_data_correct(char **argv)
+bool	check_data_correct(char **argv, int argc)
 {
-	std::vector <std::string>seglist = ft_split(argv[1], ':');
-	std::string arg_2(argv[2]), arg_3(argv[3]);
+	if (argc == 1)
+		return true;
 
-	if (seglist.size() != 3)
-		return 0;
-	if (seglist[0].empty() || !is_good_host(seglist[0]))
-		return (0);
-	if (seglist[1].empty() || !is_good_port(seglist[1]))
-		return (0);
-	if (seglist[2].empty())
-		return (0);
-	if (arg_2.empty() ||  !is_good_port(arg_2))
-		return (0);
-	if (arg_3.empty())
-		return (0);
-	return (1);
+	std::string port, pass;
+	if (argc == 3)
+	{
+		port = argv[1];
+		pass = argv[2];
+	}
+	else if (argc == 4)
+	{
+		std::vector <std::string>seglist = ft_split(argv[1], ':');
+		if (seglist.size() != 3)
+			return false;
+		if (seglist[0].empty() || !is_good_host(seglist[0]))
+			return false;
+		if (seglist[1].empty() || !is_good_port(seglist[1]))
+			return false;
+		if (seglist[2].empty())
+			return false;
+		port = argv[2];
+		pass = argv[3];
+	}
+	else
+		return false;
+
+	if (pass.empty() || port.empty() || !is_good_port(port))
+		return false;
+	
+	return true;
 }
