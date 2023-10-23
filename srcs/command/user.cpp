@@ -35,15 +35,13 @@ void  cmd::username(server &svr, int poll_fd_pos, std::string str)
 // It must be noted that realname parameter must be the last parameter,
 // because it may contain space characters and must be prefixed with a
 // colon (':') to make sure this is recognised as such.
+  std::string realname;
   std::vector<std::string> realname_split = ft_split(str, ':');// Separate realname 
-  if (realname_split.size() < 2)
-  {
-    {
-      svr.send_message(ERR_NEEDMOREPARAMS(command), usr->get_fd());
-      return ;
-    }  
-  }
   std::vector<std::string> first_params_split = ft_split(realname_split[0], ' ');
+  if (realname_split.size() >= 2)
+    realname = realname_split[1];
+  else
+    realname = first_params_split[3];
   if (first_params_split.size() + 1 < 4 )
   {
     svr.send_message(ERR_NEEDMOREPARAMS(command), usr->get_fd());
@@ -51,7 +49,6 @@ void  cmd::username(server &svr, int poll_fd_pos, std::string str)
   }
   std::string username = first_params_split[0];
   std::string servername = first_params_split[2];
-  std::string realname = realname_split[1];
 
   std::map<int, user*> users_lst = svr.get_list_of_users();
   std::map<int, user*>::iterator it;
