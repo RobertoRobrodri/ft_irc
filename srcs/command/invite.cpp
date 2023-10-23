@@ -6,7 +6,7 @@
 /*   By: crisfern <crisfern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/28 11:14:07 by crisfern          #+#    #+#             */
-/*   Updated: 2023/10/19 17:13:27 by crisfern         ###   ########.fr       */
+/*   Updated: 2023/10/23 10:28:28 by mzomeno-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,6 +57,10 @@ void cmd::invite(server &svr, int poll_fd_pos, std::string str)
 	
 	if (chn->get_mode().find('i') != std::string::npos && !chn->is_user_operator(usr))
 		return svr.send_message(ERR_CHANOPRIVSNEEDED(msglist[1]), usr.get_fd());
+	
+	if (chn->get_mode().find("l") != std::string::npos &&
+			chn->get_list_of_members().size() >= chn->get_user_limit())
+		return svr.send_message(ERR_CHANNELISFULL(msglist[1]), usr.get_fd());
 
 	if (chn->is_user_in_channel(*new_user))
 		return svr.send_message(ERR_USERONCHANNEL(msglist[0], msglist[1]), usr.get_fd());
