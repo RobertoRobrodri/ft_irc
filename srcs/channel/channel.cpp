@@ -6,7 +6,7 @@
 /*   By: crisfern <crisfern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/28 11:22:42 by crisfern          #+#    #+#             */
-/*   Updated: 2023/10/19 17:05:37 by crisfern         ###   ########.fr       */
+/*   Updated: 2023/10/23 10:29:47 by mzomeno-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -183,7 +183,10 @@ int 	channel::parse_mode_flag(user &usr, std::string &modes, std::vector<std::st
 				{
           			if (mode_params.empty())
             			break ;
-					this->set_user_limit(atoi(mode_params[j++].c_str()));
+					int limit_num = atoi(mode_params[j++].c_str());
+					if (limit_num <= 0)
+						limit_num = 1;
+					this->set_user_limit(limit_num);
 					tmp = this->get_mode();
 					if (tmp.find('l') != std::string::npos)
 						break ;
