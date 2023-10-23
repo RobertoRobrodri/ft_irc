@@ -6,7 +6,7 @@
 /*   By: crisfern <crisfern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/28 11:14:07 by crisfern          #+#    #+#             */
-/*   Updated: 2023/10/23 10:28:28 by mzomeno-         ###   ########.fr       */
+/*   Updated: 2023/10/23 12:50:26 by crisfern         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,39 +33,39 @@
 void cmd::invite(server &svr, int poll_fd_pos, std::string str)
 {
 	poll_fd pollfd = svr.get_pollfd(poll_fd_pos);
-	user &usr = svr.get_user(pollfd.fd);
+	user *usr = svr.get_user(pollfd.fd);
 	
 	/* ERROR MESSAGES */
 	std::string command = "INVITE";
   	std::vector<std::string> msglist = ft_split(str, ' ');
 	if (str == "" || msglist.size() < 2)
-		return svr.send_message(ERR_NEEDMOREPARAMS(command), usr.get_fd());
+		return svr.send_message(ERR_NEEDMOREPARAMS(command), usr->get_fd());
 	
-	if (usr.get_is_registered() == false)
-		return svr.send_message(ERR_NOTREGISTERED, usr.get_fd());
+	if (usr->get_is_registered() == false)
+		return svr.send_message(ERR_NOTREGISTERED, usr->get_fd());
   
   	user *new_user = svr.get_user_from_nick(msglist[0]);
   	if ((!new_user) || (new_user->get_is_registered() == false))
-		return svr.send_message(ERR_NOSUCHNICK(msglist[0]), usr.get_fd());
+		return svr.send_message(ERR_NOSUCHNICK(msglist[0]), usr->get_fd());
 	
 	channel *chn = svr.get_channel_from_name(msglist[1]);
   	if (!chn)
-    	return svr.send_message(ERR_NOSUCHNICK(msglist[1]), usr.get_fd());
+    	return svr.send_message(ERR_NOSUCHNICK(msglist[1]), usr->get_fd());
 	
 	if (!chn->is_user_in_channel(usr))
-		return svr.send_message(ERR_NOTONCHANNEL(msglist[1]), usr.get_fd());
+		return svr.send_message(ERR_NOTONCHANNEL(msglist[1]), usr->get_fd());
 	
 	if (chn->get_mode().find('i') != std::string::npos && !chn->is_user_operator(usr))
-		return svr.send_message(ERR_CHANOPRIVSNEEDED(msglist[1]), usr.get_fd());
+		return svr.send_message(ERR_CHANOPRIVSNEEDED(msglist[1]), usr->get_fd());
 	
 	if (chn->get_mode().find("l") != std::string::npos &&
 			chn->get_list_of_members().size() >= chn->get_user_limit())
-		return svr.send_message(ERR_CHANNELISFULL(msglist[1]), usr.get_fd());
+		return svr.send_message(ERR_CHANNELISFULL(msglist[1]), usr->get_fd());
 
-	if (chn->is_user_in_channel(*new_user))
-		return svr.send_message(ERR_USERONCHANNEL(msglist[0], msglist[1]), usr.get_fd());
+	if (chn->is_user_in_channel(new_user))
+		return svr.send_message(ERR_USERONCHANNEL(msglist[0], msglist[1]), usr->get_fd());
 	
 	/* COMMAND ACCEPTED */
-	chn->add_member(*new_user);
-	svr.send_message(RPL_INVITING(msglist[0], msglist[1]), usr.get_fd());
+	chn->add_member(new_user);
+	svr.send_message(RPL_INVITING(msglist[0], msglist[1]), usr->get_fd());
 }

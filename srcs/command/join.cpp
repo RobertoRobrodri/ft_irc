@@ -6,7 +6,7 @@
 /*   By: crisfern <crisfern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/28 11:14:38 by crisfern          #+#    #+#             */
-/*   Updated: 2023/10/16 12:15:43 by mzomeno-         ###   ########.fr       */
+/*   Updated: 2023/10/23 12:41:56 by crisfern         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,34 +39,34 @@
 //           ERR_NOSUCHCHANNEL               ERR_TOOMANYCHANNELS
 //           RPL_TOPIC
 
-void	join_existing_channel(server &svr, channel *chn, user &usr, std::string password)
+void	join_existing_channel(server &svr, channel *chn, user *usr, std::string password)
 {
 	std::string channel = chn->get_name();
-	std::string user = usr.get_nick();
+	std::string user = usr->get_nick();
 	if (chn->is_user_in_channel(usr) == true)
-		return svr.send_message(ERR_USERONCHANNEL(user, channel), usr.get_fd());
+		return svr.send_message(ERR_USERONCHANNEL(user, channel), usr->get_fd());
 	if (chn->get_mode().find("i") != std::string::npos)// Invite only channel
-		return svr.send_message(ERR_INVITEONLYCHAN(channel), usr.get_fd());
+		return svr.send_message(ERR_INVITEONLYCHAN(channel), usr->get_fd());
 	if (chn->get_mode().find("k") != std::string::npos &&
 			chn->get_password().compare(password))// Require password
-		return svr.send_message(ERR_BADCHANNELKEY(channel), usr.get_fd());
+		return svr.send_message(ERR_BADCHANNELKEY(channel), usr->get_fd());
 	if (chn->get_mode().find("l") != std::string::npos &&
 			chn->get_list_of_members().size() >= chn->get_user_limit())// Limit of users
-		return svr.send_message(ERR_CHANNELISFULL(channel), usr.get_fd());
-	if (usr.get_n_channels() >= MAX_NUMBER_OF_CHN)// Limit of channels
-		return svr.send_message(ERR_TOOMANYCHANNELS(channel), usr.get_fd());
+		return svr.send_message(ERR_CHANNELISFULL(channel), usr->get_fd());
+	if (usr->get_n_channels() >= MAX_NUMBER_OF_CHN)// Limit of channels
+		return svr.send_message(ERR_TOOMANYCHANNELS(channel), usr->get_fd());
 	chn->add_member(usr);
 }
 
 void  cmd::join(server &svr, int poll_fd_pos, std::string str) {
   poll_fd pollfd = svr.get_pollfd(poll_fd_pos);
-  user &usr = svr.get_user(pollfd.fd);
-	if (usr.get_is_registered() == true)
+  user *usr = svr.get_user(pollfd.fd);
+	if (usr->get_is_registered() == true)
   {
     std::string command = "JOIN";
     std::vector<std::string> channel_params = ft_split(str, ' ');
     if (str == "")
-      return svr.send_message(ERR_NEEDMOREPARAMS(command), usr.get_fd());
+      return svr.send_message(ERR_NEEDMOREPARAMS(command), usr->get_fd());
     std::map<std::string, std::string>channels_and_passwords;
     std::vector<std::string> channels = ft_split(channel_params[0], ',');
     std::vector<std::string>::iterator channel_it = channels.begin();
@@ -95,12 +95,12 @@ void  cmd::join(server &svr, int poll_fd_pos, std::string str) {
         join_existing_channel(svr, chn, usr, it->second);
       else
       {
-        if (usr.get_n_channels() >= MAX_NUMBER_OF_CHN)
-              return svr.send_message(ERR_TOOMANYCHANNELS(it->first), usr.get_fd());
+        if (usr->get_n_channels() >= MAX_NUMBER_OF_CHN)
+              return svr.send_message(ERR_TOOMANYCHANNELS(it->first), usr->get_fd());
         svr.create_channel(usr, it->first, it->second);
       }
     }
   }
 	else
-	  svr.send_message(ERR_NOTREGISTERED, usr.get_fd());
+	  svr.send_message(ERR_NOTREGISTERED, usr->get_fd());
 }

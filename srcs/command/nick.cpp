@@ -6,7 +6,7 @@
 /*   By: crisfern <crisfern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/28 11:16:27 by crisfern          #+#    #+#             */
-/*   Updated: 2023/10/19 19:09:11 by crisfern         ###   ########.fr       */
+/*   Updated: 2023/10/23 12:45:54 by crisfern         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,26 +34,26 @@ bool invalid_nick(std::string str)
 void cmd::nick(server &svr, int poll_fd_pos, std::string str) {
   poll_fd pollfd = svr.get_pollfd(poll_fd_pos);
   //get reference of the user
-  user &usr = svr.get_user(pollfd.fd);
+  user *usr = svr.get_user(pollfd.fd);
   user *nick;
   if (str == "")
   {
-	  svr.send_message(ERR_NONICKNAMEGIVEN, usr.get_fd());
+	  svr.send_message(ERR_NONICKNAMEGIVEN, usr->get_fd());
 	  return ;
   }
   if (invalid_nick(str))
   {
-	  svr.send_message(ERR_ERRONEUSNICKNAME(str), usr.get_fd());
+	  svr.send_message(ERR_ERRONEUSNICKNAME(str), usr->get_fd());
 	  return ;
   }
   if ((nick = svr.get_user_from_nick(str)) != 0)
   {
-    if (nick->get_nick().compare(usr.get_nick()) == 0)
+    if (nick->get_nick().compare(usr->get_nick()) == 0)
       return ;
-	  svr.send_message(ERR_NICKNAMEINUSE(str), usr.get_fd());
+	  svr.send_message(ERR_NICKNAMEINUSE(str), usr->get_fd());
 	  return ;
   }
-  usr.set_nick(str);
-  usr.is_registered(svr);
+  usr->set_nick(str);
+  usr->is_registered(svr);
   std::cout << usr << std::endl;
 }

@@ -6,7 +6,7 @@
 /*   By: crisfern <crisfern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/28 11:26:28 by crisfern          #+#    #+#             */
-/*   Updated: 2023/10/19 17:03:23 by crisfern         ###   ########.fr       */
+/*   Updated: 2023/10/23 12:56:12 by crisfern         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,7 +76,7 @@ void		user::send_to_channel(server &svr, channel *chn, std::string chn_name, std
 {
   if(chn)
   {
-    if (chn->is_user_in_channel(*this))
+    if (chn->is_user_in_channel(this))
     {
       for (size_t i = 0; i < chn->get_list_of_members().size(); i++)
         if (chn->get_list_of_members()[i]->get_nick() != this->get_nick())

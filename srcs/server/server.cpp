@@ -6,7 +6,7 @@
 /*   By: crisfern <crisfern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/28 11:23:51 by crisfern          #+#    #+#             */
-/*   Updated: 2023/10/19 19:12:39 by crisfern         ###   ########.fr       */
+/*   Updated: 2023/10/23 12:42:01 by crisfern         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,12 +49,12 @@ server::server( const server & var )
 server::~server( void )
 {
 	std::map<std::string, channel*>::iterator	itc;
-	std::map<int, user> ::iterator				itu;
+	std::map<int, user*> ::iterator				itu;
 
 	for(itc = this->list_of_channels.begin(); itc != this->list_of_channels.end(); itc++)
 		delete itc->second;
-	// for(itu = this->list_of_users.begin(); itu != this->list_of_users.end(); itu++)
-	// 	delete &(itu->second);
+	for(itu = this->list_of_users.begin(); itu != this->list_of_users.end(); itu++)
+		delete (itu->second);
 	delete this->server_socket;
 }
 
@@ -146,7 +146,7 @@ void	server::add_user(int fd, sock_in client_addr)
 	this->poll_fds[this->_active_fds].events = POLLIN;
 	this->_active_fds++;
 	user 	*new_user = new user(fd, inet_ntop(AF_INET, &(client_addr.sin_addr), ip_address, sizeof(ip_address)));
-	this->list_of_users[fd] = *new_user;
+	this->list_of_users[fd] = new_user;
 }
 
 bool	server::accept_communication(void)
@@ -219,6 +219,7 @@ void	server::send_message(std::string msg, int fd)
 void	server::delete_user(int poll_fd_pos)
 {
 	std::cout << RED << "Deleted user: fd " << this->poll_fds[poll_fd_pos].fd << RESET << std::endl;
+	delete (this->list_of_users[this->poll_fds[poll_fd_pos].fd]);
 	close(this->poll_fds[poll_fd_pos].fd);
 	this->list_of_users.erase(this->poll_fds[poll_fd_pos].fd);
 	for (int count = poll_fd_pos; count <= this->_active_fds - 1; count++)
@@ -226,7 +227,6 @@ void	server::delete_user(int poll_fd_pos)
 	this->poll_fds[this->_active_fds - 1].fd = 0;
 	this->poll_fds[this->_active_fds - 1].events = 0;
 	this->_active_fds--;
-	//TODO delete &(this->list_of_users[poll_fd_pos]);
 }
 
 // Spits string into COMAND + MSG, where message is the leftover of the string that will be parsed in different ways in each command
@@ -259,19 +259,19 @@ std::multimap<std::string, std::string> server::parse_message(std::string msg)
 void	server::execute_commands(int poll_fd_pos, std::multimap<std::string, std::string> commands)
 {
 	poll_fd pollfd = this->get_pollfd(poll_fd_pos);
-	user &usr = this->get_user(pollfd.fd);
+	user *usr = this->get_user(pollfd.fd);
 	std::multimap<std::string, std::string>::iterator it;
 
 	for (it = commands.begin(); it != commands.end(); it++)
 	{
 		if (this->list_of_cmds[it->first])
 			this->list_of_cmds[it->first](*this, poll_fd_pos, it->second);
-		else if (usr.get_is_registered())
-			this->send_message(ERR_UNKNOWNCOMMAND(it->first), usr.get_fd());
+		else if (usr->get_is_registered())
+			this->send_message(ERR_UNKNOWNCOMMAND(it->first), usr->get_fd());
 	}
 }
 
-void	server::create_channel(user &usr, std::string name, std::string password)
+void	server::create_channel(user *usr, std::string name, std::string password)
 {
 	channel *cnn = new channel(name, password);
 	if (!password.empty())
@@ -285,12 +285,12 @@ void	server::create_channel(user &usr, std::string name, std::string password)
 
 user *server::get_user_from_nick(std::string nick)
 {
-	std::map<int, user>::iterator it;
+	std::map<int, user*>::iterator it;
 
 	for (it = this->list_of_users.begin(); it != this->list_of_users.end(); it++)
 	{
-		if (it->second.get_nick().compare(nick) == 0)
-			return &(it->second);
+		if (it->second->get_nick().compare(nick) == 0)
+			return (it->second);
 	}
 	return NULL;
 }
@@ -367,7 +367,7 @@ std::string server::get_password(void) const
 	return(this->data.pass);
 }
 
-user& 	server::get_user(int i)
+user* 	server::get_user(int i)
 {
 	return(this->list_of_users.find(i)->second);
 }
@@ -377,7 +377,7 @@ pollfd&	server::get_pollfd(int i)
 	return (this->poll_fds[i]);
 }
 
-std::map<int, user> server::get_list_of_users(void) const
+std::map<int, user*> server::get_list_of_users(void) const
 {
 	return(this->list_of_users);
 }

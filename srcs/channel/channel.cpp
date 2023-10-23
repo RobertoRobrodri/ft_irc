@@ -6,7 +6,7 @@
 /*   By: crisfern <crisfern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/28 11:22:42 by crisfern          #+#    #+#             */
-/*   Updated: 2023/10/23 10:29:47 by mzomeno-         ###   ########.fr       */
+/*   Updated: 2023/10/23 12:54:48 by crisfern         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,22 +63,22 @@ std::ostream &operator<<(std::ostream& os, const channel &tmp)
 	return (os);
 }
 
-void	channel::add_member(user &usr)
+void	channel::add_member(user *usr)
 {
-	usr.set_n_channels(usr.get_n_channels() + 1);
-	this->list_of_members.push_back(&usr);
+	usr->set_n_channels(usr->get_n_channels() + 1);
+	this->list_of_members.push_back(usr);
   	std::string channel = this->get_name();
 	std::string topic = this->get_topic();
 	if (topic.empty())
-		server::send_message(RPL_NOTOPIC(channel), usr.get_fd());
+		server::send_message(RPL_NOTOPIC(channel), usr->get_fd());
 	else
-		server::send_message(RPL_TOPIC(channel, topic), usr.get_fd());
+		server::send_message(RPL_TOPIC(channel, topic), usr->get_fd());
 	
 		std::string members;
 		std::vector<user*>::iterator it;
 		for (it = this->list_of_members.begin(); it != this->list_of_members.end(); it++)
 		{
-			if (this->is_user_operator(**it))
+			if (this->is_user_operator(*it))
 				members += "@";
 			members += ((*it)->get_nick() + " ");
 		}
@@ -86,41 +86,41 @@ void	channel::add_member(user &usr)
 			server::send_message(RPL_NAMREPLY(channel, members), (*it)->get_fd());
 }
 
-void	channel::rmv_member(user &usr)
+void	channel::rmv_member(user *usr)
 {
   std::vector<user*>::iterator it;
   for (it = this->list_of_members.begin(); it != this->list_of_members.end(); it++)
   {
-    if ((*it)->get_nick() == usr.get_nick())
+    if ((*it)->get_nick() == usr->get_nick())
     {
 	    this->list_of_members.erase(it);
-		usr.set_n_channels(usr.get_n_channels() - 1);
+		usr->set_n_channels(usr->get_n_channels() - 1);
 		return ;
     }
   }
 }
 
-bool	channel::is_user_in_channel(const user &usr)
+bool	channel::is_user_in_channel(user *usr)
 {
   for (std::vector<user*>::iterator it = this->list_of_members.begin(); it != this->list_of_members.end(); it++)
   {
-    if ((*it)->get_nick() == usr.get_nick())
+    if ((*it)->get_nick() == usr->get_nick())
       return true;
   }
   return false;
 }
 
-bool channel::is_user_operator(user &usr)
+bool channel::is_user_operator(user *usr)
 {
-  	return this->list_of_operators[&usr];
+  	return this->list_of_operators[usr];
 }
 
-void	channel::set_user_operator(user &usr, const bool &flag)
+void	channel::set_user_operator(user *usr, const bool &flag)
 {
-  this->list_of_operators[&usr] = flag;
+  this->list_of_operators[usr] = flag;
 }
 
-int 	channel::parse_mode_flag(user &usr, std::string &modes, std::vector<std::string> mode_params, server &srv)
+int 	channel::parse_mode_flag(user *usr, std::string &modes, std::vector<std::string> mode_params, server &srv)
 {
 	bool sign = 0;
 	size_t j = 0;
@@ -150,7 +150,7 @@ int 	channel::parse_mode_flag(user &usr, std::string &modes, std::vector<std::st
 				user *new_op = srv.get_user_from_nick(nick);
 				if (!new_op)
 					break;
-				set_user_operator(*new_op, sign);
+				set_user_operator(new_op, sign);
         		break;
 			}
 			case 'i':	// Invite only
@@ -233,7 +233,7 @@ int 	channel::parse_mode_flag(user &usr, std::string &modes, std::vector<std::st
       		default :
       		{
 				std::string mode (&modes[i]);
-				srv.send_message(ERR_UNKNOWNMODE(mode), usr.get_fd());
+				srv.send_message(ERR_UNKNOWNMODE(mode), usr->get_fd());
         		return 1;
       		}
 		}
