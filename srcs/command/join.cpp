@@ -6,7 +6,7 @@
 /*   By: crisfern <crisfern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/28 11:14:38 by crisfern          #+#    #+#             */
-/*   Updated: 2023/10/23 12:41:56 by crisfern         ###   ########.fr       */
+/*   Updated: 2023/10/24 11:52:45 by crisfern         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,15 +88,15 @@ void  cmd::join(server &svr, int poll_fd_pos, std::string str) {
     }
     for (std::map<std::string, std::string>::iterator it = channels_and_passwords.begin(); it != channels_and_passwords.end(); it++)
     {
-		if (it->first[0] != '#' && it->first[0] != '&')
-      		return ;
+		  if (it->first[0] != '#' && it->first[0] != '&')
+      	continue ;
       	channel *chn = svr.get_channel_from_name(it->first);
       if (chn)
         join_existing_channel(svr, chn, usr, it->second);
       else
       {
         if (usr->get_n_channels() >= MAX_NUMBER_OF_CHN)
-              return svr.send_message(ERR_TOOMANYCHANNELS(it->first), usr->get_fd());
+          return svr.send_message(ERR_TOOMANYCHANNELS(it->first), usr->get_fd());
         svr.create_channel(usr, it->first, it->second);
       }
     }
