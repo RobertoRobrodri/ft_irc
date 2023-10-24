@@ -38,15 +38,15 @@ void  cmd::username(server &svr, int poll_fd_pos, std::string str)
   std::string realname;
   std::vector<std::string> realname_split = ft_split(str, ':');// Separate realname 
   std::vector<std::string> first_params_split = ft_split(realname_split[0], ' ');
-  if (realname_split.size() >= 2)
-    realname = realname_split[1];
-  else
-    realname = first_params_split[3];
   if (first_params_split.size() + 1 < 4 )
   {
     svr.send_message(ERR_NEEDMOREPARAMS(command), usr->get_fd());
     return ;
   }
+  if (realname_split.size() >= 2)
+    realname = realname_split[1];
+  else
+    realname = first_params_split[3];
   std::string username = first_params_split[0];
   std::string servername = first_params_split[2];
 
