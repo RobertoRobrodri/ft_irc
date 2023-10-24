@@ -6,7 +6,7 @@
 /*   By: crisfern <crisfern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/28 11:23:51 by crisfern          #+#    #+#             */
-/*   Updated: 2023/10/24 12:29:33 by crisfern         ###   ########.fr       */
+/*   Updated: 2023/10/24 12:54:22 by crisfern         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -203,9 +203,21 @@ bool	server::receive_communication(int poll_fd_pos)
 	std::cout << GREEN << buffer << RESET << std::endl;
 	if (buffer[0] != 0 && str.find("\r\n") != std::string::npos)
 	{
-		std::multimap<std::string, std::string> commands = this->parse_message(buffer);
-		this->execute_commands(poll_fd_pos, commands);
+		if (!this->list_of_tmp_cmds[this->poll_fds[poll_fd_pos].fd].empty())
+		{
+			str = this->list_of_tmp_cmds[this->poll_fds[poll_fd_pos].fd] + str;
+			std::multimap<std::string, std::string> commands = this->parse_message(str);
+			this->execute_commands(poll_fd_pos, commands);
+			this->list_of_tmp_cmds[this->poll_fds[poll_fd_pos].fd].erase();
+		}
+		else
+		{
+			std::multimap<std::string, std::string> commands = this->parse_message(str);
+			this->execute_commands(poll_fd_pos, commands);
+		}
 	}
+	else 
+		this->list_of_tmp_cmds[this->poll_fds[poll_fd_pos].fd] = str;
 	return 0;
 }
 
