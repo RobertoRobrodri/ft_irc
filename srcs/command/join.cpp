@@ -6,7 +6,7 @@
 /*   By: crisfern <crisfern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/28 11:14:38 by crisfern          #+#    #+#             */
-/*   Updated: 2023/10/24 12:18:58 by crisfern         ###   ########.fr       */
+/*   Updated: 2023/10/24 17:31:14 by crisfern         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,45 +60,57 @@ void	join_existing_channel(server &svr, channel *chn, user *usr, std::string pas
 
 void  cmd::join(server &svr, int poll_fd_pos, std::string str) {
   std::cout << "HOLA" << std::endl;
-  poll_fd pollfd = svr.get_pollfd(poll_fd_pos);
-  user *usr = svr.get_user(pollfd.fd);
+  poll_fd     pollfd = svr.get_pollfd(poll_fd_pos);
+  user        *usr = svr.get_user(pollfd.fd);
+  channel     *chn;
+  size_t      i = 0;
+  std::string actual_password;
+
 	if (usr->get_is_registered() == true)
   {
     std::string command = "JOIN";
     std::vector<std::string> channel_params = ft_split(str, ' ');
     if (str == "")
       return svr.send_message(ERR_NEEDMOREPARAMS(command), usr->get_fd());
-    std::map<std::string, std::string>channels_and_passwords;
     std::vector<std::string> channels = ft_split(channel_params[0], ',');
-    std::vector<std::string>::iterator channel_it = channels.begin();
     if (channel_params.size() >= 2) // we have passwords
     {
       std::vector<std::string> passwords = ft_split(channel_params[1], ',');
-      std::vector<std::string>::iterator password_it = passwords.begin();
-      while (password_it != passwords.end())
+      for (std::vector<std::string>::iterator it = channels.begin(); it != channels.end(); it++)
       {
-        channels_and_passwords.insert(std::pair<std::string, std::string>(*channel_it, *password_it));
-        password_it++;
-        channel_it++;
+        if ((*it)[0] != '#' && (*it)[0] != '&')
+          continue ;
+        chn = svr.get_channel_from_name(*it);
+        if (i < passwords.size())
+          actual_password = passwords[i];
+        else
+          actual_password = "";
+        i++;
+        if (chn)
+            join_existing_channel(svr, chn, usr, actual_password);
+        else
+        {
+          if (usr->get_n_channels() >= MAX_NUMBER_OF_CHN)
+            return svr.send_message(ERR_TOOMANYCHANNELS(*it), usr->get_fd());
+          svr.create_channel(usr, *it, actual_password);
+        }
       }
     }
-    while (channel_it != channels.end())
+    else
     {
-        channels_and_passwords.insert(std::pair<std::string, std::string>(*channel_it, ""));
-        channel_it++;
-    }
-    for (std::map<std::string, std::string>::iterator it = channels_and_passwords.begin(); it != channels_and_passwords.end(); it++)
-    {
-		  if (it->first[0] != '#' && it->first[0] != '&')
-      	continue ;
-      	channel *chn = svr.get_channel_from_name(it->first);
-      if (chn)
-        join_existing_channel(svr, chn, usr, it->second);
-      else
+      for (std::vector<std::string>::iterator it = channels.begin(); it != channels.end(); it++)
       {
-        if (usr->get_n_channels() >= MAX_NUMBER_OF_CHN)
-          return svr.send_message(ERR_TOOMANYCHANNELS(it->first), usr->get_fd());
-        svr.create_channel(usr, it->first, it->second);
+        if ((*it)[0] != '#' && (*it)[0] != '&')
+            continue ;
+        chn = svr.get_channel_from_name(*it);
+        if (chn)
+            join_existing_channel(svr, chn, usr, "");
+        else
+        {
+          if (usr->get_n_channels() >= MAX_NUMBER_OF_CHN)
+            return svr.send_message(ERR_TOOMANYCHANNELS(*it), usr->get_fd());
+          svr.create_channel(usr, *it, "");
+        }
       }
     }
   }
