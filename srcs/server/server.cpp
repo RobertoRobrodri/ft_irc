@@ -6,7 +6,7 @@
 /*   By: crisfern <crisfern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/28 11:23:51 by crisfern          #+#    #+#             */
-/*   Updated: 2023/10/23 15:06:07 by crisfern         ###   ########.fr       */
+/*   Updated: 2023/10/24 12:29:33 by crisfern         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -269,6 +269,10 @@ void	server::execute_commands(int poll_fd_pos, std::multimap<std::string, std::s
 
 	for (it = commands.begin(); it != commands.end(); it++)
 	{
+		std::cout << "MAPA COMANDO: " << it->first << " " << it->second << std::endl;
+		std::cout << "LOS 1s y 0s: " << *this->list_of_cmds[it->first] << std::endl;
+		std::cout << "LOS 1s y 0s: " << this->list_of_cmds[it->first] << std::endl;
+		std::cout << "LOS 1s y 0s: " << &this->list_of_cmds[it->first] << std::endl;
 		if (this->list_of_cmds[it->first])
 			this->list_of_cmds[it->first](*this, poll_fd_pos, it->second);
 		else if (usr->get_is_registered())
