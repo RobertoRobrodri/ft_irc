@@ -6,7 +6,7 @@
 /*   By: crisfern <crisfern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/28 11:15:55 by crisfern          #+#    #+#             */
-/*   Updated: 2023/10/23 12:44:03 by crisfern         ###   ########.fr       */
+/*   Updated: 2023/10/24 18:04:38 by crisfern         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,6 @@ void cmd::mode(server &svr, int poll_fd_pos, std::string str)
 		return ;
 	}
 	std::vector<std::string> msglist = ft_split(str, ' ');
-	// Parse msglist[1] and check if it follows the format
 	if (msglist.size() < 2)
 	{
   	  	svr.send_message(ERR_NEEDMOREPARAMS(command), usr->get_fd());

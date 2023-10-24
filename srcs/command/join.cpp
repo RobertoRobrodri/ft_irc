@@ -6,7 +6,7 @@
 /*   By: crisfern <crisfern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/28 11:14:38 by crisfern          #+#    #+#             */
-/*   Updated: 2023/10/24 17:31:14 by crisfern         ###   ########.fr       */
+/*   Updated: 2023/10/24 18:15:06 by crisfern         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,6 @@ void	join_existing_channel(server &svr, channel *chn, user *usr, std::string pas
 }
 
 void  cmd::join(server &svr, int poll_fd_pos, std::string str) {
-  std::cout << "HOLA" << std::endl;
   poll_fd     pollfd = svr.get_pollfd(poll_fd_pos);
   user        *usr = svr.get_user(pollfd.fd);
   channel     *chn;
