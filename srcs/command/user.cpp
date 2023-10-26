@@ -6,7 +6,7 @@
 /*   By: crisfern <crisfern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/28 11:21:43 by crisfern          #+#    #+#             */
-/*   Updated: 2023/10/23 12:29:45 by crisfern         ###   ########.fr       */
+/*   Updated: 2023/10/23 16:43:20 by mzomeno-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,5 +67,5 @@ void  cmd::username(server &svr, int poll_fd_pos, std::string str)
   usr->set_servername(servername);
   usr->set_realname(realname); 
   usr->is_registered(svr);
-  std::cout << usr << std::endl;
+  std::cout << *usr << std::endl;
 }
