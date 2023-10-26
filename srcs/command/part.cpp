@@ -6,7 +6,7 @@
 /*   By: crisfern <crisfern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/28 11:17:30 by crisfern          #+#    #+#             */
-/*   Updated: 2023/10/23 12:47:10 by crisfern         ###   ########.fr       */
+/*   Updated: 2023/10/24 12:06:13 by crisfern         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,10 +21,7 @@ void  cmd::part(server &svr, int poll_fd_pos, std::string str)
   if (usr->get_is_registered() == true)
   {
     if (str == "")
-    {
-      svr.send_message(ERR_NEEDMOREPARAMS(command), usr->get_fd());
-      return ;
-    }
+      return svr.send_message(ERR_NEEDMOREPARAMS(command), usr->get_fd());
     std::vector<std::string> chnlist = ft_split(str, ',');
     for (size_t i = 0; i < chnlist.size(); i++)
     {

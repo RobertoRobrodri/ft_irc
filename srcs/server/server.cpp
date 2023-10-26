@@ -6,7 +6,7 @@
 /*   By: crisfern <crisfern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/28 11:23:51 by crisfern          #+#    #+#             */
-/*   Updated: 2023/10/23 12:42:01 by crisfern         ###   ########.fr       */
+/*   Updated: 2023/10/24 18:15:33 by crisfern         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -203,9 +203,21 @@ bool	server::receive_communication(int poll_fd_pos)
 	std::cout << GREEN << buffer << RESET << std::endl;
 	if (buffer[0] != 0 && str.find("\r\n") != std::string::npos)
 	{
-		std::multimap<std::string, std::string> commands = this->parse_message(buffer);
-		this->execute_commands(poll_fd_pos, commands);
+		if (!this->list_of_tmp_cmds[this->poll_fds[poll_fd_pos].fd].empty())
+		{
+			str = this->list_of_tmp_cmds[this->poll_fds[poll_fd_pos].fd] + str;
+			std::multimap<std::string, std::string> commands = this->parse_message(str);
+			this->execute_commands(poll_fd_pos, commands);
+			this->list_of_tmp_cmds[this->poll_fds[poll_fd_pos].fd].erase();
+		}
+		else
+		{
+			std::multimap<std::string, std::string> commands = this->parse_message(str);
+			this->execute_commands(poll_fd_pos, commands);
+		}
 	}
+	else 
+		this->list_of_tmp_cmds[this->poll_fds[poll_fd_pos].fd] = str;
 	return 0;
 }
 
@@ -218,8 +230,13 @@ void	server::send_message(std::string msg, int fd)
 
 void	server::delete_user(int poll_fd_pos)
 {
+	std::map<std::string, channel*>::iterator it;
+	user *usr = this->list_of_users[this->poll_fds[poll_fd_pos].fd];
+
 	std::cout << RED << "Deleted user: fd " << this->poll_fds[poll_fd_pos].fd << RESET << std::endl;
-	delete (this->list_of_users[this->poll_fds[poll_fd_pos].fd]);
+	for (it = this->list_of_channels.begin(); it != this->list_of_channels.end(); it++)
+		it->second->rmv_member(usr);
+	delete (usr);
 	close(this->poll_fds[poll_fd_pos].fd);
 	this->list_of_users.erase(this->poll_fds[poll_fd_pos].fd);
 	for (int count = poll_fd_pos; count <= this->_active_fds - 1; count++)
