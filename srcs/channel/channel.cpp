@@ -6,7 +6,7 @@
 /*   By: crisfern <crisfern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/28 11:22:42 by crisfern          #+#    #+#             */
-/*   Updated: 2023/10/26 11:30:11 by mzomeno-         ###   ########.fr       */
+/*   Updated: 2023/10/23 12:54:48 by crisfern         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,9 +56,7 @@ std::ostream &operator<<(std::ostream& os, const channel &tmp)
 	os << "Channel topic: " << tmp.get_topic() << std::endl;
 	os << "Channel password: "<< tmp.get_password() << std::endl;
 	os << "Channel mode: " << tmp.get_mode() << std::endl;
-	os << "User limit if set: ";
-   if (tmp.get_user_limit())
-	   os << tmp.get_user_limit() << std::endl;
+	os << "User limit if set: " << tmp.get_user_limit() << std::endl;
 	os << "List of members: " << std::endl;
 	for (it = lst.begin(); it != lst.end(); it++)
     	os << (*it)->get_nick() << std::endl;
